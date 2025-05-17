@@ -4,6 +4,8 @@
 #include "draw.h"
 #include "init.h"
 #include "input.h"
+#include "Game/GObject.h"
+#include "Game/Sheet.h"
 
 SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 
@@ -24,8 +26,11 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 
     draw drawTool(&myApp);
 
-    Vector2 pos;
-    SDL_Texture* playerRender = createPlayer(drawTool, pos);
+    GObject playerObject("Custom Name");
+    Sheet sheet(drawTool.loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
+    sheet.scale = Vector2(4, 4);
+    playerObject.texture = &sheet;
+    playerObject.transform->position = Vector2(100, 100);
 
 
     while(true) {
@@ -34,11 +39,33 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 
         input::doInput();
 
-        drawTool.blitSheet(playerRender, 4, 4, 2, 2, pos, 3);
+        Vector2 scale(1,1);
+        //drawTool.blitSheet(playerRender, 4, 4, 2, 2, pos, scale);
+
+        if(playerObject.texture != nullptr) {
+            playerObject.texture->render(drawTool, playerObject.transform->position);
+
+            auto* texSheet = (Sheet*)playerObject.texture;
+
+            if(texSheet->getCurrentCol() == 5  && texSheet->getCurrentRow() != 3) {
+                texSheet->setCol(0);
+                texSheet->moveRowDown();
+            }
+            else if(texSheet->getCurrentCol() == 5 && texSheet->getCurrentRow() == 3) {
+                texSheet->setCol(0);
+                texSheet->setRow(0);
+            }
+            else {
+                texSheet->moveColRight();
+
+            }
+
+
+        }
 
         drawTool.presentScene();
 
-        SDL_Delay(16);
+        SDL_Delay(50);
     }
 
 }

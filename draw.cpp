@@ -51,7 +51,7 @@ void draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect* co
     SDL_RenderCopy(getApp().renderer, texture, copySrc, &dest);
 }
 
-void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow, const int renderCol, const Vector2 renderPosition, const double scale) const {
+void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow, const int renderCol, const Vector2 renderPosition, const Vector2 scaleFactor) const {
 
     int textWidth = 0;
     int textHeight = 0;
@@ -70,8 +70,8 @@ void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, co
     const SDL_Rect srcRect = { srcX, srcY, spriteWidth, spriteHeight };
 
     SDL_Rect dest = renderPosition.asRect();
-    dest.w = static_cast<int>(spriteWidth * scale);
-    dest.h = static_cast<int>(spriteHeight * scale);
+    dest.w = static_cast<int>(spriteWidth * scaleFactor.x);
+    dest.h = static_cast<int>(spriteHeight * scaleFactor.y);
 
     SDL_RenderCopy(getApp().renderer, texture, &srcRect, &dest);
 

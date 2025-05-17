@@ -29,7 +29,15 @@ add_executable(2DProject main.cpp
         draw.cpp
         draw.h
         Vector2.cpp
-        Vector2.h)
+        Vector2.h
+        Game/GObject.cpp
+        Game/GObject.h
+        Game/Transform.cpp
+        Game/Transform.h
+        Game/Texture.cpp
+        Game/Texture.h
+        Game/Sheet.cpp
+        Game/Sheet.h)
 
 # Link against SDL2 libraries
 target_link_libraries(2DProject SDL2 SDL2main)
