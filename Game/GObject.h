@@ -20,18 +20,18 @@ private:
     bool isActive = true;
 
 public:
-    /*
+
      static std::unordered_set<GObject*> registeredObjects;
     static  std::unordered_set<GObject*> activeObjects;
     static std::unordered_set<GObject*> inactiveObjects;
-    */
+
 
     std::string name;
     Transform* transform;
     Texture* texture;
 
 
-/*
+
     void setIsActive(const bool status) {
         if(isActive && status || !isActive && !status) { //there is nothing tto do
             return;
@@ -60,18 +60,18 @@ public:
             inactiveObjects.insert(*found);
         }
     }
-    */
+
 
     [[nodiscard]] bool getIsActive() const;
 
     GObject() {
 
         if(name.empty()) {
-            //name = "GObject " + registeredObjects.size();
+            name = "GObject " + registeredObjects.size();
         }
 
-        //registeredObjects.insert(this);
-        //activeObjects.insert(this);
+        registeredObjects.insert(this);
+        activeObjects.insert(this);
 
         transform = new Transform();
     }
@@ -79,6 +79,8 @@ public:
     explicit GObject(const std::string &name) : GObject() {
         this->name = name;
     }
+
+    virtual void update();
 
 
 };

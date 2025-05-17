@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "C:/Users/shawn/CLionProjects/2DProject/Game/Background.cpp" "CMakeFiles/2DProject.dir/Game/Background.cpp.obj" "gcc" "CMakeFiles/2DProject.dir/Game/Background.cpp.obj.d"
   "C:/Users/shawn/CLionProjects/2DProject/Game/GObject.cpp" "CMakeFiles/2DProject.dir/Game/GObject.cpp.obj" "gcc" "CMakeFiles/2DProject.dir/Game/GObject.cpp.obj.d"
   "C:/Users/shawn/CLionProjects/2DProject/Game/Sheet.cpp" "CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj" "gcc" "CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj.d"
   "C:/Users/shawn/CLionProjects/2DProject/Game/Texture.cpp" "CMakeFiles/2DProject.dir/Game/Texture.cpp.obj" "gcc" "CMakeFiles/2DProject.dir/Game/Texture.cpp.obj.d"

@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "2DProject.exe"
   "2DProject.exe.manifest"
   "2DProject.pdb"
+  "CMakeFiles/2DProject.dir/Game/Background.cpp.obj"
+  "CMakeFiles/2DProject.dir/Game/Background.cpp.obj.d"
   "CMakeFiles/2DProject.dir/Game/GObject.cpp.obj"
   "CMakeFiles/2DProject.dir/Game/GObject.cpp.obj.d"
   "CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj"

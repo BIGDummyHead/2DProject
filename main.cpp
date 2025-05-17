@@ -6,6 +6,7 @@
 #include "input.h"
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
+#include <chrono>
 
 SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 
@@ -17,6 +18,13 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
     return  playerText;
 }
 
+class Test_Player : public GObject {
+public:
+    void update() override {
+
+    }
+};
+
 [[noreturn]] int main() {
 
     App myApp;
@@ -27,11 +35,13 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
     draw drawTool(&myApp);
 
     GObject playerObject("Custom Name");
-    Sheet sheet(drawTool.loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
+    Sheet sheet(drawTool.loadTexture(R"(assets\player\Attack\Character_Attack.png)"), 4, 6);
     sheet.scale = Vector2(4, 4);
     playerObject.texture = &sheet;
     playerObject.transform->position = Vector2(100, 100);
 
+    auto elapsed_time = std::chrono::steady_clock::time_point();
+    auto frame_time = std::chrono::steady_clock::time_point();
 
     while(true) {
         //game loop
@@ -39,33 +49,30 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 
         input::doInput();
 
-        Vector2 scale(1,1);
-        //drawTool.blitSheet(playerRender, 4, 4, 2, 2, pos, scale);
+        for(auto activeObj : GObject::activeObjects) {
 
-        if(playerObject.texture != nullptr) {
-            playerObject.texture->render(drawTool, playerObject.transform->position);
-
-            auto* texSheet = (Sheet*)playerObject.texture;
-
-            if(texSheet->getCurrentCol() == 5  && texSheet->getCurrentRow() != 3) {
-                texSheet->setCol(0);
-                texSheet->moveRowDown();
-            }
-            else if(texSheet->getCurrentCol() == 5 && texSheet->getCurrentRow() == 3) {
-                texSheet->setCol(0);
-                texSheet->setRow(0);
-            }
-            else {
-                texSheet->moveColRight();
-
+            if(activeObj == nullptr || activeObj->transform == nullptr) {
+                continue;
             }
 
+            activeObj->texture->render(drawTool, activeObj->transform->position);
 
+            auto now = std::chrono::steady_clock::time_point();
+            const long long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frame_time - now).count();
+
+            if(elapsed > 100) {
+                frame_time = now; //reset clock to 0
+                activeObj->update();
+            }
         }
+
 
         drawTool.presentScene();
 
-        SDL_Delay(50);
+        constexpr Uint32 sdlDelayMS = 16;
+        SDL_Delay(sdlDelayMS);
+        elapsed_time += std::chrono::milliseconds(sdlDelayMS);
+        frame_time += std::chrono::milliseconds(sdlDelayMS);
     }
 
 }

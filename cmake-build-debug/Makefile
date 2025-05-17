@@ -128,6 +128,30 @@ depend:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/build
 .PHONY : 2DProject/fast
 
+Game/Background.obj: Game/Background.cpp.obj
+.PHONY : Game/Background.obj
+
+# target to build an object file
+Game/Background.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Background.cpp.obj
+.PHONY : Game/Background.cpp.obj
+
+Game/Background.i: Game/Background.cpp.i
+.PHONY : Game/Background.i
+
+# target to preprocess a source file
+Game/Background.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Background.cpp.i
+.PHONY : Game/Background.cpp.i
+
+Game/Background.s: Game/Background.cpp.s
+.PHONY : Game/Background.s
+
+# target to generate assembly for a file
+Game/Background.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Background.cpp.s
+.PHONY : Game/Background.cpp.s
+
 Game/GObject.obj: Game/GObject.cpp.obj
 .PHONY : Game/GObject.obj
 
@@ -353,6 +377,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... 2DProject
+	@echo ... Game/Background.obj
+	@echo ... Game/Background.i
+	@echo ... Game/Background.s
 	@echo ... Game/GObject.obj
 	@echo ... Game/GObject.i
 	@echo ... Game/GObject.s

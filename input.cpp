@@ -3,7 +3,48 @@
 //
 
 #include "input.h"
+#include <unordered_map>
 
+std::unordered_map<SDL_Keycode, bool> isDown;
+std::unordered_map<SDL_Keycode, bool> isUp;
+
+void input::onKeyDown(const SDL_Keycode pressed) {
+    const auto iterVal = isDown.find(pressed);
+
+    if(iterVal == isDown.end()) {
+        //add the key here as it does not exist
+        isDown[pressed] = true;
+        isUp[pressed] = false; //add this because how could something be up if it has not been pressed?
+        return;
+    }
+
+    isDown[pressed] = true;
+    isUp[pressed] = false;
+}
+
+void input::onKeyUp(const SDL_Keycode released) {
+
+    const auto iterVal = isUp.find(released);
+
+    if(iterVal == isUp.end()) {
+        isUp[released] = true;
+        return;
+    }
+
+    isUp[released] = true;
+    isDown[released] = false;
+
+}
+
+bool input::isKeyDown(SDL_Keycode key) {
+    const auto find = isDown.find(key);
+    return find != isDown.end() && isDown[key];
+}
+
+bool input::isKeyUp(const SDL_Keycode key) {
+    const auto find = isUp.find(key);
+    return find == isUp.end() || isUp[key];
+}
 
 void input::doInput() {
     SDL_Event event;
@@ -13,8 +54,18 @@ void input::doInput() {
             case SDL_QUIT:
                 exit(0);
             break;
+            case SDL_KEYDOWN:
+                onKeyDown(event.key.keysym.sym);
+                break;
+            case SDL_KEYUP:
+                onKeyUp(event.key.keysym.sym);
+                break;
             default:
                 break;
         }
+
     }
 }
+
+
+

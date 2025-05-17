@@ -11,6 +11,10 @@
 class input {
 
 public:
+    static void onKeyDown(SDL_Keycode pressed);
+    static void onKeyUp(SDL_Keycode released);
+    static bool isKeyDown(SDL_Keycode key);
+    static bool isKeyUp(SDL_Keycode key);
     static void doInput();
 
 };
