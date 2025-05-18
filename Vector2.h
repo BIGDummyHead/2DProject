@@ -24,7 +24,52 @@ public:
 
     //TODO: add some math functions for Vector2 later.
 
-    SDL_Rect asRect() const;
+    [[nodiscard]] SDL_Rect asRect() const;
+
+    Vector2& operator+=(const Vector2& other) {
+
+        x += other.x;
+        y += other.y;
+
+        return *this;
+
+    }
+
+    Vector2& operator-=(const Vector2& other) {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+
+    Vector2& operator*=(const Vector2& other) {
+        x *= other.x;
+        y *= other.y;
+
+        return *this;
+    }
+
+    Vector2& operator*=(const double& other) {
+        x *= other;
+        y *= other;
+
+        return *this;
+    }
+
+    Vector2& operator/=(const Vector2& other) {
+        x /= other.x;
+        y /= other.y;
+
+        return *this;
+    }
+
+    Vector2& operator/=(const double& other) {
+        x /= other;
+        y /= other;
+
+        return *this;
+    }
+
 };
 
 

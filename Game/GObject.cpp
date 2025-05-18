@@ -13,8 +13,9 @@ bool GObject::getIsActive() const {
 }
 
 void GObject::update() {
-    //do nothing
 }
+
+
 
 
 

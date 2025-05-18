@@ -19,9 +19,51 @@ SDL_Texture* createPlayer(draw& tool, Vector2& position) {
 }
 
 class Test_Player : public GObject {
-public:
-    void update() override {
 
+private:
+    Sheet textureSheet;
+
+public:
+
+    explicit Test_Player(draw* drawTool) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 6) {
+        textureSheet.scale *= 2.5;
+        texture = &textureSheet;
+        transform->position = Vector2(100, 100);
+    }
+
+    float getHorizontalMove() {
+
+        float h = 0;
+
+        if(input::isKeyDown(SDLK_a) ||input::isKeyHeld(SDLK_a)) {
+            h--;
+        }
+
+        if(input::isKeyDown(SDLK_d) ||input::isKeyHeld(SDLK_d)) {
+            h++;
+        }
+
+        return h;
+    }
+
+    float getVerticalMove() {
+        float v = 0;
+
+        if(input::isKeyDown(SDLK_w) || input::isKeyHeld(SDLK_w)) {
+            v--;
+        }
+
+        if(input::isKeyDown(SDLK_s) ||input::isKeyHeld(SDLK_s)) {
+            v++;
+        }
+
+        return v;
+    }
+
+    void update() override {
+        Vector2 move(getHorizontalMove(), getVerticalMove());
+        move *= 4;
+        transform->position += move;
     }
 };
 
@@ -34,11 +76,7 @@ public:
 
     draw drawTool(&myApp);
 
-    GObject playerObject("Custom Name");
-    Sheet sheet(drawTool.loadTexture(R"(assets\player\Attack\Character_Attack.png)"), 4, 6);
-    sheet.scale = Vector2(4, 4);
-    playerObject.texture = &sheet;
-    playerObject.transform->position = Vector2(100, 100);
+    Test_Player playerObject(&drawTool);
 
     auto elapsed_time = std::chrono::steady_clock::time_point();
     auto frame_time = std::chrono::steady_clock::time_point();
@@ -47,7 +85,7 @@ public:
         //game loop
         drawTool.prepareScene();
 
-        input::doInput();
+        input::pollInput();
 
         for(auto activeObj : GObject::activeObjects) {
 
@@ -60,7 +98,7 @@ public:
             auto now = std::chrono::steady_clock::time_point();
             const long long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frame_time - now).count();
 
-            if(elapsed > 100) {
+            if(elapsed > 10) {
                 frame_time = now; //reset clock to 0
                 activeObj->update();
             }
@@ -69,7 +107,7 @@ public:
 
         drawTool.presentScene();
 
-        constexpr Uint32 sdlDelayMS = 16;
+        constexpr Uint32 sdlDelayMS = 5;
         SDL_Delay(sdlDelayMS);
         elapsed_time += std::chrono::milliseconds(sdlDelayMS);
         frame_time += std::chrono::milliseconds(sdlDelayMS);

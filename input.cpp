@@ -4,9 +4,11 @@
 
 #include "input.h"
 #include <unordered_map>
+#include <iostream>
 
 std::unordered_map<SDL_Keycode, bool> isDown;
 std::unordered_map<SDL_Keycode, bool> isUp;
+std::unordered_map<SDL_Keycode, bool> holding;
 
 void input::onKeyDown(const SDL_Keycode pressed) {
     const auto iterVal = isDown.find(pressed);
@@ -20,6 +22,8 @@ void input::onKeyDown(const SDL_Keycode pressed) {
 
     isDown[pressed] = true;
     isUp[pressed] = false;
+
+
 }
 
 void input::onKeyUp(const SDL_Keycode released) {
@@ -32,7 +36,15 @@ void input::onKeyUp(const SDL_Keycode released) {
     }
 
     isUp[released] = true;
+    holding[released] = false;
     isDown[released] = false;
+
+}
+
+void input::onKeyHeld(const SDL_Keycode pressing) {
+
+    isDown[pressing] = false;
+    holding[pressing] = true;
 
 }
 
@@ -46,7 +58,29 @@ bool input::isKeyUp(const SDL_Keycode key) {
     return find == isUp.end() || isUp[key];
 }
 
-void input::doInput() {
+bool input::isKeyHeld(const SDL_Keycode key) {
+    return holding.contains(key) && holding[key];
+}
+
+
+void input::doKeyCheck(const SDL_Event& event) {
+
+    //check if isDown contains the keycode
+
+    const SDL_Keycode key = event.key.keysym.sym;
+
+    //if isDown does not contain we shall add it
+    //or
+    //if the current key is not down and it is also not being held
+    if(!isDown.contains(key) || (!isDown[key] && !holding[key])) {
+        onKeyDown(key);
+    }
+    else { //item was down in the previous poll
+        onKeyHeld(key);
+    }
+}
+
+void input::pollInput() {
     SDL_Event event;
 
     while(SDL_PollEvent(&event)) {
@@ -55,7 +89,7 @@ void input::doInput() {
                 exit(0);
             break;
             case SDL_KEYDOWN:
-                onKeyDown(event.key.keysym.sym);
+                doKeyCheck(event);
                 break;
             case SDL_KEYUP:
                 onKeyUp(event.key.keysym.sym);

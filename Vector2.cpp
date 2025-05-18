@@ -14,3 +14,4 @@ SDL_Rect Vector2::asRect() const {
 
     return rect;
 }
+

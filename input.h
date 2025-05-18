@@ -15,8 +15,10 @@ public:
     static void onKeyUp(SDL_Keycode released);
     static bool isKeyDown(SDL_Keycode key);
     static bool isKeyUp(SDL_Keycode key);
-    static void doInput();
-
+    static void pollInput();
+    static void doKeyCheck(const SDL_Event &event);
+    static void onKeyHeld(SDL_Keycode pressing);
+    static  bool isKeyHeld(SDL_Keycode key);
 };
 
 
