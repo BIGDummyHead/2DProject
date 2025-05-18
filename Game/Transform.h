@@ -13,15 +13,21 @@ class Transform {
 
 private:
     Transform* parentPtr = nullptr;
-
-public:
     Vector2 position;
     Vector2 rotation;
+
+public:
+
     std::vector<Transform*> children;
 
-    Transform* getParent();
     void setParent(Transform* parent);
+    [[nodiscard]] Transform* getParent() const;
 
+    void setPosition(const Vector2& pos);
+    [[nodiscard]] Vector2 getPosition() const;
+
+    void setRotation(const Vector2& rot);
+    [[nodiscard]] Vector2 getRotation() const;
 
 
 };

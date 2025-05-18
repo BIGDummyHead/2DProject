@@ -22,6 +22,16 @@ public:
         this->y = y;
     }
 
+    static Vector2 one() {
+        const Vector2 v(1,1);
+        return v;
+    }
+
+    static  Vector2 zero() {
+        const Vector2 v(0,0);
+        return v;
+    }
+
     //TODO: add some math functions for Vector2 later.
 
     [[nodiscard]] SDL_Rect asRect() const;
@@ -33,6 +43,42 @@ public:
 
         return *this;
 
+    }
+
+    Vector2 operator+(const Vector2& other) const {
+        const Vector2 v(x + other.x, y + other.y);
+        return v;
+    }
+
+    Vector2 operator-(const Vector2& other) const {
+        const Vector2 v(x-other.x, y - other.y);
+        return v;
+    }
+
+    Vector2 operator/(const Vector2& other) const {
+
+        if(other.y == 0 || other.x == 0) {
+            const Vector2 badV;
+            return badV;
+        }
+
+        const Vector2 v(x / other.x, y / other.y);
+        return v;
+    }
+
+    Vector2 operator*(const Vector2& other) const {
+        const Vector2 v(x * other.x, y * other.y);
+        return v;
+    }
+
+    Vector2 operator*(const double& other) const {
+        const Vector2 v(x * other, y * other);
+        return v;
+    }
+
+    Vector2 operator/(const double& other) const {
+        const Vector2 v(x / other, y / other);
+        return v;
     }
 
     Vector2& operator-=(const Vector2& other) {
@@ -57,8 +103,14 @@ public:
     }
 
     Vector2& operator/=(const Vector2& other) {
-        x /= other.x;
-        y /= other.y;
+
+        Vector2 divisor = other;
+        if(other.x == 0 || other.y == 0) {
+            divisor = Vector2(1,1);
+        }
+
+        x /= divisor.x;
+        y /= divisor.y;
 
         return *this;
     }

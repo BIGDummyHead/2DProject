@@ -20,6 +20,7 @@ private:
     bool isActive = true;
 
 public:
+    virtual ~GObject() = default;
 
     static std::unordered_set<GObject*> registeredObjects;
     static  std::unordered_set<GObject*> activeObjects;
