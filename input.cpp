@@ -11,9 +11,7 @@ std::unordered_map<SDL_Keycode, bool> isUp;
 std::unordered_map<SDL_Keycode, bool> holding;
 
 void input::onKeyDown(const SDL_Keycode pressed) {
-    const auto iterVal = isDown.find(pressed);
-
-    if(iterVal == isDown.end()) {
+    if(const auto iterVal = isDown.find(pressed); iterVal == isDown.end()) {
         //add the key here as it does not exist
         isDown[pressed] = true;
         isUp[pressed] = false; //add this because how could something be up if it has not been pressed?
@@ -27,10 +25,7 @@ void input::onKeyDown(const SDL_Keycode pressed) {
 }
 
 void input::onKeyUp(const SDL_Keycode released) {
-
-    const auto iterVal = isUp.find(released);
-
-    if(iterVal == isUp.end()) {
+    if(const auto iterVal = isUp.find(released); iterVal == isUp.end()) {
         isUp[released] = true;
         return;
     }
@@ -59,7 +54,7 @@ bool input::isKeyUp(const SDL_Keycode key) {
 }
 
 bool input::isKeyHeld(const SDL_Keycode key) {
-    return holding.contains(key) && holding[key];
+    return isKeyDown(key) || holding.contains(key) && holding[key];
 }
 
 
