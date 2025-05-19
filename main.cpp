@@ -7,6 +7,7 @@
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
+#include "Game/Collider.h"
 
 
 class Test_Player final : public GObject {
@@ -54,6 +55,12 @@ public:
         move *= 4;
         transform->setPosition(transform->getPosition() + move);
     }
+
+    Collider* collider;
+    void onRender() override {
+
+    }
+
 };
 
 [[noreturn]] int main() {
@@ -93,6 +100,7 @@ public:
             }
 
             activeObj->texture->render(drawTool, activeObj->transform->getPosition());
+            activeObj->onRender();
 
             if(elapsed > 10) {
                 frame_time = now; //reset clock to 0

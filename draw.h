@@ -34,6 +34,8 @@ public:
     void blit(SDL_Texture *texture, Vector2 position, const SDL_Rect* copySrc = nullptr) const;
 
     void blitSheet(SDL_Texture *texture, int rows, int columns, int renderRow, int renderCol, Vector2 renderPosition, Vector2 scalingFactor) const;
+
+    void drawLine(const Vector2& from, const Vector2& to) const;
 };
 
 

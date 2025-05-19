@@ -39,7 +39,9 @@ add_executable(2DProject main.cpp
         Game/Sheet.cpp
         Game/Sheet.h
         Game/Background.cpp
-        Game/Background.h)
+        Game/Background.h
+        Game/Collider.cpp
+        Game/Collider.h)
 
 # Link against SDL2 libraries
 target_link_libraries(2DProject SDL2 SDL2main)
