@@ -17,10 +17,13 @@ private:
 
 public:
 
+    Collider* collider;
     explicit Test_Player(draw* drawTool) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 6) {
         textureSheet.scale *= 2.5;
         texture = &textureSheet;
         transform->setPosition(Vector2(100, 100));
+
+        collider = new Collider(transform, 135, 120, 180, 200);
     }
 
     static float getHorizontalMove() {
@@ -56,9 +59,8 @@ public:
         transform->setPosition(transform->getPosition() + move);
     }
 
-    Collider* collider;
     void onRender() override {
-
+        collider->drawDebugCollider(drawTool);
     }
 
 };
@@ -79,7 +81,9 @@ public:
     sheet.scale *= 2.5;
     obj.texture = &sheet;
 
-    obj.transform->setParent(playerObject.transform);
+    obj.transform->setPosition(Vector2(250, 100));
+    const auto* deathCollider = new Collider(obj.transform, 135, 120, 180, 200);
+
 
 
     auto elapsed_time = std::chrono::steady_clock::time_point();
@@ -101,6 +105,7 @@ public:
 
             activeObj->texture->render(drawTool, activeObj->transform->getPosition());
             activeObj->onRender();
+            deathCollider->drawDebugCollider(&drawTool);
 
             if(elapsed > 10) {
                 frame_time = now; //reset clock to 0

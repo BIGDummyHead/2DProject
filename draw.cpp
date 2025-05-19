@@ -80,7 +80,7 @@ void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, co
 
 void draw::drawLine(const Vector2 &from, const Vector2 &to) const {
 
-    std::cout << SDL_RenderDrawLine(getApp().renderer, from.x, from.y, to.x, to.y) << std::endl;
+   SDL_RenderDrawLineF(getApp().renderer, from.x, from.y, to.x, to.y);
 }
 
 
