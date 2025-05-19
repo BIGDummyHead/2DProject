@@ -23,13 +23,14 @@ void Transform::setParent(Transform *parent) {
     parentPtr->children.push_back(this);
 }
 
-Vector2 Transform::getPosition() const {
+Vector2 Transform::getPosition() {
 
     if(parentPtr == nullptr)
         return position; //absolute
 
-   return  parentPtr->getPosition() + position;
+    return  parentPtr->getPosition() + position;
 }
+
 
 void Transform::setPosition(const Vector2 &pos) {
     position = pos;

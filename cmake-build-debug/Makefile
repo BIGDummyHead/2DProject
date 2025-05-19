@@ -152,6 +152,30 @@ Game/Background.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Background.cpp.s
 .PHONY : Game/Background.cpp.s
 
+Game/Collider.obj: Game/Collider.cpp.obj
+.PHONY : Game/Collider.obj
+
+# target to build an object file
+Game/Collider.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Collider.cpp.obj
+.PHONY : Game/Collider.cpp.obj
+
+Game/Collider.i: Game/Collider.cpp.i
+.PHONY : Game/Collider.i
+
+# target to preprocess a source file
+Game/Collider.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Collider.cpp.i
+.PHONY : Game/Collider.cpp.i
+
+Game/Collider.s: Game/Collider.cpp.s
+.PHONY : Game/Collider.s
+
+# target to generate assembly for a file
+Game/Collider.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Collider.cpp.s
+.PHONY : Game/Collider.cpp.s
+
 Game/GObject.obj: Game/GObject.cpp.obj
 .PHONY : Game/GObject.obj
 
@@ -380,6 +404,9 @@ help:
 	@echo ... Game/Background.obj
 	@echo ... Game/Background.i
 	@echo ... Game/Background.s
+	@echo ... Game/Collider.obj
+	@echo ... Game/Collider.i
+	@echo ... Game/Collider.s
 	@echo ... Game/GObject.obj
 	@echo ... Game/GObject.i
 	@echo ... Game/GObject.s

@@ -15,7 +15,9 @@ bool GObject::getIsActive() const {
 void GObject::update() {
 }
 
+void GObject::onRender() {
 
+}
 
 
 

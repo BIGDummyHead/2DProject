@@ -29,6 +29,7 @@ public:
     void setRotation(const Vector2& rot);
     [[nodiscard]] Vector2 getRotation() const;
 
+    Vector2 getPosition();
 
 };
 
