@@ -27,7 +27,7 @@ public:
 
     Vector2 scale;
 
-    void render(draw drawTool, Vector2 where) override;
+    void render(const draw &drawTool, Vector2 where) override;
 
     void moveRowDown();
     void moveRowUp();

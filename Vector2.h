@@ -34,6 +34,7 @@ public:
 
     //TODO: add some math functions for Vector2 later.
 
+    [[nodiscard]] double distance(const Vector2& other) const;
     [[nodiscard]] SDL_Rect asRect() const;
 
     Vector2& operator+=(const Vector2& other) {

@@ -7,6 +7,7 @@
 #include "structs.h"
 #include <cstdio>
 #include <map>
+#include <SDL_render.h>
 #include <stdexcept>
 
 #include "Vector2.h"

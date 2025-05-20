@@ -23,7 +23,7 @@ public:
         loadedTexture = text;
     }
 
-    virtual void render(draw drawTool, Vector2 where);
+    virtual void render(const draw &drawTool, Vector2 where);
 };
 
 
