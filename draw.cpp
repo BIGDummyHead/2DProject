@@ -4,6 +4,9 @@
 
 #include "draw.h"
 #include <iostream>
+#include <SDL_log.h>
+#include <SDL_render.h>
+#include <SDL_surface.h>
 
 App draw::getApp()  const {
 
@@ -58,24 +61,31 @@ void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, co
     int textHeight = 0;
     SDL_QueryTexture(texture, nullptr, nullptr, &textWidth, &textHeight);
 
-    //auto determine how much each section cost
+    //based on the given texture, determine how big an object is
     const int spriteWidth = textWidth / columns;
     const int spriteHeight = textHeight / rows;
 
-    //determine where to render.
-     const int srcX = spriteWidth * renderCol;
-     const int srcY = spriteHeight * renderRow;
-
-
-    //now we have a part of our sprite to render
+    //calculate the src rectangle
+    const int srcX = spriteWidth * renderCol;
+    const int srcY = spriteHeight * renderRow;
     const SDL_Rect srcRect = { srcX, srcY, spriteWidth, spriteHeight };
 
+    //place where we should take from the texture
     SDL_Rect dest = renderPosition.asRect();
     dest.w = static_cast<int>(spriteWidth * scaleFactor.x);
     dest.h = static_cast<int>(spriteHeight * scaleFactor.y);
 
-    SDL_RenderCopy(getApp().renderer, texture, &srcRect, &dest);
+    //center the object's render position
+    dest.x -= dest.w / 2;
+    dest.y -= dest.h / 2;
 
+    // Draw a red rectangle behind the sprite
+    //SDL_SetRenderDrawColor(getApp().renderer, 255, 0, 0, 255); // Red color
+    //SDL_RenderFillRect(getApp().renderer, &dest);
+
+
+    // Render the sprite
+    SDL_RenderCopy(getApp().renderer, texture, &srcRect, &dest);
 }
 
 void draw::drawLine(const Vector2 &from, const Vector2 &to) const {

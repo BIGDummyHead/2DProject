@@ -4,6 +4,6 @@
 
 #include "Texture.h"
 
-void Texture::render(draw drawTool, Vector2 where) {
+void Texture::render(const draw& drawTool, Vector2 where) {
     drawTool.blit(loadedTexture, where);
 }

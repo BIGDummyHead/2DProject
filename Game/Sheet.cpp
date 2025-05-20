@@ -4,7 +4,7 @@
 
 #include "Sheet.h"
 
-void Sheet::render(draw drawTool, Vector2 where) {
+void Sheet::render(const draw &drawTool, Vector2 where) {
     drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
 }
 

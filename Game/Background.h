@@ -22,7 +22,7 @@ public:
     }
 
     int drawRadius;
-    void render(draw drawTool, Vector2 where) override;
+    void render(const draw &drawTool, Vector2 where) override;
 };
 
 

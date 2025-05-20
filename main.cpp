@@ -7,6 +7,8 @@
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
+
+#include "Game/Camera.h"
 #include "Game/Collider.h"
 
 
@@ -18,12 +20,12 @@ private:
 public:
 
     Collider* collider;
-    explicit Test_Player(draw* drawTool) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 6) {
+    explicit Test_Player(draw* drawTool) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4) {
         textureSheet.scale *= 2.5;
         texture = &textureSheet;
-        transform->setPosition(Vector2(100, 100));
+        transform->setPosition(Vector2());
 
-        collider = new Collider(transform, 135, 120, 180, 200);
+        collider = new Collider(transform, -24, 40, 24, -40);
     }
 
     static float getHorizontalMove() {
@@ -85,9 +87,16 @@ public:
     const auto* deathCollider = new Collider(obj.transform, 135, 120, 180, 200);
 
 
+    Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+    //add some padding to the FOV
+    const auto fov = Vector2(SCREEN_WIDTH + 100, SCREEN_HEIGHT + 100);
+    const Camera cam(fov, center);
+
 
     auto elapsed_time = std::chrono::steady_clock::time_point();
     auto frame_time = std::chrono::steady_clock::time_point();
+
 
     while(true) {
         //game loop
@@ -103,9 +112,17 @@ public:
                 continue;
             }
 
-            activeObj->texture->render(drawTool, activeObj->transform->getPosition());
-            activeObj->onRender();
+            if(cam.isInRenderView(activeObj->transform)) {
+                activeObj->texture->render(drawTool, activeObj->transform->getPosition());
+                activeObj->onRender();
+            }
+
             deathCollider->drawDebugCollider(&drawTool);
+            drawTool.drawLine(center, Vector2(center.x, center.y + cam.renderFOV.y));
+            drawTool.drawLine(center, Vector2(center.x, center.y - cam.renderFOV.y));
+            drawTool.drawLine(center, Vector2(center.x + cam.renderFOV.x, center.y));
+            drawTool.drawLine(center, Vector2(center.x - cam.renderFOV.x, center.y));
+
 
             if(elapsed > 10) {
                 frame_time = now; //reset clock to 0
