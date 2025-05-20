@@ -20,10 +20,11 @@ private:
 public:
 
     Collider* collider;
-    explicit Test_Player(draw* drawTool) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4) {
+    Camera* cam = nullptr;
+    explicit Test_Player(draw* drawTool, const Vector2& pos) : GObject(drawTool, "The Player"), textureSheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4) {
         textureSheet.scale *= 2.5;
         texture = &textureSheet;
-        transform->setPosition(Vector2());
+        transform->setPosition(pos);
 
         collider = new Collider(transform, -24, 40, 24, -40);
     }
@@ -58,7 +59,10 @@ public:
     void update() override {
         Vector2 move(getHorizontalMove(), getVerticalMove());
         move *= 4;
-        transform->setPosition(transform->getPosition() + move);
+        move = cam->transform->getPosition() - move;
+        //transform->setPosition(move);
+        cam->transform->setPosition(move);
+        //transform->setPosition(move);
     }
 
     void onRender() override {
@@ -69,74 +73,85 @@ public:
 
 [[noreturn]] int main() {
 
+    //Initialize the application
     App myApp;
     myApp.name = "My Game!";
-
     init::initSDL(myApp);
 
+    //create a drawtool from application
     draw drawTool(&myApp);
 
-    Test_Player playerObject(&drawTool);
-    GObject obj(&drawTool, "This is a game object");
+    //Center of the Screen, can be used for rendering
+    const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
+    //Create a camera to use for later, this will control scrolling
+    Camera cam(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT), center);
+
+    //Create a new basic gameobjects, using sheets
+
+    /*Death Object*/
+    GObject obj(&drawTool, "This is a game object");
     Sheet sheet(drawTool.loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
     sheet.scale *= 2.5;
     obj.texture = &sheet;
 
-    obj.transform->setPosition(Vector2(250, 100));
-    const auto* deathCollider = new Collider(obj.transform, 135, 120, 180, 200);
+
+    /* Player Object */
+    Test_Player playerObject(&drawTool, center);
+    playerObject.cam = &cam; //hook the camera up to the GObject
 
 
-    Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-
-    //add some padding to the FOV
-    const auto fov = Vector2(SCREEN_WIDTH + 100, SCREEN_HEIGHT + 100);
-    const Camera cam(fov, center);
-
-
+    //Setup timers for appropriate updating functionality.
     auto elapsed_time = std::chrono::steady_clock::time_point();
     auto frame_time = std::chrono::steady_clock::time_point();
-
-
     while(true) {
-        //game loop
+        //Prepare the scene for rendering
         drawTool.prepareScene();
 
+        //Poll for inputs, updates the input sectors
         input::pollInput();
 
+        //create a time for now to determine timing
         auto now = std::chrono::steady_clock::time_point();
         const long long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frame_time - now).count();
+
+        //Loop over active scene objects.
         for(auto activeObj : GObject::activeObjects) {
 
+            //Ensure this object is not null for drawing
             if(activeObj == nullptr || activeObj->transform == nullptr) {
                 continue;
             }
 
-            if(cam.isInRenderView(activeObj->transform)) {
+            //hard coded, TODO: change how this part works
+            if(activeObj == &playerObject) {
+                //draw normally, this way the player object is followed
                 activeObj->texture->render(drawTool, activeObj->transform->getPosition());
-                activeObj->onRender();
+            }
+            else if(cam.isInRenderView(activeObj->transform->getPosition())){
+                //Create an offset of where the item will be drawn
+                const Vector2 where = cam.transform->getPosition() - activeObj->transform->getPosition();
+                activeObj->texture->render(drawTool, where);
             }
 
-            deathCollider->drawDebugCollider(&drawTool);
-            drawTool.drawLine(center, Vector2(center.x, center.y + cam.renderFOV.y));
-            drawTool.drawLine(center, Vector2(center.x, center.y - cam.renderFOV.y));
-            drawTool.drawLine(center, Vector2(center.x + cam.renderFOV.x, center.y));
-            drawTool.drawLine(center, Vector2(center.x - cam.renderFOV.x, center.y));
+            activeObj->onRender();
 
 
-            if(elapsed > 10) {
+
+            if(elapsed > UPDATE_DELAY_MS) { //Call the update
                 frame_time = now; //reset clock to 0
                 activeObj->update();
             }
         }
 
 
+        //Draw the render
         drawTool.presentScene();
 
-        constexpr Uint32 sdlDelayMS = 5;
-        SDL_Delay(sdlDelayMS);
-        elapsed_time += std::chrono::milliseconds(sdlDelayMS);
-        frame_time += std::chrono::milliseconds(sdlDelayMS);
+        //Give a delay between render
+        SDL_Delay(RENDER_DELAY_MS);
+        elapsed_time += std::chrono::milliseconds(RENDER_DELAY_MS);
+        frame_time += std::chrono::milliseconds(RENDER_DELAY_MS);
     }
 
 }

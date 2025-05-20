@@ -21,8 +21,9 @@ public:
         renderFOV = fov;
     }
 
-    bool isInRenderView(const Transform* other) const;
-    SDL_Rect getPosition(const Vector2& position); //render a certain position
+    bool isInRenderView(const Vector2& other) const;
+
+    static SDL_Rect getPosition(const Vector2& position); //render a certain position
 };
 
 

@@ -32,9 +32,9 @@ public:
     void presentScene() const;
     [[nodiscard]] SDL_Texture* loadTexture(const std::string& filePath);
 
-    void blit(SDL_Texture *texture, Vector2 position, const SDL_Rect* copySrc = nullptr) const;
+    SDL_Rect blit(SDL_Texture *texture, Vector2 position, const SDL_Rect* copySrc = nullptr) const;
 
-    void blitSheet(SDL_Texture *texture, int rows, int columns, int renderRow, int renderCol, Vector2 renderPosition, Vector2 scalingFactor) const;
+    SDL_Rect blitSheet(SDL_Texture *texture, int rows, int columns, int renderRow, int renderCol, Vector2 renderPosition, Vector2 scalingFactor) const;
 
     void drawLine(const Vector2& from, const Vector2& to) const;
 };

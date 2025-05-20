@@ -8,5 +8,7 @@
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+#define UPDATE_DELAY_MS 10
+#define RENDER_DELAY_MS 5
 
 #endif //DEFS_H

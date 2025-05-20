@@ -22,7 +22,7 @@ public:
     }
 
     int drawRadius;
-    void render(const draw &drawTool, Vector2 where) override;
+    SDL_Rect render(const draw &drawTool, Vector2 where) override;
 };
 
 

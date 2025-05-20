@@ -4,8 +4,8 @@
 
 #include "Sheet.h"
 
-void Sheet::render(const draw &drawTool, Vector2 where) {
-    drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
+SDL_Rect Sheet::render(const draw &drawTool, Vector2 where) {
+    return drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
 }
 
 

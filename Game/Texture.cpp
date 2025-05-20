@@ -4,6 +4,6 @@
 
 #include "Texture.h"
 
-void Texture::render(const draw& drawTool, Vector2 where) {
-    drawTool.blit(loadedTexture, where);
+SDL_Rect Texture::render(const draw& drawTool, Vector2 where) {
+    return drawTool.blit(loadedTexture, where);
 }

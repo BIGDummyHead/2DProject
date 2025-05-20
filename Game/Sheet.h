@@ -27,7 +27,7 @@ public:
 
     Vector2 scale;
 
-    void render(const draw &drawTool, Vector2 where) override;
+    SDL_Rect render(const draw &drawTool, Vector2 where) override;
 
     void moveRowDown();
     void moveRowUp();

@@ -13,6 +13,8 @@ typedef struct {
     const char* name;
     SDL_Renderer *renderer;
     SDL_Window *window;
+
+
 } App;
 
 #endif //STRUCTS_H

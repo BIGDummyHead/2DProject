@@ -25,6 +25,7 @@ void draw::prepareScene() const {
 
 void draw::presentScene() const {
     SDL_RenderPresent(getApp().renderer);
+
 }
 
 SDL_Texture* draw::loadTexture(const std::string& filePath) {
@@ -47,15 +48,17 @@ SDL_Texture* draw::loadTexture(const std::string& filePath) {
 }
 
 //Draws a texture at a given position. Set onlyCopy as a position from the texture to copy.
-void draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect* copySrc) const {
+SDL_Rect draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect* copySrc) const {
     SDL_Rect dest = position.asRect();
 
     SDL_QueryTexture(texture, nullptr, nullptr, &dest.w, &dest.h);
 
     SDL_RenderCopy(getApp().renderer, texture, copySrc, &dest);
+
+    return dest;
 }
 
-void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow, const int renderCol, const Vector2 renderPosition, const Vector2 scaleFactor) const {
+SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow, const int renderCol, const Vector2 renderPosition, const Vector2 scalingFactor) const {
 
     int textWidth = 0;
     int textHeight = 0;
@@ -72,8 +75,8 @@ void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, co
 
     //place where we should take from the texture
     SDL_Rect dest = renderPosition.asRect();
-    dest.w = static_cast<int>(spriteWidth * scaleFactor.x);
-    dest.h = static_cast<int>(spriteHeight * scaleFactor.y);
+    dest.w = static_cast<int>(spriteWidth * scalingFactor.x);
+    dest.h = static_cast<int>(spriteHeight * scalingFactor.y);
 
     //center the object's render position
     dest.x -= dest.w / 2;
@@ -86,6 +89,8 @@ void draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, co
 
     // Render the sprite
     SDL_RenderCopy(getApp().renderer, texture, &srcRect, &dest);
+
+    return dest;
 }
 
 void draw::drawLine(const Vector2 &from, const Vector2 &to) const {
