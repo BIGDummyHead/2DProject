@@ -15,6 +15,8 @@ private:
     Transform* parentPtr = nullptr;
     Vector2 position;
     Vector2 rotation;
+    Vector2 drawnPosition;
+    bool hasDrawnPosition = false;
 
 public:
 
@@ -28,6 +30,7 @@ public:
 
     void setRotation(const Vector2& rot);
     [[nodiscard]] Vector2 getRotation() const;
+
 
 
 };

@@ -14,6 +14,7 @@ public:
     virtual ~Texture() = default;
 
     SDL_Texture* loadedTexture;
+    SDL_Rect renderedTexture{}; //init with an empty value
 
     Texture() {
         loadedTexture = nullptr;
@@ -23,7 +24,7 @@ public:
         loadedTexture = text;
     }
 
-    virtual SDL_Rect render(const draw &drawTool, Vector2 where);
+    virtual void render(const draw &drawTool, Vector2 where);
 };
 
 

@@ -25,10 +25,13 @@ void Transform::setParent(Transform *parent) {
 
 Vector2 Transform::getPosition() const {
 
-    if(parentPtr == nullptr)
-        return position; //absolute
+    const Vector2 ret = hasDrawnPosition ? drawnPosition : position;
 
-   return  parentPtr->getPosition() + position;
+    if(parentPtr == nullptr)
+        return ret; //absolute
+
+
+   return  parentPtr->getPosition() + ret;
 }
 
 void Transform::setPosition(const Vector2 &pos) {
@@ -42,6 +45,8 @@ Vector2 Transform::getRotation() const {
 void Transform::setRotation(const Vector2 &rot) {
     rotation = rot;
 }
+
+
 
 
 

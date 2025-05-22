@@ -4,34 +4,55 @@
 
 #include "Sheet.h"
 
-SDL_Rect Sheet::render(const draw &drawTool, Vector2 where) {
-    return drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
+void Sheet::render(const draw &drawTool, Vector2 where) {
+    renderedTexture = drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
 }
 
 
-void Sheet::moveColRight() {
-    if(currentCol + 1 > initCols - 1)
+void Sheet::moveColRight(const bool loop) {
+    if(currentCol + 1 > initCols - 1) {
+
+        if(loop)
+            currentCol = 0;
+
         return;
+    }
 
     currentCol++;
 }
 
-void Sheet::moveColLeft() {
-    if(currentCol - 1 < 0)
+void Sheet::moveColLeft(const bool loop) {
+    if(currentCol - 1 < 0) {
+
+        if(loop)
+            currentCol = initCols - 1;
+
         return;
+    }
 
     currentCol--;
 }
 
-void Sheet::moveRowUp() {
-    if(currentRow - 1 < 0)
+void Sheet::moveRowUp(const bool loop) {
+    if(currentRow - 1 < 0) {
+
+        if(loop) {
+            currentRow = initRows - 1;
+        }
+
         return;
+    }
 
     currentRow--;
 }
 
-void Sheet::moveRowDown() {
+void Sheet::moveRowDown(const bool loop) {
     if(currentRow + 1  > initRows - 1) {
+
+        if(loop) {
+            currentRow = 0;
+        }
+
         return;
     }
 
@@ -39,11 +60,11 @@ void Sheet::moveRowDown() {
 }
 
 
-int Sheet::getCurrentCol() {
+int Sheet::getCurrentCol() const {
     return currentCol;
 }
 
-int Sheet::getCurrentRow() {
+int Sheet::getCurrentRow() const {
     return currentRow;
 }
 
@@ -64,3 +85,13 @@ void Sheet::setRow(int rowIndex) {
 
     currentRow = rowIndex;
 }
+
+int Sheet::totalCols() const {
+    return initCols;
+}
+
+int Sheet::totalRows() const {
+    return initRows;
+}
+
+

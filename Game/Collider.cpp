@@ -7,20 +7,99 @@
 // Created by shawn on 5/18/2025.
 //
 
+#include <cmath>
+
 #include "Collider.h"
 
-void Collider::drawDebugCollider(const draw *drawTool) const {
+#include <algorithm>
 
-    SDL_SetRenderDrawColor(drawTool->getApp().renderer, 0, 255, 0,  255);
-    //top line
-    drawTool->drawLine(leftTopPoint->getPosition(), rightTopPoint->getPosition());
+//Ensure that sheet.renderedTexture is set before calling this function
+Vector2 Collider::createBoxFromTexture(const Sheet &sheet) {
 
-    //left line
-    drawTool->drawLine(leftTopPoint->getPosition(), leftBottomPoint->getPosition());
+    //produces 40
+    //std::cout << textureSheet.renderedTexture.w / textureSheet.totalCols() / 2 << std::endl;
 
-    //bottom line
-    drawTool->drawLine(leftBottomPoint->getPosition(), rightBottomPoint->getPosition());
+    //produces 25, width
+    //std::cout << textureSheet.renderedTexture.y / textureSheet.totalRows() / 2 << std::endl;
 
-    //right line
-    drawTool->drawLine(rightBottomPoint->getPosition(), rightTopPoint->getPosition());
+    const int x = sheet.renderedTexture.y / sheet.totalRows() / 2;
+    const int y = sheet.renderedTexture.w / sheet.totalCols() / 2;
+
+    const Vector2 v (x, y);
+
+    return v;
+}
+
+bool Collider::isColliding(const Collider& other, Vector2& push) const {
+    // Get the bounds of this collider
+    const Vector2 thisTopLeft = getTopLeft();
+    const Vector2 thisBottomRight = getBottomRight();
+
+    // Get the bounds of the other collider
+    const Vector2 otherTopLeft = other.getTopLeft();
+    const Vector2 otherBottomRight = other.getBottomRight();
+
+    // Check for overlap in both axes
+    const bool hasCollision =  thisTopLeft.x < otherBottomRight.x && thisBottomRight.x > otherTopLeft.x && thisTopLeft.y < otherBottomRight.y && thisBottomRight.y > otherTopLeft.y;
+
+    if(hasCollision) {
+        //1st algo coming from the top
+        //2nd algo coming from the bottom
+        //when coming from the top do the following: thisBottomRight.y - otherTopLeft.y
+        //when coming from the bottom do the following: otherBottomRight.y - thisTopLeft.y
+        push.y = center.y < other.center.y ? (thisBottomRight.y - otherTopLeft.y) * -1: (otherBottomRight.y - thisTopLeft.y);
+
+        //algorithm to get the pushforce for X as well
+        push.x = center.x > other.center.x ? otherBottomRight.x - thisTopLeft.x : otherTopLeft.x - thisBottomRight.x;
+
+        // test which type of collision horizontal or vertical
+        if (fabs(push.x) > fabs(push.y)) {
+            // vertical collision, do nothing on the X axis
+            push.x = 0;
+        } else {
+            // horizontal collision, do nothing on the Y axis
+            push.y = 0;
+        }
+
+    }
+
+    return hasCollision;
+}
+
+Vector2 Collider::getBottomLeft() const {
+    return Vector2{center.x - width, center.y + height};
+}
+
+Vector2 Collider::getBottomRight() const {
+    return Vector2{center.x + width, center.y + height};
+}
+
+Vector2 Collider::getTopLeft() const {
+    return Vector2{center.x - width, center.y - height};
+}
+
+Vector2 Collider::getTopRight() const {
+    return Vector2{center.x + width, center.y - height};
+}
+
+
+Vector2 Collider::getSize() const {
+    return Vector2{width, height};
+}
+
+void Collider::drawColliderBox(SDL_Renderer* renderer, const Vector2& drawnAt) const {
+
+    const Vector2 colliderSize = getSize();
+
+    SDL_Rect rect;
+    rect.x = static_cast<int>(drawnAt.x - (colliderSize.x )); // Offset by half the width
+    rect.y = static_cast<int>(drawnAt.y - (colliderSize.y )); // Offset by half the height
+    rect.w = static_cast<int>(colliderSize.x * 2);
+    rect.h = static_cast<int>(colliderSize.y * 2);
+
+    // Set the draw color (e.g., green for the rectangle)
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+
+    // Draw the rectangle
+    SDL_RenderDrawRect(renderer, &rect);
 }

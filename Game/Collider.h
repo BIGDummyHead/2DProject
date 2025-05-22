@@ -4,44 +4,44 @@
 
 #ifndef COLLIDER_H
 #define COLLIDER_H
+#include "Sheet.h"
+#include "Texture.h"
 #include "Transform.h"
 #include "../draw.h"
 #include "../Vector2.h"
+#include <cmath>
 
 
 class Collider {
 
 public:
-    Transform* leftTopPoint;
-    Transform* rightTopPoint;
-    Transform* leftBottomPoint;
-    Transform* rightBottomPoint;
+    double width;
+    double height;
+    Vector2 center;
+    bool isStatic = true;
 
     //Create a default collider
-    Collider(Transform* attached, const float& leftX, const float& bottomY, const float& rightX, const float& topY) {
-
-        leftBottomPoint = new Transform();
-        leftBottomPoint->setParent(attached);
-        leftBottomPoint->setPosition(Vector2(leftX, bottomY));
-
-        leftTopPoint = new Transform();
-        leftTopPoint->setParent(attached);
-        leftTopPoint->setPosition(Vector2(leftX, topY));
-
-        rightBottomPoint = new Transform();
-        rightBottomPoint->setParent(attached);
-        rightBottomPoint->setPosition(Vector2(rightX, bottomY));
-
-        rightTopPoint = new Transform();
-        rightTopPoint->setParent(attached);
-        rightTopPoint->setPosition(Vector2(rightX, topY));
+    Collider(const double& width, const double& height, const bool isStatic = true) {
+        this->width = fabs( width );
+        this->height = fabs( height );
+        this->isStatic = isStatic;
     }
 
     //Check if this collider is colliding with another collider
-    bool isColliding(const Collider& other);
+    [[nodiscard]] bool isColliding(const Collider& other, Vector2& push) const;
 
-    //Draw this collider
-    void drawDebugCollider(const draw* drawTool) const;
+    [[nodiscard]] Vector2 getSize() const;
+
+    void drawColliderBox(SDL_Renderer* renderer, const Vector2& drawnAt) const;
+
+    [[nodiscard]] Vector2 getTopLeft() const;
+    [[nodiscard]]Vector2 getTopRight() const;
+    [[nodiscard]]Vector2 getBottomLeft() const;
+    [[nodiscard]]Vector2 getBottomRight() const;
+
+    void pushOut(Collider* other, Transform* thisColliderTransform, Transform* otherTransform);
+
+    static Vector2 createBoxFromTexture(const Sheet& sheet);
 
 };
 

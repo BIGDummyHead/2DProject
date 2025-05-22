@@ -5,7 +5,8 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 #include <SDL_rect.h>
-
+#include <iostream>
+#include <sstream>
 
 class Vector2 {
 public:
@@ -122,6 +123,15 @@ public:
 
         return *this;
     }
+
+    [[nodiscard]] std::string toString() const {
+
+        std::stringstream ss;
+        ss << "(" << x << "," << y << ")";
+        return ss.str();
+    }
+
+    double magnitude() const;
 
 };
 

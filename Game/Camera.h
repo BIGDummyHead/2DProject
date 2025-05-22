@@ -15,15 +15,15 @@ public:
     Vector2 renderFOV;
     Transform* transform;
 
+
     Camera(const Vector2 fov, const Vector2 position) {
         transform = new Transform();
         transform->setPosition(position);
         renderFOV = fov;
     }
 
-    bool isInRenderView(const Vector2& other) const;
+    [[nodiscard]] bool isInRenderView(const Vector2& other) const;
 
-    static SDL_Rect getPosition(const Vector2& position); //render a certain position
 };
 
 

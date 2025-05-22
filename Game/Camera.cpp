@@ -7,22 +7,15 @@
 #include "../defs.h"
 
 bool Camera::isInRenderView(const Vector2& other) const {
-    //I believe we need to take the current transform position that we have and we need to measure the distance
+    const Vector2 currentPosition = transform->getPosition();
 
-    //we divide this by two to get the real FOV
 
-    const double distance = transform->getPosition().distance(other);
 
-    std::cout << "Render Distance:" << renderFOV.x << "," << renderFOV.y << std::endl << distance << std::endl << std::endl;
 
-    return distance <= renderFOV.x + renderFOV.y;
-}
+    const double xDistance = std::abs(currentPosition.x)  - std::abs(other.x);
+    const double yDistance = std::abs(currentPosition.y) - std::abs(other.y);
 
-SDL_Rect Camera::getPosition(const Vector2 &position) {
-    const SDL_Rect renderPosition {
-        static_cast<int>( position.x ), static_cast<int>(position.y),SCREEN_WIDTH,SCREEN_HEIGHT
-    };
 
-    return renderPosition;
+    return xDistance <= renderFOV.x / 2 && yDistance <= renderFOV.y / 2;
 }
 

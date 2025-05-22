@@ -24,6 +24,7 @@ void draw::prepareScene() const {
 }
 
 void draw::presentScene() const {
+
     SDL_RenderPresent(getApp().renderer);
 
 }
@@ -74,13 +75,13 @@ SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns
     const SDL_Rect srcRect = { srcX, srcY, spriteWidth, spriteHeight };
 
     //place where we should take from the texture
-    SDL_Rect dest = renderPosition.asRect();
-    dest.w = static_cast<int>(spriteWidth * scalingFactor.x);
-    dest.h = static_cast<int>(spriteHeight * scalingFactor.y);
+    SDL_Rect renderRectPosition = renderPosition.asRect();
+    renderRectPosition.w = static_cast<int>(spriteWidth * scalingFactor.x);
+    renderRectPosition.h = static_cast<int>(spriteHeight * scalingFactor.y);
 
     //center the object's render position
-    dest.x -= dest.w / 2;
-    dest.y -= dest.h / 2;
+    renderRectPosition.x -= renderRectPosition.w / 2;
+    renderRectPosition.y -= renderRectPosition.h / 2;
 
     // Draw a red rectangle behind the sprite
     //SDL_SetRenderDrawColor(getApp().renderer, 255, 0, 0, 255); // Red color
@@ -88,9 +89,9 @@ SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns
 
 
     // Render the sprite
-    SDL_RenderCopy(getApp().renderer, texture, &srcRect, &dest);
+    SDL_RenderCopy(getApp().renderer, texture, &srcRect, &renderRectPosition);
 
-    return dest;
+    return renderRectPosition;
 }
 
 void draw::drawLine(const Vector2 &from, const Vector2 &to) const {

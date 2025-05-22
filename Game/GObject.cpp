@@ -15,9 +15,14 @@ bool GObject::getIsActive() const {
 void GObject::update() {
 }
 
-void GObject::onRender() {
+void GObject::onRender(const Vector2& drawnAt) {
 
 }
+
+void GObject::onCollision(Collider *other) {
+
+}
+
 
 
 

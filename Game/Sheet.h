@@ -27,19 +27,22 @@ public:
 
     Vector2 scale;
 
-    SDL_Rect render(const draw &drawTool, Vector2 where) override;
+    void render(const draw &drawTool, Vector2 where) override;
 
-    void moveRowDown();
-    void moveRowUp();
+    void moveRowDown(bool loop = false);
+    void moveRowUp(bool loop = false);
 
-    void moveColRight();
-    void moveColLeft();
+    void moveColRight(bool loop = false);
+    void moveColLeft(bool loop = false);
 
-    int getCurrentRow();
-    int getCurrentCol();
+    [[nodiscard]] int getCurrentRow() const;
+    [[nodiscard]] int getCurrentCol() const;
 
     void setRow(int rowIndex);
     void setCol(int colIndex);
+
+    [[nodiscard]] int totalRows() const;
+    [[nodiscard]] int totalCols() const;
 
 };
 

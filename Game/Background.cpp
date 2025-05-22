@@ -9,7 +9,7 @@ void Background::drawAround(draw drawTool, Vector2 pos) {
 }
 
 
-SDL_Rect Background::render(const draw &drawTool, Vector2 where) {
+void Background::render(const draw &drawTool, Vector2 where) {
     drawTool.blit(loadedTexture, where);
 
     for(int i = 1; i < drawRadius; i++) {

@@ -4,13 +4,9 @@
 
 #ifndef GOBJECT_H
 #define GOBJECT_H
-
-#include <stdio.h>
 #include <string>
-#include <vector>
-
 #include <unordered_set>
-
+#include "Collider.h"
 #include "Texture.h"
 #include "Transform.h"
 
@@ -31,6 +27,7 @@ public:
     Transform* transform;
     Texture* texture = nullptr;
     draw* drawTool;
+    Collider* collider = nullptr;
 
 
     void setIsActive(const bool status) {
@@ -83,7 +80,8 @@ public:
     }
 
     virtual void update();
-    virtual  void onRender();
+    virtual  void onRender(const Vector2& drawnAt);
+    virtual  void onCollision(Collider* other);
 
 
 };
