@@ -124,6 +124,8 @@ public:
         return *this;
     }
 
+
+
     [[nodiscard]] std::string toString() const {
 
         std::stringstream ss;
@@ -131,7 +133,9 @@ public:
         return ss.str();
     }
 
-    double magnitude() const;
+    [[nodiscard]] double magnitude() const;
+
+    [[nodiscard]] Vector2 absolute() const;
 
 };
 

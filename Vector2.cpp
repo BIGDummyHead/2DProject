@@ -24,4 +24,8 @@ double Vector2::magnitude() const {
     return sqrt(pow(x, 2) + pow(y, 2));
 }
 
+Vector2 Vector2::absolute() const {
+    return Vector2{fabs(x), fabs(y)};
+}
+
 

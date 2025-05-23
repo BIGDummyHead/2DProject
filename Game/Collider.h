@@ -20,6 +20,8 @@ public:
     Vector2 center;
     bool isStatic = true;
 
+    double mass = 1;
+
     //Create a default collider
     Collider(const double& width, const double& height, const bool isStatic = true) {
         this->width = fabs( width );

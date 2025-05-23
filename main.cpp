@@ -105,7 +105,7 @@ public:
 
         // After collision resolution, update the camera's position
         if (cam != nullptr) {
-            cam->transform->setPosition(transform->getPosition() - (initSpawn));
+            cam->transform->setPosition(transform->getPosition() - initSpawn);
         }
     }
 
@@ -134,24 +134,31 @@ public:
 
     }
 
+    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass) {
+        auto *obj = new GObject(sceneInfo.drawingTool, "This is a game object");
+        auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
+        obj->collider = new Collider(20, 40);
+        obj->collider->isStatic = false;
+        obj->collider->mass = mass;
+        obj->transform->setPosition(where + Vector2{-250, 0});
+        sheet->scale *= 2.5;
+        obj->texture = sheet;
+    }
+
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void onSceneLoad(const SceneInformation sceneInfo) override {
         if (Camera::mainCamera == nullptr)
             throw std::runtime_error("No camera was instantiated");
 
         const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-
-        /* Death Object */
-        auto *obj = new GObject(sceneInfo.drawingTool, "This is a game object");
-        auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
-        obj->collider = new Collider(20, 40);
-        obj->transform->setPosition(center + Vector2{-250, 0});
-        sheet->scale *= 2.5;
-        obj->texture = sheet;
+        createDeathObject(sceneInfo, center, 1);
+        createDeathObject(sceneInfo, center + Vector2{500, 0}, 4);
 
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
+
+
     }
 };
 
@@ -167,7 +174,7 @@ public:
     //Center of the Screen, can be used for rendering
 
     //Create a camera to use for later, this will control scrolling
-    const Camera cam(Vector2(SCREEN_WIDTH + 10, SCREEN_HEIGHT + 10), Vector2{0, 0});
+    const Camera cam(Vector2(SCREEN_WIDTH + 50, SCREEN_HEIGHT + 50), Vector2{0, 0});
 
     const SceneInformation sceneInfo{&myApp, &drawTool};
 
@@ -192,11 +199,14 @@ public:
 
         //Loop over active scene objects.
         for (auto activeObj: GObject::activeObjects) {
+
             //Ensure this object is not null for drawing
             if (activeObj == nullptr || activeObj->transform == nullptr) {
                 continue;
             }
 
+            //important to only call this once
+            const Vector2 vel = activeObj->transform->getVelocity();
 
             //check if the object is even in the render view
             if (cam.isInRenderView(activeObj->transform->getPosition())) {
@@ -218,29 +228,64 @@ public:
                             continue;
 
 
-                        //TODO: Implement a way to push objects if they are both dynamic (non-static)
 
                         //determine the center of this collider
                         comparingObj->collider->center =
                                 comparingObj->transform->getPosition() - cam.transform->getPosition();
 
-                        //pick the non static object (dynamic)
-                        GObject *nonStaticObject = comparingObj->collider->isStatic ? activeObj : comparingObj;
 
-                        //this may not be static, but it is the opposite of whatever the other one is :)
-                        GObject *staticObject = nonStaticObject == activeObj ? comparingObj : activeObj;
+
+                        //dynamic or heaviest
+                        GObject* left = nullptr;
+
+                        //static or lightest
+                        GObject* right = nullptr;
+
+                        if(comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
+
+                            //both are dynamic
+
+                            //choose the fastest and heaviest object
+
+                            //get the last stored velocity, avoids the recalcuation step
+                            const Vector2 comparingVelocity = comparingObj->transform->getVelocity(true);
+                            const double comparingWeight = comparingObj->collider->mass;
+                            const double myWeight = activeObj->collider->mass;
+
+                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight) ? comparingObj : activeObj;
+                            right = left == activeObj ? comparingObj : activeObj;
+
+                        }
+                        else { //one is static and the other is dynamic
+                            //static object
+                            left = comparingObj->collider->isStatic ? activeObj : comparingObj;
+
+                            //dynamic object
+                            right = left == activeObj ? comparingObj : activeObj;
+                        }
 
                         Vector2 push; //check for collision
-                        if (nonStaticObject->collider->isColliding(*staticObject->collider, push)) {
+                        if (left->collider->isColliding(*right->collider, push)) {
+
+                            if(left->collider->isStatic == false && right->collider->isStatic == false) {
+
+                                Transform* rightTrans = right->transform;
+
+                                //fix for object clipping when one was heavier.
+                                rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
+                            }
 
                             //collision gives us back the amount that we need to push the nonStaticObject
-                            Transform *trans = nonStaticObject->transform;
-                            trans->setPosition(trans->getPosition() + push);
+                            Transform *trans = left->transform;
+                            const Vector2 newLocation = trans->getPosition() + push;
+                            trans->setPosition(newLocation);
 
                             //send a notification
-                            nonStaticObject->onCollision(staticObject->collider);
-                            staticObject->onCollision(nonStaticObject->collider);
+                            right->onCollision(left->collider);
+                            left->onCollision(right->collider);
                         }
+
+
                     }
 
                     //debug: draw the collider box so we can see it
@@ -252,6 +297,12 @@ public:
                 activeObj->texture->render(drawTool, drawnAt);
                 activeObj->onRender(drawnAt);
             }
+            else { //do not render
+                std::cout << "Do not render: " << activeObj->name << std::endl;
+            }
+
+
+            //update the transform velocity.
 
 
             if (elapsed > UPDATE_DELAY_MS) {
@@ -259,6 +310,10 @@ public:
                 frame_time = now; //reset clock to 0
                 activeObj->update();
             }
+
+
+
+
         }
 
 

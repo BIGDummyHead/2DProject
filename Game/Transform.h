@@ -15,8 +15,9 @@ private:
     Transform* parentPtr = nullptr;
     Vector2 position;
     Vector2 rotation;
-    Vector2 drawnPosition;
-    bool hasDrawnPosition = false;
+
+    Vector2 velocity;
+    Vector2 lastPosition;
 
 public:
 
@@ -31,6 +32,9 @@ public:
     void setRotation(const Vector2& rot);
     [[nodiscard]] Vector2 getRotation() const;
 
+
+    //Get the current velocity that was last calculated.
+    [[nodiscard]] Vector2 getVelocity(bool useLastStored = false);
 
 
 };

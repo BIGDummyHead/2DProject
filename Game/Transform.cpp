@@ -25,16 +25,15 @@ void Transform::setParent(Transform *parent) {
 
 Vector2 Transform::getPosition() const {
 
-    const Vector2 ret = hasDrawnPosition ? drawnPosition : position;
-
     if(parentPtr == nullptr)
-        return ret; //absolute
+        return position; //absolute
 
 
-   return  parentPtr->getPosition() + ret;
+   return  parentPtr->getPosition() + position;
 }
 
 void Transform::setPosition(const Vector2 &pos) {
+    lastPosition = position; //update the last position
     position = pos;
 }
 
@@ -45,6 +44,20 @@ Vector2 Transform::getRotation() const {
 void Transform::setRotation(const Vector2 &rot) {
     rotation = rot;
 }
+
+Vector2 Transform::getVelocity(const bool useLastStored) {
+
+    if(useLastStored) //do not recalculate
+        return velocity;
+
+    velocity = (position - lastPosition).absolute();
+    lastPosition = getPosition();
+
+    return velocity;
+}
+
+
+
 
 
 
