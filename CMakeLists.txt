@@ -43,7 +43,9 @@ add_executable(2DProject main.cpp
         Game/Collider.cpp
         Game/Collider.h
         Game/Camera.cpp
-        Game/Camera.h)
+        Game/Camera.h
+        Game/Scene.cpp
+        Game/Scene.h)
 
 # Link against SDL2 libraries
 target_link_libraries(2DProject SDL2 SDL2main)

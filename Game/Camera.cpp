@@ -6,6 +6,8 @@
 #include <iostream>
 #include "../defs.h"
 
+Camera* Camera::mainCamera;
+
 bool Camera::isInRenderView(const Vector2& other) const {
     const Vector2 currentPosition = transform->getPosition();
 

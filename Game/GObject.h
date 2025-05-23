@@ -29,35 +29,10 @@ public:
     draw* drawTool;
     Collider* collider = nullptr;
 
+    bool destroyOnSceneLoad = true;
 
-    void setIsActive(const bool status) {
-        if(isActive && status || !isActive && !status) { //there is nothing tto do
-            return;
-        }
 
-        isActive = status;
-
-        if(isActive) {
-
-            const auto found = inactiveObjects.find(this);
-
-            if(found != inactiveObjects.end()) {
-                inactiveObjects.erase(*found);
-            }
-
-            activeObjects.insert(*found);
-
-        }
-        else {
-            const auto found = activeObjects.find(this);
-
-            if(found != activeObjects.end()) {
-                activeObjects.erase(*found);
-            }
-
-            inactiveObjects.insert(*found);
-        }
-    }
+    void setIsActive(bool status);
 
 
     [[nodiscard]] bool getIsActive() const;
@@ -82,6 +57,8 @@ public:
     virtual void update();
     virtual  void onRender(const Vector2& drawnAt);
     virtual  void onCollision(Collider* other);
+
+    void destroy();
 
 
 };

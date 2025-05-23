@@ -10,14 +10,17 @@
 
 #include "Game/Camera.h"
 #include "Game/Collider.h"
+#include "Game/Scene.h"
+
+
 
 
 class Test_Player final : public GObject {
 private:
     Vector2 initSpawn;
 
-    Sheet textureSheet = Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
-    Sheet runningSheet = Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
+    Sheet* textureSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
+    Sheet* runningSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
 
     std::chrono::steady_clock::time_point lastAnimationTime = std::chrono::steady_clock::now();
     const int animationDelayMs = 95; // Delay in milliseconds
@@ -26,14 +29,14 @@ public:
     Camera *cam = nullptr;
 
     explicit Test_Player(draw *drawTool, const Vector2 &pos) : GObject(drawTool, "The Player"), initSpawn(pos) {
-        textureSheet.scale *= 2.5;
-        runningSheet.scale *= 2.5;
+        textureSheet->scale *= 2.5;
+        runningSheet->scale *= 2.5;
 
-        texture = &textureSheet;
+        texture = textureSheet;
         transform->setPosition(pos);
 
-        textureSheet.render(*drawTool, Vector2());
-        const Vector2 box = Collider::createBoxFromTexture(textureSheet);
+        textureSheet->render(*drawTool, Vector2());
+        const Vector2 box = Collider::createBoxFromTexture(*textureSheet);
         collider = new Collider(box.x, box.y, false);
     }
 
@@ -79,19 +82,19 @@ public:
             return;
         }
 
-        texture = &runningSheet;
+        texture = runningSheet;
         if (move.x > 0) {
-            runningSheet.setRow(2);
+            runningSheet->setRow(2);
         } else if (move.x < 0) {
-            runningSheet.setRow(1);
+            runningSheet->setRow(1);
         }
 
         if (move.y > 0) {
-            runningSheet.setRow(0);
+            runningSheet->setRow(0);
         } else if (move.y < 0) {
-            runningSheet.setRow(3);
+            runningSheet->setRow(3);
         }
-        runningSheet.moveColRight(true);
+        runningSheet->moveColRight(true);
     }
 
     void doMovement(Vector2 &move) const {
@@ -112,15 +115,43 @@ public:
             animateMovement(move);
             doMovement(move);
         } else {
-            if (texture != &textureSheet) {
-                texture = &textureSheet;
+            if (texture != textureSheet) {
+                texture = textureSheet;
             }
 
             if (shouldAnimate()) {
-                textureSheet.setRow(0);
-                textureSheet.moveColRight(true);
+                textureSheet->setRow(0);
+                textureSheet->moveColRight(true);
             }
         }
+    }
+};
+
+class Test_Scene final : public Scene {
+
+public:
+    Test_Scene() : Scene("Main Scene") {
+
+    }
+
+    //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    void onSceneLoad(const SceneInformation sceneInfo) override {
+        if (Camera::mainCamera == nullptr)
+            throw std::runtime_error("No camera was instantiated");
+
+        const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+        /* Death Object */
+        auto *obj = new GObject(sceneInfo.drawingTool, "This is a game object");
+        auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
+        obj->collider = new Collider(20, 40);
+        obj->transform->setPosition(center + Vector2{-250, 0});
+        sheet->scale *= 2.5;
+        obj->texture = sheet;
+
+        /* Player Object */
+        auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
+        playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
     }
 };
 
@@ -134,24 +165,15 @@ public:
     draw drawTool(&myApp);
 
     //Center of the Screen, can be used for rendering
-    const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
     //Create a camera to use for later, this will control scrolling
-    Camera cam(Vector2(SCREEN_WIDTH + 10, SCREEN_HEIGHT + 10), Vector2{0, 0});
+    const Camera cam(Vector2(SCREEN_WIDTH + 10, SCREEN_HEIGHT + 10), Vector2{0, 0});
 
-    /*Death Object*/
-    GObject obj(&drawTool, "This is a game object");
-    Sheet sheet(drawTool.loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
-    obj.collider = new Collider(20, 40);
-    obj.transform->setPosition(center + Vector2{-250, 0});
-    sheet.scale *= 2.5;
-    obj.texture = &sheet;
+    const SceneInformation sceneInfo{&myApp, &drawTool};
 
+    Test_Scene firstScene;
 
-    /* Player Object */
-    Test_Player playerObject(&drawTool, center);
-    playerObject.cam = &cam; //hook the camera up to the GObject
-
+    Scene::loadScene("Main Scene", sceneInfo);
 
     //Setup timers for appropriate updating functionality.
     auto elapsed_time = std::chrono::steady_clock::time_point();
@@ -176,29 +198,42 @@ public:
             }
 
 
+            //check if the object is even in the render view
             if (cam.isInRenderView(activeObj->transform->getPosition())) {
+
+                //determine where to draw this object
                 Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
 
                 //test collision before updating position
                 if (activeObj->collider != nullptr) {
                     activeObj->collider->center = drawnAt;
 
-                    //collision detection
+                    //we have to loop through all the active objects again and make sure there is not collision
                     for (auto comparingObj: GObject::activeObjects) {
-                        //if same obj or comparing is null or both static, save time
+
+                        //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
                         if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
-                            isStatic && comparingObj->collider->isStatic || !!cam.isInRenderView(
+                            isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
                                 comparingObj->transform->getPosition()))
                             continue;
 
+
+                        //TODO: Implement a way to push objects if they are both dynamic (non-static)
+
+                        //determine the center of this collider
                         comparingObj->collider->center =
                                 comparingObj->transform->getPosition() - cam.transform->getPosition();
 
+                        //pick the non static object (dynamic)
                         GObject *nonStaticObject = comparingObj->collider->isStatic ? activeObj : comparingObj;
+
+                        //this may not be static, but it is the opposite of whatever the other one is :)
                         GObject *staticObject = nonStaticObject == activeObj ? comparingObj : activeObj;
 
-                        Vector2 push;
+                        Vector2 push; //check for collision
                         if (nonStaticObject->collider->isColliding(*staticObject->collider, push)) {
+
+                            //collision gives us back the amount that we need to push the nonStaticObject
                             Transform *trans = nonStaticObject->transform;
                             trans->setPosition(trans->getPosition() + push);
 
@@ -208,16 +243,15 @@ public:
                         }
                     }
 
+                    //debug: draw the collider box so we can see it
                     activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
                 }
 
 
+                //render the object
                 activeObj->texture->render(drawTool, drawnAt);
                 activeObj->onRender(drawnAt);
             }
-
-
-            //once we render we can now check for collision
 
 
             if (elapsed > UPDATE_DELAY_MS) {
@@ -228,7 +262,7 @@ public:
         }
 
 
-        //Draw the render
+        //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene
         drawTool.presentScene();
 
         //Give a delay between render

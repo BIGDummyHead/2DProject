@@ -15,11 +15,16 @@ public:
     Vector2 renderFOV;
     Transform* transform;
 
+    static Camera* mainCamera;
+
 
     Camera(const Vector2 fov, const Vector2 position) {
         transform = new Transform();
         transform->setPosition(position);
         renderFOV = fov;
+
+        if(mainCamera == nullptr)
+            mainCamera = this;
     }
 
     [[nodiscard]] bool isInRenderView(const Vector2& other) const;
