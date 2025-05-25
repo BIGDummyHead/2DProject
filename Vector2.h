@@ -7,6 +7,7 @@
 #include <SDL_rect.h>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 
 class Vector2 {
 public:
@@ -124,6 +125,8 @@ public:
         return *this;
     }
 
+
+    [[nodiscard]] Vector2 normalize() const;
 
 
     [[nodiscard]] std::string toString() const {

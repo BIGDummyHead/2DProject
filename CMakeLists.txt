@@ -49,6 +49,7 @@ add_executable(2DProject main.cpp
         Game/Physics/Raycaster.cpp
         Game/Physics/Raycaster.h
         Game/Physics/RayInfo.h
+        Game/Physics/Ray.h
 )
 
 # Link against SDL2 libraries

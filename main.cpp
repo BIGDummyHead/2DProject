@@ -126,16 +126,34 @@ public:
         }
 
         //SDL_RenderDrawLine(drawTool->getApp().renderer, transform->getPosition().x, transform->getPosition().y, transform->getPosition().x * 100, transform->getPosition().y);
+        const Vector2 origin = transform->getPosition();
+        const Vector2 forward = Vector2(3, 2).normalize();  // Assuming you have normalized method or do it manually
 
-       /* RayInfo rInfo;
-        if(Raycaster::cast(transform->getPosition(), Vector2(1, 0), DBL_MAX, &rInfo)) {
+        constexpr double coneAngleDeg = 90.0f;
+        constexpr double coneAngleRad = coneAngleDeg * 3.14159265f / 180.0f;  // degrees to radians
 
-            std::cout << "Hit: " << rInfo.gameObjectHit->name << std::endl;
+        constexpr int numRays = 100;  // number of rays in the cone
+        constexpr double halfAngle = coneAngleRad;
 
+        for (int i = 0; i < numRays; ++i) {
+            constexpr double distance = 600.0;
+            const double t = static_cast<double>(i) / (numRays - 1);
+            const double angle = -halfAngle + t * coneAngleRad;
+
+            // 2D rotation formula
+            const double cosA = cos(angle);
+            const double sinA = sin(angle);
+
+            Vector2 dir;
+            dir.x = forward.x * cosA - forward.y * sinA;
+            dir.y = forward.x * sinA + forward.y * cosA;
+
+            // Cast the ray and draw
+            Ray ray(origin, dir, distance);
+            RayInfo rInfo;
+            Raycaster::cast(ray, &rInfo);
+            Raycaster::drawCast(ray, drawTool->getApp().renderer, rInfo);
         }
-        else {
-            std::cout << "Nothing hit!" << std::endl;
-        }*/
     }
 };
 
@@ -149,7 +167,7 @@ public:
     void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string& theName) {
         auto *obj = new GObject(sceneInfo.drawingTool, theName);
         auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
-        obj->collider = new Collider(20, 40);
+        obj->collider = new Collider(25, 40);
         obj->collider->isStatic = false;
         obj->collider->mass = mass;
         obj->transform->setPosition(where + Vector2{-250, 0});
@@ -186,7 +204,7 @@ public:
     //Center of the Screen, can be used for rendering
 
     //Create a camera to use for later, this will control scrolling
-    const Camera cam(Vector2(SCREEN_WIDTH + 50, SCREEN_HEIGHT + 50), Vector2{0, 0});
+    const Camera cam(Vector2(SCREEN_WIDTH + 150, SCREEN_HEIGHT + 250), Vector2{0, 0});
 
     const SceneInformation sceneInfo{&myApp, &drawTool};
 
@@ -315,11 +333,9 @@ public:
             //update the transform velocity.
 
 
-            if (elapsed > UPDATE_DELAY_MS) {
                 //Call the update
                 frame_time = now; //reset clock to 0
                 activeObj->update();
-            }
 
 
 
