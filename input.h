@@ -6,9 +6,29 @@
 #define INPUT_H
 #include <SDL_events.h>
 #include <process.h>
+#include "Vector2.h"
+#include <windows.h>
+#include <cmath>
+
+enum MouseState {
+    Up,
+    Down,
+    Held
+};
+
+enum MouseButton {
+    Left,
+    Right,
+    //others to come soon
+};
 
 //Class to deal with input
 class input {
+
+private:
+    static DWORD currentPID;
+    static HWND windowHandle;
+    static BOOL CALLBACK EnumWindowsProcMy(HWND hwnd,LPARAM lParam);
 
 public:
     static void onKeyDown(SDL_Keycode pressed);
@@ -19,6 +39,12 @@ public:
     static void doKeyCheck(const SDL_Event &event);
     static void onKeyHeld(SDL_Keycode pressing);
     static  bool isKeyHeld(SDL_Keycode key);
+    static Vector2 getMousePosition();
+    static  bool windowHasFocus();
+    static long clampLong( const long& val,  const long& min, const long& max);
+
+    static MouseState getMouseInputState(const MouseButton& mouseButton);
+    static void updateMouseInputState(const Uint8& key, const bool& down);
 };
 
 

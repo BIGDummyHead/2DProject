@@ -103,6 +103,7 @@ public:
         // Temporarily update the player's position
         transform->setPosition(transform->getPosition() + move);
 
+
         // After collision resolution, update the camera's position
         if (cam != nullptr) {
             cam->transform->setPosition(transform->getPosition() - initSpawn);
@@ -223,6 +224,18 @@ public:
 
         //Poll for inputs, updates the input sectors
         input::pollInput();
+
+        switch (input::getMouseInputState(Left)) {
+            case Down:
+                std::cout << "Mouse was pushed down" << std::endl;
+                break;
+            case Up:
+                std::cout << "Mouse is now up" << std::endl;
+                break;
+            case Held:
+                std::cout << "Mouse is being held" << std::endl;
+                break;
+        }
 
         //create a time for now to determine timing
         auto now = std::chrono::steady_clock::time_point();
