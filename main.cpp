@@ -7,12 +7,12 @@
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
+#include <float.h>
 
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
-
-
+#include "Game/Physics/Raycaster.h"
 
 
 class Test_Player final : public GObject {
@@ -124,6 +124,18 @@ public:
                 textureSheet->moveColRight(true);
             }
         }
+
+        //SDL_RenderDrawLine(drawTool->getApp().renderer, transform->getPosition().x, transform->getPosition().y, transform->getPosition().x * 100, transform->getPosition().y);
+
+       /* RayInfo rInfo;
+        if(Raycaster::cast(transform->getPosition(), Vector2(1, 0), DBL_MAX, &rInfo)) {
+
+            std::cout << "Hit: " << rInfo.gameObjectHit->name << std::endl;
+
+        }
+        else {
+            std::cout << "Nothing hit!" << std::endl;
+        }*/
     }
 };
 
@@ -134,8 +146,8 @@ public:
 
     }
 
-    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass) {
-        auto *obj = new GObject(sceneInfo.drawingTool, "This is a game object");
+    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string& theName) {
+        auto *obj = new GObject(sceneInfo.drawingTool, theName);
         auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
         obj->collider = new Collider(20, 40);
         obj->collider->isStatic = false;
@@ -151,8 +163,8 @@ public:
             throw std::runtime_error("No camera was instantiated");
 
         const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        createDeathObject(sceneInfo, center, 1);
-        createDeathObject(sceneInfo, center + Vector2{500, 0}, 4);
+        createDeathObject(sceneInfo, center, 1, "left object");
+        createDeathObject(sceneInfo, center + Vector2{500, 0}, 4, "right object");
 
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
@@ -186,6 +198,8 @@ public:
     auto elapsed_time = std::chrono::steady_clock::time_point();
     auto frame_time = std::chrono::steady_clock::time_point();
     while (true) {
+
+
         //Prepare the scene for rendering
         drawTool.prepareScene();
 
@@ -226,7 +240,6 @@ public:
                             isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
                                 comparingObj->transform->getPosition()))
                             continue;
-
 
 
                         //determine the center of this collider
@@ -296,9 +309,6 @@ public:
                 //render the object
                 activeObj->texture->render(drawTool, drawnAt);
                 activeObj->onRender(drawnAt);
-            }
-            else { //do not render
-                std::cout << "Do not render: " << activeObj->name << std::endl;
             }
 
 

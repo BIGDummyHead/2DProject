@@ -45,7 +45,11 @@ add_executable(2DProject main.cpp
         Game/Camera.cpp
         Game/Camera.h
         Game/Scene.cpp
-        Game/Scene.h)
+        Game/Scene.h
+        Game/Physics/Raycaster.cpp
+        Game/Physics/Raycaster.h
+        Game/Physics/RayInfo.h
+)
 
 # Link against SDL2 libraries
 target_link_libraries(2DProject SDL2 SDL2main)
