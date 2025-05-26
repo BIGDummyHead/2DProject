@@ -6,9 +6,9 @@
 #define DEFS_H
 #include <SDL_render.h>
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-#define UPDATE_DELAY_MS 10
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 #define RENDER_DELAY_MS 5
+#define FPS 60
 
 #endif //DEFS_H

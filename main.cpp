@@ -126,35 +126,6 @@ public:
             }
         }
 
-        //SDL_RenderDrawLine(drawTool->getApp().renderer, transform->getPosition().x, transform->getPosition().y, transform->getPosition().x * 100, transform->getPosition().y);
-        const Vector2 origin = transform->getPosition();
-        const Vector2 forward = Vector2(3, 2).normalize();  // Assuming you have normalized method or do it manually
-
-        constexpr double coneAngleDeg = 90.0f;
-        constexpr double coneAngleRad = coneAngleDeg * 3.14159265f / 180.0f;  // degrees to radians
-
-        constexpr int numRays = 100;  // number of rays in the cone
-        constexpr double halfAngle = coneAngleRad;
-
-        for (int i = 0; i < numRays; ++i) {
-            constexpr double distance = 600.0;
-            const double t = static_cast<double>(i) / (numRays - 1);
-            const double angle = -halfAngle + t * coneAngleRad;
-
-            // 2D rotation formula
-            const double cosA = cos(angle);
-            const double sinA = sin(angle);
-
-            Vector2 dir;
-            dir.x = forward.x * cosA - forward.y * sinA;
-            dir.y = forward.x * sinA + forward.y * cosA;
-
-            // Cast the ray and draw
-            Ray ray(origin, dir, distance);
-            RayInfo rInfo;
-            Raycaster::cast(ray, &rInfo);
-            Raycaster::drawCast(ray, drawTool->getApp().renderer, rInfo);
-        }
     }
 };
 
@@ -213,11 +184,15 @@ public:
 
     Scene::loadScene("Main Scene", sceneInfo);
 
-    //Setup timers for appropriate updating functionality.
-    auto elapsed_time = std::chrono::steady_clock::time_point();
-    auto frame_time = std::chrono::steady_clock::time_point();
+
+    Uint32 lastTick = -1;
     while (true) {
 
+        const Uint32 thisTick = SDL_GetTicks();
+        if(thisTick - lastTick < 1000 / FPS) {
+            continue;
+        }
+        lastTick = thisTick;
 
         //Prepare the scene for rendering
         drawTool.prepareScene();
@@ -225,26 +200,8 @@ public:
         //Poll for inputs, updates the input sectors
         input::pollInput();
 
-        switch (input::getMouseInputState(Left)) {
-            case Down:
-                std::cout << "Mouse was pushed down" << std::endl;
-                break;
-            case Up:
-                std::cout << "Mouse is now up" << std::endl;
-                break;
-            case Held:
-                std::cout << "Mouse is being held" << std::endl;
-                break;
-        }
-
-        //create a time for now to determine timing
-        auto now = std::chrono::steady_clock::time_point();
-        const long long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frame_time - now).count();
-
-
         //Loop over active scene objects.
         for (auto activeObj: GObject::activeObjects) {
-
             //Ensure this object is not null for drawing
             if (activeObj == nullptr || activeObj->transform == nullptr) {
                 continue;
@@ -255,7 +212,6 @@ public:
 
             //check if the object is even in the render view
             if (cam.isInRenderView(activeObj->transform->getPosition())) {
-
                 //determine where to draw this object
                 Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
 
@@ -265,7 +221,6 @@ public:
 
                     //we have to loop through all the active objects again and make sure there is not collision
                     for (auto comparingObj: GObject::activeObjects) {
-
                         //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
                         if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
                             isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
@@ -278,15 +233,13 @@ public:
                                 comparingObj->transform->getPosition() - cam.transform->getPosition();
 
 
-
                         //dynamic or heaviest
-                        GObject* left = nullptr;
+                        GObject *left = nullptr;
 
                         //static or lightest
-                        GObject* right = nullptr;
+                        GObject *right = nullptr;
 
-                        if(comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
-
+                        if (comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
                             //both are dynamic
 
                             //choose the fastest and heaviest object
@@ -296,11 +249,12 @@ public:
                             const double comparingWeight = comparingObj->collider->mass;
                             const double myWeight = activeObj->collider->mass;
 
-                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight) ? comparingObj : activeObj;
+                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
+                                       ? comparingObj
+                                       : activeObj;
                             right = left == activeObj ? comparingObj : activeObj;
-
-                        }
-                        else { //one is static and the other is dynamic
+                        } else {
+                            //one is static and the other is dynamic
                             //static object
                             left = comparingObj->collider->isStatic ? activeObj : comparingObj;
 
@@ -310,10 +264,8 @@ public:
 
                         Vector2 push; //check for collision
                         if (left->collider->isColliding(*right->collider, push)) {
-
-                            if(left->collider->isStatic == false && right->collider->isStatic == false) {
-
-                                Transform* rightTrans = right->transform;
+                            if (left->collider->isStatic == false && right->collider->isStatic == false) {
+                                Transform *rightTrans = right->transform;
 
                                 //fix for object clipping when one was heavier.
                                 rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
@@ -328,8 +280,6 @@ public:
                             right->onCollision(left->collider);
                             left->onCollision(right->collider);
                         }
-
-
                     }
 
                     //debug: draw the collider box so we can see it
@@ -346,13 +296,7 @@ public:
             //update the transform velocity.
 
 
-                //Call the update
-                frame_time = now; //reset clock to 0
-                activeObj->update();
-
-
-
-
+            activeObj->update();
         }
 
 
@@ -361,7 +305,5 @@ public:
 
         //Give a delay between render
         SDL_Delay(RENDER_DELAY_MS);
-        elapsed_time += std::chrono::milliseconds(RENDER_DELAY_MS);
-        frame_time += std::chrono::milliseconds(RENDER_DELAY_MS);
     }
 }

@@ -21,7 +21,7 @@ class Raycaster {
 public:
 
     static bool cast(const Ray& ray, RayInfo* rayInformation);
-    static bool lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const GObject* obj);
+    static bool lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const GObject* obj, Vector2* intersection);
     static void drawCast(const Ray& ray, SDL_Renderer* renderer, const RayInfo& rInfo);
     static  Vector2 createEndPoint(const Ray& ray);
 };

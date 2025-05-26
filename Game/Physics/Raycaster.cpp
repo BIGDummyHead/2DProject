@@ -8,13 +8,13 @@
 
 #include "../Camera.h"
 
-bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rEnd, const GObject* obj) {
+bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const GObject* obj, Vector2* intersection) {
 
-      Vector2 rayEnd = rEnd;
-      rayEnd.x = static_cast<int>(rayEnd.x);
-      rayEnd.y = static_cast<int>(rayEnd.y);
+      Vector2 calcRayEnd = rayEnd;
+      calcRayEnd.x = static_cast<int>(calcRayEnd.x);
+      calcRayEnd.y = static_cast<int>(calcRayEnd.y);
       //some base case statement
-      if(rayStart.x == rayEnd.x && rayStart.y == rayEnd.y)
+      if(rayStart.x == calcRayEnd.x && rayStart.y == calcRayEnd.y)
             return false;
 
       const Vector2 b = obj->transform->getPosition();
@@ -23,7 +23,7 @@ bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rEnd,
             return false; //calling object
 
       //a to c
-      const Vector2 ac(rayEnd.x - rayStart.x, rayEnd.y - rayStart.y);
+      const Vector2 ac(calcRayEnd.x - rayStart.x, calcRayEnd.y - rayStart.y);
 
       //a to b
       const Vector2 ab(b.x - rayStart.x, b.y - rayStart.y);
@@ -33,17 +33,14 @@ bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rEnd,
       projectionScalar = std::max(0.0, std::min(1.0, projectionScalar));
 
       //find the closest point that this may interesect, allows for thresholds
-      const Vector2 closestPoint(rayStart.x + projectionScalar * (rayEnd.x - rayStart.x), rayStart.y + projectionScalar * (rayEnd.y - rayStart.y));
+      intersection->x = rayStart.x + projectionScalar * (calcRayEnd.x - rayStart.x);
+      intersection->y = rayStart.y + projectionScalar * (calcRayEnd.y - rayStart.y);
 
       //grab the collider size
       const Vector2 colliderSize = obj->collider->getSize();
 
-      //check if the closest point intersects with b
-      const bool insideX = (closestPoint.x >= b.x - colliderSize.x) && (closestPoint.x <= b.x + colliderSize.x);
-      const bool insideY = (closestPoint.y >= b.y - colliderSize.y) && (closestPoint.y <= b.y + colliderSize.y);
-
       //true if these both intersect
-      return insideX && insideY;
+      return (intersection->x >= b.x - colliderSize.x) && (intersection->x <= b.x + colliderSize.x) && (intersection->y >= b.y - colliderSize.y) && (intersection->y <= b.y + colliderSize.y);
 }
 
 Vector2 Raycaster::createEndPoint(const Ray &ray) {
@@ -77,8 +74,9 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
 
             const Vector2 objPosition = obj->transform->getPosition();
 
+            Vector2 intersection;
             //it has hit something
-            if(lineIntersectsRect(ray.position, rayEndPoint, obj)) {
+            if(lineIntersectsRect(ray.position, rayEndPoint, obj, &intersection)) {
                   const double objDistanceToRay = ray.position.distance(objPosition);
 
                   //assume if 0, it is the caller
@@ -87,7 +85,7 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
                         closestDistance = objDistanceToRay;
                         rayInformation->collider = obj->collider;
                         rayInformation->gameObjectHit = obj;
-                        rayInformation->positionHit = objPosition;
+                        rayInformation->positionHit = intersection;
                   }
             }
 
@@ -111,9 +109,8 @@ void Raycaster::drawCast(const Ray &ray, SDL_Renderer* renderer, const RayInfo& 
       const Vector2 camPos = Camera::mainCamera->transform->getPosition();
 
       //determine where to draw the line
-      Vector2 endPoint = createEndPoint(ray) - camPos;
-      endPoint.x = isHit ? rInfo.gameObjectHit->transform->getPosition().x - camPos.x : endPoint.x;
       const Vector2 camStart = ray.position - camPos;
+      const Vector2 endPoint = isHit ? rInfo.positionHit - camPos : createEndPoint(ray) - camPos;
 
       //create a white line if it is not hit, green if it is
       const Uint8 r = isHit ? 0 : 255;
