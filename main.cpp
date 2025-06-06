@@ -126,7 +126,29 @@ public:
             }
         }
 
+
+
     }
+};
+
+class Test_Light : public GObject {
+public:
+
+    Test_Light(draw* drawTool) : GObject(drawTool, "My Light") {
+
+    }
+
+    void update() override {
+        const Vector2 position = input::getMousePosition();
+        transform->setPosition(position);
+
+
+    }
+
+    void onRender(const Vector2 &drawnAt) override {
+        drawTool->drawLine(Vector2{}, drawnAt + Camera::mainCamera->transform->getPosition());
+    }
+
 };
 
 class Test_Scene final : public Scene {
@@ -147,6 +169,8 @@ public:
         obj->texture = sheet;
     }
 
+
+
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void onSceneLoad(const SceneInformation sceneInfo) override {
         if (Camera::mainCamera == nullptr)
@@ -156,6 +180,8 @@ public:
         createDeathObject(sceneInfo, center, 1, "left object");
         createDeathObject(sceneInfo, center + Vector2{500, 0}, 4, "right object");
 
+        auto *light = new Test_Light(sceneInfo.drawingTool);
+
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
@@ -163,6 +189,8 @@ public:
 
     }
 };
+
+
 
 [[noreturn]] int main() {
     //Initialize the application
@@ -282,22 +310,55 @@ public:
                         }
                     }
 
+
                     //debug: draw the collider box so we can see it
                     activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
                 }
 
 
                 //render the object
-                activeObj->texture->render(drawTool, drawnAt);
+                if(activeObj->texture != nullptr)
+                    activeObj->texture->render(drawTool, drawnAt);
+
                 activeObj->onRender(drawnAt);
             }
 
 
-            //update the transform velocity.
 
 
             activeObj->update();
         }
+
+
+        LightSource someLight;
+        someLight.radius = 360;
+        someLight.angle = 135;
+
+        someLight.distance = 5000;
+        someLight.position = {0,0};
+        someLight.rayCastCount = 3000;
+        someLight.createRayCastedShadowing = false;
+        someLight.setAsDynamic();
+
+        std::vector lights = { someLight }; // or your player, torch, etc.
+        SDL_Texture* lightmap = drawTool.createLightMap(lights);
+
+        // Set multiply (modulate) blending mode so black hides, white reveals
+        SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
+        SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);
+        /*
+        //add in some lighting here:
+        SDL_Rect darkRect(0, 0, SCREEN_WIDTH + 50, SCREEN_HEIGHT + 50);
+        SDL_SetRenderDrawBlendMode(myApp.renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(myApp.renderer, 0,0,0,200);
+        SDL_RenderFillRect(myApp.renderer, &darkRect);
+
+        SDL_Rect lightRect(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, 50);
+        // Draw a semi-transparent light "blob"
+        SDL_SetRenderDrawColor(myApp.renderer, 255,255,255, 180); // white-ish light, low alpha
+        SDL_RenderFillRect(myApp.renderer, &lightRect);
+*/
+
 
 
         //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene

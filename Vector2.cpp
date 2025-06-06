@@ -34,4 +34,15 @@ Vector2 Vector2::absolute() const {
     return Vector2{fabs(x), fabs(y)};
 }
 
+Vector2 Vector2::normalized() const {
+
+    const double mag = magnitude();
+    return mag == 0 ? Vector2{0,0} : Vector2{ x / mag, y / mag };
+}
+
+double Vector2::length() const {
+    return sqrt(x * x + y * y);
+}
+
+
 

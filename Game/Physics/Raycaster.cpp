@@ -7,6 +7,7 @@
 #include <bits/stl_algo.h>
 
 #include "../Camera.h"
+#include "../../input.h"
 
 bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const GObject* obj, Vector2* intersection) {
 
@@ -17,7 +18,9 @@ bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEn
       if(rayStart.x == calcRayEnd.x && rayStart.y == calcRayEnd.y)
             return false;
 
-      const Vector2 b = obj->transform->getPosition();
+      const Vector2 camPosition = Camera::mainCamera == nullptr ? Vector2{ 0, 0 } : Camera::mainCamera->transform->getPosition();
+
+      const Vector2 b = obj->transform->getPosition() - camPosition;
 
       if(rayStart.x == b.x && rayStart.y == b.y)
             return false; //calling object
@@ -70,7 +73,8 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
 
             //ignore anything without a collider.
             if(obj->collider == nullptr)
-                  return false;
+                  continue;
+
 
             const Vector2 objPosition = obj->transform->getPosition();
 
@@ -119,4 +123,28 @@ void Raycaster::drawCast(const Ray &ray, SDL_Renderer* renderer, const RayInfo& 
       SDL_SetRenderDrawColor(renderer, r, 255, b, 255);
       SDL_RenderDrawLine(renderer, camStart.x, camStart.y, endPoint.x, endPoint.y);
 }
+
+//Create a cast from the mouse
+bool Raycaster::castFromMouse(RayInfo *rayInformation, const double &radius, SDL_Renderer *shouldRender) {
+
+      Vector2 mouse = input::getMousePosition();
+
+      if (Camera::mainCamera != nullptr) {
+            mouse += Camera::mainCamera->transform->getPosition();
+      }
+
+      for (int i = 0; i < 4; i++) {
+            const Ray ray(mouse, 90 * i, radius);
+
+            if (cast(ray, rayInformation))
+                  return true;
+
+            if (shouldRender != nullptr) {
+                  drawCast(ray, shouldRender, *rayInformation);
+            }
+      }
+
+      return false;
+}
+
 
