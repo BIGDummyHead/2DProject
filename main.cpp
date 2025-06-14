@@ -131,6 +131,7 @@ public:
     }
 };
 
+
 class Test_Light : public GObject {
 public:
 
@@ -148,6 +149,28 @@ public:
     void onRender(const Vector2 &drawnAt) override {
         drawTool->drawLine(Vector2{}, drawnAt + Camera::mainCamera->transform->getPosition());
     }
+
+};
+
+class Test_Component : public Component {
+
+public:
+    void start() override {
+        std::cout << "This is a start message from test_component" << std::endl;
+    }
+
+    void update() override {
+        /*std::cout << "This is a UPDATE message from test_component" << std::endl;*/
+    }
+
+    void destroy() override {
+        std::cout << "This is a destroyed message from test_component" << std::endl;
+    }
+
+    void testing() {
+        std::cout << "Testing" << std::endl;
+    }
+
 
 };
 
@@ -171,6 +194,7 @@ public:
 
 
 
+
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void onSceneLoad(const SceneInformation sceneInfo) override {
         if (Camera::mainCamera == nullptr)
@@ -184,6 +208,32 @@ public:
 
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
+        playerObject->addComponent<Test_Component>();
+
+        //! Component Functionality Testing, working as of 06-14-2025
+        /*auto* getTestComp = playerObject->getComponent<Test_Component>();
+
+        if(getTestComp) {
+            getTestComp->testing();
+            std::cout << "Obj: " << getTestComp->getAttachedObject()->name << std::endl;
+        }
+        else {
+            std::cout << "None" << std::endl;
+        }
+
+        playerObject->removeComponent<Test_Component>();
+
+        getTestComp = playerObject->getComponent<Test_Component>();
+
+        if(getTestComp) {
+            getTestComp->testing();
+            std::cout << "Obj: " << getTestComp->getAttachedObject()->name << std::endl;
+        }
+        else {
+            std::cout << "None" << std::endl;
+        }*/
+
+
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
 
 
@@ -326,7 +376,7 @@ public:
 
 
 
-            activeObj->update();
+            activeObj->updateFrame();
         }
 
 

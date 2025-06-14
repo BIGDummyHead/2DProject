@@ -52,6 +52,8 @@ add_executable(2DProject main.cpp
         Game/Physics/Ray.h
         Game/LightSource.h
         Game/LightSource.cpp
+        Game/Component.cpp
+        Game/Component.h
 )
 
 # Link against SDL2 libraries
