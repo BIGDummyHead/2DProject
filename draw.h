@@ -40,11 +40,19 @@ public:
 
     void drawLine(const Vector2& from, const Vector2& to) const;
 
-    void light(const Vector2& position, const double& radius);
+    static std::vector<LightSource> lightSources;
 
-    void drawCircle(const Vector2& position, const int& radius);
+    //Add a light source to be rendered
+    void addLightSource(const LightSource& source);
+    //Start the light map texture and return it
+    [[nodiscard]] SDL_Texture* startLightMap() const;
+    //Draw a singular light, can be useful for certain situations
+    void drawLight(LightSource& light) const;
+    //Draws all light sources that have been registered.
+    void drawLights() const;
+    //Completes and renders the light map, returning to the newDrawTexture or default.
+    void endLightMap(SDL_Texture* newDrawTexture = nullptr) const;
 
-    SDL_Texture* createLightMap(std::vector<LightSource> &lights);
     void drawGradientLine(Vector2 start, Vector2 end, double totalDistance, Uint8 r, Uint8 g, Uint8 b, double intensity) const;
 };
 

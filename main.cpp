@@ -12,6 +12,7 @@
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
+#include "Game/UiObject.h"
 #include "Game/Physics/Raycaster.h"
 
 
@@ -19,8 +20,8 @@ class Test_Player final : public GObject {
 private:
     Vector2 initSpawn;
 
-    Sheet* textureSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
-    Sheet* runningSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
+    Sheet *textureSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
+    Sheet *runningSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
 
     std::chrono::steady_clock::time_point lastAnimationTime = std::chrono::steady_clock::now();
     const int animationDelayMs = 95; // Delay in milliseconds
@@ -125,35 +126,26 @@ public:
                 textureSheet->moveColRight(true);
             }
         }
-
-
-
     }
 };
 
 
 class Test_Light : public GObject {
 public:
-
-    Test_Light(draw* drawTool) : GObject(drawTool, "My Light") {
-
+    Test_Light(draw *drawTool) : GObject(drawTool, "My Light") {
     }
 
     void update() override {
         const Vector2 position = input::getMousePosition();
         transform->setPosition(position);
-
-
     }
 
     void onRender(const Vector2 &drawnAt) override {
         drawTool->drawLine(Vector2{}, drawnAt + Camera::mainCamera->transform->getPosition());
     }
-
 };
 
 class Test_Component : public Component {
-
 public:
     void start() override {
         std::cout << "This is a start message from test_component" << std::endl;
@@ -170,20 +162,27 @@ public:
     void testing() {
         std::cout << "Testing" << std::endl;
     }
+};
 
+class Test_UI final : public UiObject {
 
+public:
+
+    explicit Test_UI(draw* tool): UiObject(tool, new Texture(tool->loadTexture(R"(assets\player\Death\Character_Death.png)"))) {
+        position = Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+        collider = new Collider(100, 100);
+    }
 };
 
 class Test_Scene final : public Scene {
-
 public:
     Test_Scene() : Scene("Main Scene") {
-
     }
 
-    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string& theName) {
+    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string &theName) {
         auto *obj = new GObject(sceneInfo.drawingTool, theName);
-        auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
+        auto *sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4,
+                                11);
         obj->collider = new Collider(25, 40);
         obj->collider->isStatic = false;
         obj->collider->mass = mass;
@@ -191,8 +190,6 @@ public:
         sheet->scale *= 2.5;
         obj->texture = sheet;
     }
-
-
 
 
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -209,6 +206,8 @@ public:
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
         playerObject->addComponent<Test_Component>();
+
+        auto* testUI = new Test_UI(sceneInfo.drawingTool);
 
         //! Component Functionality Testing, working as of 06-14-2025
         /*auto* getTestComp = playerObject->getComponent<Test_Component>();
@@ -235,11 +234,8 @@ public:
 
 
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
-
-
     }
 };
-
 
 
 [[noreturn]] int main() {
@@ -265,9 +261,8 @@ public:
 
     Uint32 lastTick = -1;
     while (true) {
-
         const Uint32 thisTick = SDL_GetTicks();
-        if(thisTick - lastTick < 1000 / FPS) {
+        if (thisTick - lastTick < 1000 / FPS) {
             continue;
         }
         lastTick = thisTick;
@@ -367,49 +362,67 @@ public:
 
 
                 //render the object
-                if(activeObj->texture != nullptr)
+                if (activeObj->texture != nullptr)
                     activeObj->texture->render(drawTool, drawnAt);
 
                 activeObj->onRender(drawnAt);
             }
 
 
-
-
             activeObj->updateFrame();
         }
 
 
-        LightSource someLight;
-        someLight.radius = 360;
-        someLight.angle = 135;
-
-        someLight.distance = 5000;
-        someLight.position = {0,0};
-        someLight.rayCastCount = 3000;
-        someLight.createRayCastedShadowing = false;
-        someLight.setAsDynamic();
-
-        std::vector lights = { someLight }; // or your player, torch, etc.
-        SDL_Texture* lightmap = drawTool.createLightMap(lights);
+        SDL_Texture *lightmap = drawTool.startLightMap();
+        drawTool.drawLights();
+        drawTool.endLightMap();
 
         // Set multiply (modulate) blending mode so black hides, white reveals
         SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
         SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);
-        /*
-        //add in some lighting here:
-        SDL_Rect darkRect(0, 0, SCREEN_WIDTH + 50, SCREEN_HEIGHT + 50);
-        SDL_SetRenderDrawBlendMode(myApp.renderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(myApp.renderer, 0,0,0,200);
-        SDL_RenderFillRect(myApp.renderer, &darkRect);
 
-        SDL_Rect lightRect(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, 50);
-        // Draw a semi-transparent light "blob"
-        SDL_SetRenderDrawColor(myApp.renderer, 255,255,255, 180); // white-ish light, low alpha
-        SDL_RenderFillRect(myApp.renderer, &lightRect);
-*/
+        //Render UI
+
+        RayInfo rayInfo;
+        const bool hasHitUI = Raycaster::castUI(&rayInfo);
+        for (auto *uiObject: UiObject::getRegisteredUI()) {
+            uiObject->render(); //always draw the object
+
+            if (uiObject->collider == nullptr)
+                continue; //go onto the next one
+
+            //start any event calls here:
+            if (uiObject == rayInfo.uiObjectHit) {
 
 
+                if (!uiObject->isMouseFocused()) {
+                    uiObject->setMouseIn();
+                } else {
+                    uiObject->whileMouseOver();
+                }
+
+                switch (input::getMouseInputState(Left)) {
+                    case Down:
+                        uiObject->onMouseClick();
+                        break;
+                    case Up:
+                        uiObject->onMouseRelease();
+                        break;
+                    case Held:
+                        uiObject->whileMouseDown();
+                        break;
+                    default:
+                        break;
+                }
+
+            } else {
+                if (uiObject->isMouseFocused()) {
+                    uiObject->setMouseOut();
+                } else {
+                    uiObject->whileMouseOut();
+                }
+            }
+        }
 
         //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene
         drawTool.presentScene();

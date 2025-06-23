@@ -6,6 +6,7 @@
 #define RAYINFO_H
 #include "../Collider.h"
 #include "../GObject.h"
+#include "../UiObject.h"
 #include "../../Vector2.h"
 
 //Information about a ray cast.
@@ -18,6 +19,7 @@ typedef struct {
     Collider* collider = nullptr;
     //The gameobject that was hit
     GObject* gameObjectHit = nullptr;
+    UiObject* uiObjectHit = nullptr;
 
     //Where the ray came from
     Vector2 castFrom;

@@ -54,6 +54,9 @@ add_executable(2DProject main.cpp
         Game/LightSource.cpp
         Game/Component.cpp
         Game/Component.h
+        Game/UiObject.cpp
+        Game/UiObject.h
+        Game/Physics/Castable.h
 )
 
 # Link against SDL2 libraries

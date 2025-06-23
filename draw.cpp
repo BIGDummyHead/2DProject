@@ -140,13 +140,20 @@ void draw::drawGradientLine(const Vector2 start, const Vector2 end, const double
 }
 
 static SDL_Texture *lightmap;
+std::vector<LightSource> draw::lightSources;
 
-SDL_Texture *draw::createLightMap(std::vector<LightSource> &lights) {
+void draw::addLightSource(const LightSource &source) {
+    lightSources.push_back(source);
+}
+
+
+SDL_Texture *draw::startLightMap() const {
     SDL_Renderer *renderer = getApp().renderer;
 
     if (!lightmap) {
         //create a simple lightmap texture
-        lightmap = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH,SCREEN_HEIGHT);
+        lightmap = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH,
+                                     SCREEN_HEIGHT);
     }
 
     // Set lightmap as render target
@@ -158,92 +165,98 @@ SDL_Texture *draw::createLightMap(std::vector<LightSource> &lights) {
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
 
+    return lightmap;
+}
 
-
-
-    for (LightSource &light : lights) {
-        //check if dynamic or not initalized
-        if (light.isDynamic() || !light.hasDrawn) {
-            // more rays = smoother cone
-            const double centerAngle = light.angle * M_PI / 180.0;
-
-            // Calculate start and end angles to cover the cone centered on centerAngle
-            const double startAngle = centerAngle - light.radius / 2.0;
-            const double endAngle = centerAngle + light.radius / 2.0;
-
-            light.vertices.clear();
-            const SDL_Color centerColor = {light.r, light.g, light.b, light.a}; // slightly dimmer if needed
-            SDL_Vertex centerVertex{
-                {static_cast<float>(light.position.x), static_cast<float>(light.position.y)},
-                centerColor,
-                {0, 0}
-            };
-            light.vertices.push_back(centerVertex);
-
-            for (int i = 0; i < light.rayCastCount; ++i) {
-                const double t = i / static_cast<double>(light.rayCastCount - 1); // from 0 to 1
-                double rayAngle = startAngle + t * (endAngle - startAngle);
-
-                Ray lightRay(light.position, rayAngle, light.distance);
-
-                RayInfo rInfo;
-
-                Vector2 end = {0, 0};
-
-                if (light.createRayCastedShadowing && Raycaster::cast(lightRay, &rInfo)) {
-                    Vector2 toHit = rInfo.positionHit - light.position;
-                    const double hitDist = toHit.length();
-
-                    //TODO: check if this gObject that we hit has some kind of component like Shadow caster?
-                    //If it does then we can create a shadow for the object, that would be kinda epic!
-
-                    // Only overshoot if hit was significantly before full range (e.g. < 98%)
-                    if (hitDist < light.distance * 0.99) {
-                        constexpr double overshootFactor = 1.15;
-                        Vector2 direction = toHit.normalized();
-                        double overshootDist = std::min(hitDist * overshootFactor, light.distance); // add 10 pixels max
-                        end = light.position + direction * overshootDist;
-                    } else {
-                        // Hit very close to end — no overshoot
-                        end = rInfo.positionHit;
-                    }
-                } else {
-                    end = Raycaster::createEndPoint(lightRay);
-                }
-
-                //copy and change up
-                SDL_Color edgeColor = centerColor;
-                edgeColor.a = 0;
-
-                light.vertices.push_back({{static_cast<float>(end.x), static_cast<float>(end.y)}, edgeColor, {0, 0}});
-            }
-
-            light.indices.clear();
-            // create indices for triangles
-            for (int i = 1; i < light.vertices.size() - 1; ++i) {
-                light.indices.push_back(0);
-                light.indices.push_back(i);
-                light.indices.push_back(i + 1);
-            }
-
-            light.hasDrawn = true;
-        }
-
-        SDL_RenderGeometry(renderer, nullptr, light.vertices.data(), light.vertices.size(), light.indices.data(), light.indices.size());
-    }
-
-
+void draw::endLightMap(SDL_Texture *newDrawTexture) const {
+    SDL_Renderer* renderer = getApp().renderer;
     //add some base light into this.
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 25);
     constexpr SDL_Rect screenRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_RenderFillRect(renderer, &screenRect);
 
-    SDL_SetRenderTarget(renderer, nullptr); // Restore default
-    return lightmap;
+    SDL_SetRenderTarget(renderer, newDrawTexture); // Restore default
 }
 
+void draw::drawLight(LightSource &light) const {
+    SDL_Renderer *renderer = getApp().renderer;
 
+    //check if dynamic or not initalized
+    if (light.isDynamic() || !light.hasDrawn) {
+        // more rays = smoother cone
+        const double centerAngle = light.angle * M_PI / 180.0;
 
+        // Calculate start and end angles to cover the cone centered on centerAngle
+        const double startAngle = centerAngle - light.radius / 2.0;
+        const double endAngle = centerAngle + light.radius / 2.0;
+
+        light.vertices.clear();
+        const SDL_Color centerColor = {light.r, light.g, light.b, light.a}; // slightly dimmer if needed
+        SDL_Vertex centerVertex{
+            {static_cast<float>(light.position.x), static_cast<float>(light.position.y)},
+            centerColor,
+            {0, 0}
+        };
+        light.vertices.push_back(centerVertex);
+
+        for (int i = 0; i < light.rayCastCount; ++i) {
+            const double t = i / static_cast<double>(light.rayCastCount - 1); // from 0 to 1
+            double rayAngle = startAngle + t * (endAngle - startAngle);
+
+            Ray lightRay(light.position, rayAngle, light.distance);
+
+            RayInfo rInfo;
+
+            Vector2 end = {0, 0};
+
+            if (light.createRayCastedShadowing && Raycaster::cast(lightRay, &rInfo)) {
+                Vector2 toHit = rInfo.positionHit - light.position;
+                const double hitDist = toHit.length();
+
+                //TODO: check if this gObject that we hit has some kind of component like Shadow caster?
+                //If it does then we can create a shadow for the object, that would be kinda epic!
+
+                // Only overshoot if hit was significantly before full range (e.g. < 98%)
+                if (hitDist < light.distance * 0.99) {
+                    constexpr double overshootFactor = 1.15;
+                    Vector2 direction = toHit.normalized();
+                    double overshootDist = std::min(hitDist * overshootFactor, light.distance); // add 10 pixels max
+                    end = light.position + direction * overshootDist;
+                } else {
+                    // Hit very close to end — no overshoot
+                    end = rInfo.positionHit;
+                }
+            } else {
+                end = Raycaster::createEndPoint(lightRay);
+            }
+
+            //copy and change up
+            SDL_Color edgeColor = centerColor;
+            edgeColor.a = 0;
+
+            light.vertices.push_back({{static_cast<float>(end.x), static_cast<float>(end.y)}, edgeColor, {0, 0}});
+        }
+
+        light.indices.clear();
+        // create indices for triangles
+        for (int i = 1; i < light.vertices.size() - 1; ++i) {
+            light.indices.push_back(0);
+            light.indices.push_back(i);
+            light.indices.push_back(i + 1);
+        }
+
+        light.hasDrawn = true;
+    }
+
+    SDL_RenderGeometry(renderer, nullptr, light.vertices.data(), light.vertices.size(), light.indices.data(),
+                       light.indices.size());
+}
+
+void draw::drawLights() const {
+    for(auto light : lightSources) {
+        drawLight(light);
+    }
+}
 
 
 

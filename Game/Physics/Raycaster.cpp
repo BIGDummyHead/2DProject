@@ -9,7 +9,7 @@
 #include "../Camera.h"
 #include "../../input.h"
 
-bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const GObject* obj, Vector2* intersection) {
+bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const Vector2& position, const Collider* collider, Vector2* intersection) {
 
       Vector2 calcRayEnd = rayEnd;
       calcRayEnd.x = static_cast<int>(calcRayEnd.x);
@@ -20,7 +20,7 @@ bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEn
 
       const Vector2 camPosition = Camera::mainCamera == nullptr ? Vector2{ 0, 0 } : Camera::mainCamera->transform->getPosition();
 
-      const Vector2 b = obj->transform->getPosition() - camPosition;
+      const Vector2 b = position - camPosition;
 
       if(rayStart.x == b.x && rayStart.y == b.y)
             return false; //calling object
@@ -40,7 +40,7 @@ bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEn
       intersection->y = rayStart.y + projectionScalar * (calcRayEnd.y - rayStart.y);
 
       //grab the collider size
-      const Vector2 colliderSize = obj->collider->getSize();
+      const Vector2 colliderSize = collider->getSize();
 
       //true if these both intersect
       return (intersection->x >= b.x - colliderSize.x) && (intersection->x <= b.x + colliderSize.x) && (intersection->y >= b.y - colliderSize.y) && (intersection->y <= b.y + colliderSize.y);
@@ -58,6 +58,38 @@ Vector2 Raycaster::createEndPoint(const Ray &ray) {
       return ret;
 }
 
+bool Raycaster::castUI(RayInfo *rayInformation) {
+
+      const Ray mouseRay(input::getMousePosition(), 0, 10);
+
+      const Vector2& rayEndPoint = createEndPoint(mouseRay);
+
+      auto closestDistance = DBL_MAX;
+      rayInformation->castFrom = mouseRay.position;
+
+      for(auto* ui : UiObject::getRegisteredUI()) {
+
+            if(ui->collider == nullptr) {
+                  //purely decorational.
+                  continue;
+            }
+
+            Vector2 intersection;
+            if(lineIntersectsRect(mouseRay.position, rayEndPoint, ui->position, ui->collider, &intersection)) {
+                  const double objDistanceToRay = mouseRay.position.distance(ui->position);
+
+                  if(objDistanceToRay < closestDistance) {
+                        closestDistance = objDistanceToRay;
+                        rayInformation->collider = ui->collider;
+                        rayInformation->uiObjectHit = ui;
+                        rayInformation->positionHit = intersection;
+                  }
+            }
+
+      }
+
+      return rayInformation->uiObjectHit != nullptr;
+}
 
 
 //Returns true if something intersected
@@ -80,7 +112,7 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
 
             Vector2 intersection;
             //it has hit something
-            if(lineIntersectsRect(ray.position, rayEndPoint, obj, &intersection)) {
+            if(lineIntersectsRect(ray.position, rayEndPoint, obj->transform->getPosition(), obj->collider, &intersection)) {
                   const double objDistanceToRay = ray.position.distance(objPosition);
 
                   //assume if 0, it is the caller
