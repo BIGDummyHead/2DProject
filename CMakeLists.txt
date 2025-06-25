@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 # SDL2 Root Path
 set(SDL2_PATH "SDL")
 set(SDL2_image_PATH "SDL_image")
+set(SDL2_ttf_PATH "SDL_ttf")
 
 # Include and lib directories
 include_directories(${SDL2_PATH}/include)
@@ -17,6 +18,9 @@ include_directories(${SDL2_image_PATH}/include)
 include_directories(${SDL2_image_PATH}/include/SDL3_image)
 
 link_directories(${SDL2_image_PATH}/lib)
+
+include_directories(${SDL2_ttf_PATH}/include)
+link_directories(${SDL2_ttf_PATH}/lib/x64)
 
 # Add your executable
 add_executable(2DProject main.cpp
@@ -57,12 +61,15 @@ add_executable(2DProject main.cpp
         Game/UiObject.cpp
         Game/UiObject.h
         Game/Physics/Castable.h
+        UiFont.h
 )
 
 # Link against SDL2 libraries
 target_link_libraries(2DProject SDL2 SDL2main)
 
 target_link_libraries(2DProject SDL2_image SDL2_image)
+
+target_link_libraries(2DProject SDL2_ttf)
 
 # Enable debugging symbols
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")

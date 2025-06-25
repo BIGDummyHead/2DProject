@@ -7,13 +7,14 @@
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
-#include <float.h>
 
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
 #include "Game/UiObject.h"
 #include "Game/Physics/Raycaster.h"
+
+#include "SDL_ttf/include/SDL_ttf.h"
 
 
 class Test_Player final : public GObject {
@@ -258,7 +259,6 @@ public:
 
     Scene::loadScene("Main Scene", sceneInfo);
 
-
     Uint32 lastTick = -1;
     while (true) {
         const Uint32 thisTick = SDL_GetTicks();
@@ -373,6 +373,7 @@ public:
         }
 
 
+        //Lights:
         SDL_Texture *lightmap = drawTool.startLightMap();
         drawTool.drawLights();
         drawTool.endLightMap();
@@ -381,8 +382,11 @@ public:
         SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
         SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);
 
-        //Render UI
 
+
+
+
+        //Render UI
         RayInfo rayInfo;
         const bool hasHitUI = Raycaster::castUI(&rayInfo);
         for (auto *uiObject: UiObject::getRegisteredUI()) {
@@ -430,4 +434,10 @@ public:
         //Give a delay between render
         SDL_Delay(RENDER_DELAY_MS);
     }
+
+    //quit out of everything!!!!
+    IMG_Quit();
+    TTF_Quit();
+    SDL_Quit();
+
 }

@@ -4,6 +4,8 @@
 
 #include "init.h"
 
+#include "SDL_ttf/include/SDL_ttf.h"
+
 void init::initSDL(App& app) {
     constexpr int renderFlag = SDL_RENDERER_ACCELERATED;
     constexpr int windowFlag = 0;
@@ -27,7 +29,15 @@ void init::initSDL(App& app) {
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    if(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == -1) {
+        printf("Failed to initialize SDL_Img: %s\n", IMG_GetError());
+        exit(-1);
+    }
+
+    if(TTF_Init() == -1) {
+        printf("Failed to initialize SDL_ttf: %s\n", TTF_GetError());
+        exit(-1);
+    }
 
     app.renderer = SDL_CreateRenderer(app.window, -1, renderFlag);
 

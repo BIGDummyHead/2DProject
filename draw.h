@@ -5,15 +5,13 @@
 #ifndef DRAW_H
 #define DRAW_H
 #include "structs.h"
-#include <cstdio>
 #include <map>
 #include <SDL_render.h>
-#include <stdexcept>
 #include <vector>
 
 #include "Vector2.h"
 #include "Game/LightSource.h"
-#include "SDL_image/include/SDL2/SDL_image.h"
+#include "UiFont.h"
 
 //Class to help with drawing features and scene rendering
 class draw {
@@ -54,6 +52,8 @@ public:
     void endLightMap(SDL_Texture* newDrawTexture = nullptr) const;
 
     void drawGradientLine(Vector2 start, Vector2 end, double totalDistance, Uint8 r, Uint8 g, Uint8 b, double intensity) const;
+
+    [[nodiscard]] SDL_Texture* createTextTexture(UiFont uiFont&, const char* text) const;
 };
 
 

@@ -12,6 +12,7 @@
 #include "Game/Camera.h"
 #include "Game/Physics/Ray.h"
 #include "Game/Physics/Raycaster.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 App draw::getApp() const {
     if (drawingFor == nullptr) {
@@ -169,7 +170,7 @@ SDL_Texture *draw::startLightMap() const {
 }
 
 void draw::endLightMap(SDL_Texture *newDrawTexture) const {
-    SDL_Renderer* renderer = getApp().renderer;
+    SDL_Renderer *renderer = getApp().renderer;
     //add some base light into this.
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 25);
     constexpr SDL_Rect screenRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -253,10 +254,53 @@ void draw::drawLight(LightSource &light) const {
 }
 
 void draw::drawLights() const {
-    for(auto light : lightSources) {
+    for (auto light: lightSources) {
         drawLight(light);
     }
 }
+
+
+SDL_Texture *draw::createTextTexture(UiFont &uiFont, const char *text) const {
+    //TTF_Font* font = TTF_OpenFont(R"(assets\fonts\font.ttf)", 24);
+    TTF_Font *font = TTF_OpenFont(uiFont.getPath(), uiFont.size);
+    if (!font) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to load font: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    //constexpr SDL_Color white{255, 255, 255, 255};
+    SDL_Surface *surface = nullptr;
+
+    //TODO: Add in other render styles
+    switch (uiFont.renderStyle) {
+        case UiFont::Type::Solid:
+            surface = TTF_RenderText_Solid(font, text, uiFont.color);
+            break;
+        default:
+            SDL_LogError(SDL_LOG_PRIORITY_ERROR, "This render style is currently not supported\n");
+            break;
+    }
+
+    if (!surface) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to render solid text: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    SDL_Renderer *renderer = getApp().renderer;
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    if (!texture) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to create texture from surface: %s\n", SDL_GetError());
+        return nullptr;
+    }
+
+    SDL_FreeSurface(surface);
+    TTF_CloseFont(font);
+
+    //SDL_RenderCopy(renderer, texture, nullptr, destination);
+    return texture;
+}
+
 
 
 
