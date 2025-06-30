@@ -7,10 +7,15 @@
 #include <SDL_log.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
+#include <bits/stl_algo.h>
+#include "defs.h"
+#include "Game/Camera.h"
+#include "Game/Physics/Ray.h"
+#include "Game/Physics/Raycaster.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
-App draw::getApp()  const {
-
-    if(drawingFor == nullptr) {
+App draw::getApp() const {
+    if (drawingFor == nullptr) {
         throw std::runtime_error("During draw, app was found to be a null pointer.");
     }
 
@@ -18,19 +23,15 @@ App draw::getApp()  const {
 }
 
 void draw::prepareScene() const {
-    SDL_SetRenderDrawColor(getApp().renderer, 96,128,255,255);
+    SDL_SetRenderDrawColor(getApp().renderer, 96, 128, 255, 255);
     SDL_RenderClear(getApp().renderer);
-
 }
 
 void draw::presentScene() const {
-
     SDL_RenderPresent(getApp().renderer);
-
 }
 
-SDL_Texture* draw::loadTexture(const std::string& filePath) {
-
+SDL_Texture *draw::loadTexture(const std::string &filePath) {
     if (loadedTextures.contains(filePath)) {
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%s was already loaded.", filePath.c_str());
         return loadedTextures.at(filePath);
@@ -38,7 +39,7 @@ SDL_Texture* draw::loadTexture(const std::string& filePath) {
 
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filePath.c_str());
 
-    SDL_Texture* texture = IMG_LoadTexture(getApp().renderer, filePath.c_str());
+    SDL_Texture *texture = IMG_LoadTexture(getApp().renderer, filePath.c_str());
     if (!texture) {
         throw std::runtime_error("Failed to load texture: " + filePath);
     }
@@ -49,7 +50,7 @@ SDL_Texture* draw::loadTexture(const std::string& filePath) {
 }
 
 //Draws a texture at a given position. Set onlyCopy as a position from the texture to copy.
-SDL_Rect draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect* copySrc) const {
+SDL_Rect draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect *copySrc) const {
     SDL_Rect dest = position.asRect();
 
     SDL_QueryTexture(texture, nullptr, nullptr, &dest.w, &dest.h);
@@ -59,8 +60,8 @@ SDL_Rect draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect
     return dest;
 }
 
-SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow, const int renderCol, const Vector2 renderPosition, const Vector2 scalingFactor) const {
-
+SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow,
+                         const int renderCol, const Vector2 renderPosition, const Vector2 scalingFactor) const {
     int textWidth = 0;
     int textHeight = 0;
     SDL_QueryTexture(texture, nullptr, nullptr, &textWidth, &textHeight);
@@ -72,7 +73,7 @@ SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns
     //calculate the src rectangle
     const int srcX = spriteWidth * renderCol;
     const int srcY = spriteHeight * renderRow;
-    const SDL_Rect srcRect = { srcX, srcY, spriteWidth, spriteHeight };
+    const SDL_Rect srcRect = {srcX, srcY, spriteWidth, spriteHeight};
 
     //place where we should take from the texture
     SDL_Rect renderRectPosition = renderPosition.asRect();
@@ -95,8 +96,209 @@ SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns
 }
 
 void draw::drawLine(const Vector2 &from, const Vector2 &to) const {
+    SDL_RenderDrawLineF(getApp().renderer, from.x, from.y, to.x, to.y);
+}
 
-   SDL_RenderDrawLineF(getApp().renderer, from.x, from.y, to.x, to.y);
+void draw::drawGradientLine(const Vector2 start, const Vector2 end, const double totalDistance, const Uint8 r,
+                            const Uint8 g, const Uint8 b, const double intensity) const {
+    SDL_Renderer *renderer = getApp().renderer;
+
+    const Vector2 delta = end - start;
+    const double lineLength = delta.magnitude();
+
+    const Vector2 direction = delta.normalized();
+
+    // If the line is shorter than totalDistance, draw solid color line
+    if (lineLength <= totalDistance) {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(renderer, Uint8(r * intensity), Uint8(g * intensity), Uint8(b * intensity), 255);
+        SDL_RenderDrawLine(renderer, (int) start.x, (int) start.y, (int) end.x, (int) end.y);
+        return;
+    }
+
+    // Otherwise, draw the line pixel by pixel fading alpha from full to zero over totalDistance
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+    const int steps = static_cast<int>(lineLength);
+    for (int i = 0; i <= steps; ++i) {
+        const double t = i / static_cast<float>(steps);
+        const Vector2 point = start + direction * (lineLength * t);
+
+        // Calculate distance from start along the line
+        const double dist = lineLength * t;
+
+        Uint8 alpha;
+        if (dist <= totalDistance) {
+            // Fade alpha linearly from 255 at start to 0 at totalDistance
+            alpha = static_cast<Uint8>(255 * intensity * (1.0f - (dist / totalDistance)));
+        } else {
+            alpha = 0;
+        }
+
+        SDL_SetRenderDrawColor(renderer, r, g, b, alpha);
+        SDL_RenderDrawPoint(renderer, static_cast<int>(point.x), static_cast<int>(point.y));
+    }
+}
+
+static SDL_Texture *lightmap;
+std::vector<LightSource> draw::lightSources;
+
+void draw::addLightSource(const LightSource &source) {
+    lightSources.push_back(source);
+}
+
+
+SDL_Texture *draw::startLightMap() const {
+    SDL_Renderer *renderer = getApp().renderer;
+
+    if (!lightmap) {
+        //create a simple lightmap texture
+        lightmap = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH,
+                                     SCREEN_HEIGHT);
+    }
+
+    // Set lightmap as render target
+    SDL_SetRenderTarget(renderer, lightmap);
+
+    // Fill the whole texture with black (no light)
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
+
+    return lightmap;
+}
+
+void draw::endLightMap(SDL_Texture *newDrawTexture) const {
+    SDL_Renderer *renderer = getApp().renderer;
+    //add some base light into this.
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 25);
+    constexpr SDL_Rect screenRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SDL_RenderFillRect(renderer, &screenRect);
+
+    SDL_SetRenderTarget(renderer, newDrawTexture); // Restore default
+}
+
+void draw::drawLight(LightSource &light) const {
+    SDL_Renderer *renderer = getApp().renderer;
+
+    //check if dynamic or not initalized
+    if (light.isDynamic() || !light.hasDrawn) {
+        // more rays = smoother cone
+        const double centerAngle = light.angle * M_PI / 180.0;
+
+        // Calculate start and end angles to cover the cone centered on centerAngle
+        const double startAngle = centerAngle - light.radius / 2.0;
+        const double endAngle = centerAngle + light.radius / 2.0;
+
+        light.vertices.clear();
+        const SDL_Color centerColor = {light.r, light.g, light.b, light.a}; // slightly dimmer if needed
+        SDL_Vertex centerVertex{
+            {static_cast<float>(light.position.x), static_cast<float>(light.position.y)},
+            centerColor,
+            {0, 0}
+        };
+        light.vertices.push_back(centerVertex);
+
+        for (int i = 0; i < light.rayCastCount; ++i) {
+            const double t = i / static_cast<double>(light.rayCastCount - 1); // from 0 to 1
+            double rayAngle = startAngle + t * (endAngle - startAngle);
+
+            Ray lightRay(light.position, rayAngle, light.distance);
+
+            RayInfo rInfo;
+
+            Vector2 end = {0, 0};
+
+            if (light.createRayCastedShadowing && Raycaster::cast(lightRay, &rInfo)) {
+                Vector2 toHit = rInfo.positionHit - light.position;
+                const double hitDist = toHit.length();
+
+                //TODO: check if this gObject that we hit has some kind of component like Shadow caster?
+                //If it does then we can create a shadow for the object, that would be kinda epic!
+
+                // Only overshoot if hit was significantly before full range (e.g. < 98%)
+                if (hitDist < light.distance * 0.99) {
+                    constexpr double overshootFactor = 1.15;
+                    Vector2 direction = toHit.normalized();
+                    double overshootDist = std::min(hitDist * overshootFactor, light.distance); // add 10 pixels max
+                    end = light.position + direction * overshootDist;
+                } else {
+                    // Hit very close to end — no overshoot
+                    end = rInfo.positionHit;
+                }
+            } else {
+                end = Raycaster::createEndPoint(lightRay);
+            }
+
+            //copy and change up
+            SDL_Color edgeColor = centerColor;
+            edgeColor.a = 0;
+
+            light.vertices.push_back({{static_cast<float>(end.x), static_cast<float>(end.y)}, edgeColor, {0, 0}});
+        }
+
+        light.indices.clear();
+        // create indices for triangles
+        for (int i = 1; i < light.vertices.size() - 1; ++i) {
+            light.indices.push_back(0);
+            light.indices.push_back(i);
+            light.indices.push_back(i + 1);
+        }
+
+        light.hasDrawn = true;
+    }
+
+    SDL_RenderGeometry(renderer, nullptr, light.vertices.data(), light.vertices.size(), light.indices.data(),
+                       light.indices.size());
+}
+
+void draw::drawLights() const {
+    for (auto light: lightSources) {
+        drawLight(light);
+    }
+}
+
+
+SDL_Texture *draw::createTextTexture(UiFont &uiFont, const char *text) const {
+    //TTF_Font* font = TTF_OpenFont(R"(assets\fonts\font.ttf)", 24);
+    TTF_Font *font = TTF_OpenFont(uiFont.getPath(), uiFont.size);
+    if (!font) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to load font: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    //constexpr SDL_Color white{255, 255, 255, 255};
+    SDL_Surface *surface = nullptr;
+
+    //TODO: Add in other render styles
+    switch (uiFont.renderStyle) {
+        case UiFont::Type::Solid:
+            surface = TTF_RenderText_Solid(font, text, uiFont.color);
+            break;
+        default:
+            SDL_LogError(SDL_LOG_PRIORITY_ERROR, "This render style is currently not supported\n");
+            break;
+    }
+
+    if (!surface) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to render solid text: %s\n", TTF_GetError());
+        return nullptr;
+    }
+
+    SDL_Renderer *renderer = getApp().renderer;
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    if (!texture) {
+        SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to create texture from surface: %s\n", SDL_GetError());
+        return nullptr;
+    }
+
+    SDL_FreeSurface(surface);
+    TTF_CloseFont(font);
+
+    //SDL_RenderCopy(renderer, texture, nullptr, destination);
+    return texture;
 }
 
 

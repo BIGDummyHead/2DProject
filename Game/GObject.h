@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_set>
 #include "Collider.h"
+#include "Component.h"
 #include "Texture.h"
 #include "Transform.h"
 
@@ -14,6 +15,7 @@ class GObject {
 
 private:
     bool isActive = true;
+    std::vector<Component*> activeComponents{};
 
 public:
     virtual ~GObject() = default;
@@ -54,9 +56,67 @@ public:
         this->name = name;
     }
 
+    void updateFrame();
+
+    template<typename T> requires std::is_base_of_v<Component, T>
+    void addComponent() {
+        T* componentPtr = new T();
+        activeComponents.push_back(componentPtr);
+
+        auto* comp = dynamic_cast<Component *>(componentPtr);
+        comp->setAttachedObject(this);
+        comp->awake();
+    }
+
+    template<typename T> requires std::is_base_of_v<Component, T>
+    bool hasComponent() {
+        return getComponent<T>() != nullptr;
+    }
+
+
+    template<typename T> requires std::is_base_of_v<Component, T>
+    T* getComponent() {
+        for(const auto comp : activeComponents) {
+            T* currentPtr = dynamic_cast<T*>(comp);
+            if(currentPtr != nullptr)
+                return currentPtr;
+        }
+
+        return nullptr;
+    }
+
+    template<typename T> requires std::is_base_of_v<Component, T>
+    bool removeComponent() {
+
+        int removingIndex = -1;
+        Component* removingComp = nullptr;
+        for(int i = 0; i < activeComponents.size(); i++) {
+            T* comp = dynamic_cast<T*>( activeComponents[i] );
+
+            if(comp != nullptr) {
+                removingIndex = i;
+                removingComp = comp;
+                break;
+            }
+        }
+
+        if(removingIndex != -1) {
+
+            activeComponents.erase(activeComponents.begin() + removingIndex);
+
+            if(removingComp) {
+                removingComp->destroy();
+                delete removingComp;
+            }
+        }
+
+        return removingIndex != -1;
+    }
+
+
     virtual void update();
-    virtual  void onRender(const Vector2& drawnAt);
-    virtual  void onCollision(Collider* other);
+    virtual void onRender(const Vector2& drawnAt);
+    virtual void onCollision(Collider* other);
 
     void destroy();
 

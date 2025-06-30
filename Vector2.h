@@ -140,6 +140,10 @@ public:
 
     [[nodiscard]] Vector2 absolute() const;
 
+    [[nodiscard]]Vector2 normalized() const;
+
+    [[nodiscard]]double length() const;
+
 };
 
 

@@ -1,0 +1,3 @@
+C:/Users/shawn/CLionProjects/2DProject/build/CMakeFiles/2DProject.dir
+C:/Users/shawn/CLionProjects/2DProject/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/shawn/CLionProjects/2DProject/build/CMakeFiles/ZERO_CHECK.dir

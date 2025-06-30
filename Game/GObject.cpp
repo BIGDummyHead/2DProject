@@ -31,6 +31,29 @@ void GObject::destroy() {
     //registeredObjects.erase(this);
 }
 
+void GObject::updateFrame() {
+
+    for(const auto comp : activeComponents) {
+
+        if(!comp->hasStarted) {
+            comp->start();
+            comp->hasStarted = true;
+            continue;
+        }
+
+        comp->update();
+    }
+
+    //do internal things
+    update();
+}
+
+
+
+
+
+
+
 void GObject::setIsActive(const bool status)  {
     if(isActive && status || !isActive && !status) { //there is nothing tto do
         return;

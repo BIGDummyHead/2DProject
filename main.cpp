@@ -7,20 +7,22 @@
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
-#include <float.h>
 
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
+#include "Game/UiObject.h"
 #include "Game/Physics/Raycaster.h"
+
+#include "SDL_ttf/include/SDL_ttf.h"
 
 
 class Test_Player final : public GObject {
 private:
     Vector2 initSpawn;
 
-    Sheet* textureSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
-    Sheet* runningSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
+    Sheet *textureSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Idle\Character_Idle.png)"), 4, 4);
+    Sheet *runningSheet = new Sheet(drawTool->loadTexture(R"(assets\player\Move\Character_Move.png)"), 4, 6);
 
     std::chrono::steady_clock::time_point lastAnimationTime = std::chrono::steady_clock::now();
     const int animationDelayMs = 95; // Delay in milliseconds
@@ -125,49 +127,63 @@ public:
                 textureSheet->moveColRight(true);
             }
         }
+    }
+};
 
-        //SDL_RenderDrawLine(drawTool->getApp().renderer, transform->getPosition().x, transform->getPosition().y, transform->getPosition().x * 100, transform->getPosition().y);
-        const Vector2 origin = transform->getPosition();
-        const Vector2 forward = Vector2(3, 2).normalize();  // Assuming you have normalized method or do it manually
 
-        constexpr double coneAngleDeg = 90.0f;
-        constexpr double coneAngleRad = coneAngleDeg * 3.14159265f / 180.0f;  // degrees to radians
+class Test_Light : public GObject {
+public:
+    Test_Light(draw *drawTool) : GObject(drawTool, "My Light") {
+    }
 
-        constexpr int numRays = 100;  // number of rays in the cone
-        constexpr double halfAngle = coneAngleRad;
+    void update() override {
+        const Vector2 position = input::getMousePosition();
+        transform->setPosition(position);
+    }
 
-        for (int i = 0; i < numRays; ++i) {
-            constexpr double distance = 600.0;
-            const double t = static_cast<double>(i) / (numRays - 1);
-            const double angle = -halfAngle + t * coneAngleRad;
+    void onRender(const Vector2 &drawnAt) override {
+        drawTool->drawLine(Vector2{}, drawnAt + Camera::mainCamera->transform->getPosition());
+    }
+};
 
-            // 2D rotation formula
-            const double cosA = cos(angle);
-            const double sinA = sin(angle);
+class Test_Component : public Component {
+public:
+    void start() override {
+        std::cout << "This is a start message from test_component" << std::endl;
+    }
 
-            Vector2 dir;
-            dir.x = forward.x * cosA - forward.y * sinA;
-            dir.y = forward.x * sinA + forward.y * cosA;
+    void update() override {
+        /*std::cout << "This is a UPDATE message from test_component" << std::endl;*/
+    }
 
-            // Cast the ray and draw
-            Ray ray(origin, dir, distance);
-            RayInfo rInfo;
-            Raycaster::cast(ray, &rInfo);
-            Raycaster::drawCast(ray, drawTool->getApp().renderer, rInfo);
-        }
+    void destroy() override {
+        std::cout << "This is a destroyed message from test_component" << std::endl;
+    }
+
+    void testing() {
+        std::cout << "Testing" << std::endl;
+    }
+};
+
+class Test_UI final : public UiObject {
+
+public:
+
+    explicit Test_UI(draw* tool): UiObject(tool, new Texture(tool->loadTexture(R"(assets\player\Death\Character_Death.png)"))) {
+        position = Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+        collider = new Collider(100, 100);
     }
 };
 
 class Test_Scene final : public Scene {
-
 public:
     Test_Scene() : Scene("Main Scene") {
-
     }
 
-    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string& theName) {
+    void createDeathObject(SceneInformation sceneInfo, Vector2 where, double mass, const std::string &theName) {
         auto *obj = new GObject(sceneInfo.drawingTool, theName);
-        auto* sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4, 11);
+        auto *sheet = new Sheet(sceneInfo.drawingTool->loadTexture(R"(assets\player\Death\Character_Death.png)"), 4,
+                                11);
         obj->collider = new Collider(25, 40);
         obj->collider->isStatic = false;
         obj->collider->mass = mass;
@@ -175,6 +191,7 @@ public:
         sheet->scale *= 2.5;
         obj->texture = sheet;
     }
+
 
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void onSceneLoad(const SceneInformation sceneInfo) override {
@@ -185,13 +202,42 @@ public:
         createDeathObject(sceneInfo, center, 1, "left object");
         createDeathObject(sceneInfo, center + Vector2{500, 0}, 4, "right object");
 
+        auto *light = new Test_Light(sceneInfo.drawingTool);
+
         /* Player Object */
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
+        playerObject->addComponent<Test_Component>();
+
+        auto* testUI = new Test_UI(sceneInfo.drawingTool);
+
+        //! Component Functionality Testing, working as of 06-14-2025
+        /*auto* getTestComp = playerObject->getComponent<Test_Component>();
+
+        if(getTestComp) {
+            getTestComp->testing();
+            std::cout << "Obj: " << getTestComp->getAttachedObject()->name << std::endl;
+        }
+        else {
+            std::cout << "None" << std::endl;
+        }
+
+        playerObject->removeComponent<Test_Component>();
+
+        getTestComp = playerObject->getComponent<Test_Component>();
+
+        if(getTestComp) {
+            getTestComp->testing();
+            std::cout << "Obj: " << getTestComp->getAttachedObject()->name << std::endl;
+        }
+        else {
+            std::cout << "None" << std::endl;
+        }*/
+
+
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
-
-
     }
 };
+
 
 [[noreturn]] int main() {
     //Initialize the application
@@ -213,11 +259,13 @@ public:
 
     Scene::loadScene("Main Scene", sceneInfo);
 
-    //Setup timers for appropriate updating functionality.
-    auto elapsed_time = std::chrono::steady_clock::time_point();
-    auto frame_time = std::chrono::steady_clock::time_point();
+    Uint32 lastTick = -1;
     while (true) {
-
+        const Uint32 thisTick = SDL_GetTicks();
+        if (thisTick - lastTick < 1000 / FPS) {
+            continue;
+        }
+        lastTick = thisTick;
 
         //Prepare the scene for rendering
         drawTool.prepareScene();
@@ -225,26 +273,8 @@ public:
         //Poll for inputs, updates the input sectors
         input::pollInput();
 
-        switch (input::getMouseInputState(Left)) {
-            case Down:
-                std::cout << "Mouse was pushed down" << std::endl;
-                break;
-            case Up:
-                std::cout << "Mouse is now up" << std::endl;
-                break;
-            case Held:
-                std::cout << "Mouse is being held" << std::endl;
-                break;
-        }
-
-        //create a time for now to determine timing
-        auto now = std::chrono::steady_clock::time_point();
-        const long long elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(frame_time - now).count();
-
-
         //Loop over active scene objects.
         for (auto activeObj: GObject::activeObjects) {
-
             //Ensure this object is not null for drawing
             if (activeObj == nullptr || activeObj->transform == nullptr) {
                 continue;
@@ -255,7 +285,6 @@ public:
 
             //check if the object is even in the render view
             if (cam.isInRenderView(activeObj->transform->getPosition())) {
-
                 //determine where to draw this object
                 Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
 
@@ -265,7 +294,6 @@ public:
 
                     //we have to loop through all the active objects again and make sure there is not collision
                     for (auto comparingObj: GObject::activeObjects) {
-
                         //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
                         if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
                             isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
@@ -278,15 +306,13 @@ public:
                                 comparingObj->transform->getPosition() - cam.transform->getPosition();
 
 
-
                         //dynamic or heaviest
-                        GObject* left = nullptr;
+                        GObject *left = nullptr;
 
                         //static or lightest
-                        GObject* right = nullptr;
+                        GObject *right = nullptr;
 
-                        if(comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
-
+                        if (comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
                             //both are dynamic
 
                             //choose the fastest and heaviest object
@@ -296,11 +322,12 @@ public:
                             const double comparingWeight = comparingObj->collider->mass;
                             const double myWeight = activeObj->collider->mass;
 
-                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight) ? comparingObj : activeObj;
+                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
+                                       ? comparingObj
+                                       : activeObj;
                             right = left == activeObj ? comparingObj : activeObj;
-
-                        }
-                        else { //one is static and the other is dynamic
+                        } else {
+                            //one is static and the other is dynamic
                             //static object
                             left = comparingObj->collider->isStatic ? activeObj : comparingObj;
 
@@ -310,10 +337,8 @@ public:
 
                         Vector2 push; //check for collision
                         if (left->collider->isColliding(*right->collider, push)) {
-
-                            if(left->collider->isStatic == false && right->collider->isStatic == false) {
-
-                                Transform* rightTrans = right->transform;
+                            if (left->collider->isStatic == false && right->collider->isStatic == false) {
+                                Transform *rightTrans = right->transform;
 
                                 //fix for object clipping when one was heavier.
                                 rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
@@ -328,9 +353,8 @@ public:
                             right->onCollision(left->collider);
                             left->onCollision(right->collider);
                         }
-
-
                     }
+
 
                     //debug: draw the collider box so we can see it
                     activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
@@ -338,30 +362,82 @@ public:
 
 
                 //render the object
-                activeObj->texture->render(drawTool, drawnAt);
+                if (activeObj->texture != nullptr)
+                    activeObj->texture->render(drawTool, drawnAt);
+
                 activeObj->onRender(drawnAt);
             }
 
 
-            //update the transform velocity.
-
-
-                //Call the update
-                frame_time = now; //reset clock to 0
-                activeObj->update();
-
-
-
-
+            activeObj->updateFrame();
         }
 
+
+        //Lights:
+        SDL_Texture *lightmap = drawTool.startLightMap();
+        drawTool.drawLights();
+        drawTool.endLightMap();
+
+        // Set multiply (modulate) blending mode so black hides, white reveals
+        SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
+        SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);
+
+
+
+
+
+        //Render UI
+        RayInfo rayInfo;
+        const bool hasHitUI = Raycaster::castUI(&rayInfo);
+        for (auto *uiObject: UiObject::getRegisteredUI()) {
+            uiObject->render(); //always draw the object
+
+            if (uiObject->collider == nullptr)
+                continue; //go onto the next one
+
+            //start any event calls here:
+            if (uiObject == rayInfo.uiObjectHit) {
+
+
+                if (!uiObject->isMouseFocused()) {
+                    uiObject->setMouseIn();
+                } else {
+                    uiObject->whileMouseOver();
+                }
+
+                switch (input::getMouseInputState(Left)) {
+                    case Down:
+                        uiObject->onMouseClick();
+                        break;
+                    case Up:
+                        uiObject->onMouseRelease();
+                        break;
+                    case Held:
+                        uiObject->whileMouseDown();
+                        break;
+                    default:
+                        break;
+                }
+
+            } else {
+                if (uiObject->isMouseFocused()) {
+                    uiObject->setMouseOut();
+                } else {
+                    uiObject->whileMouseOut();
+                }
+            }
+        }
 
         //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene
         drawTool.presentScene();
 
         //Give a delay between render
         SDL_Delay(RENDER_DELAY_MS);
-        elapsed_time += std::chrono::milliseconds(RENDER_DELAY_MS);
-        frame_time += std::chrono::milliseconds(RENDER_DELAY_MS);
     }
+
+    //quit out of everything!!!!
+    IMG_Quit();
+    TTF_Quit();
+    SDL_Quit();
+
 }
