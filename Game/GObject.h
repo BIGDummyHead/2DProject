@@ -16,6 +16,7 @@ class GObject {
 private:
     bool isActive = true;
     std::vector<Component*> activeComponents{};
+    bool hasStarted = false;
 
 public:
     virtual ~GObject() = default;
@@ -23,6 +24,7 @@ public:
     static std::unordered_set<GObject*> registeredObjects;
     static  std::unordered_set<GObject*> activeObjects;
     static std::unordered_set<GObject*> inactiveObjects;
+
 
 
     std::string name;
@@ -50,12 +52,18 @@ public:
         activeObjects.insert(this);
 
         transform = new Transform();
+        GObject::start();
     }
 
     explicit GObject(draw* drawTool, const std::string &name) : GObject(drawTool) {
         this->name = name;
     }
 
+
+
+
+    //Automatically create a collider based on your texture (if it is a sheet), does not set the collider
+    Collider* automaticCollider(const bool& setStatic, const bool& useSheet = false) const;
     void updateFrame();
 
     template<typename T> requires std::is_base_of_v<Component, T>
@@ -104,7 +112,7 @@ public:
 
             activeComponents.erase(activeComponents.begin() + removingIndex);
 
-            if(removingComp) {
+            if(removingComp != nullptr) {
                 removingComp->destroy();
                 delete removingComp;
             }
@@ -114,6 +122,7 @@ public:
     }
 
 
+    virtual void start();
     virtual void update();
     virtual void onRender(const Vector2& drawnAt);
     virtual void onCollision(Collider* other);

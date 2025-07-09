@@ -278,6 +278,171 @@ CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\Physics\Raycaster.cpp -o CMakeFiles\2DProject.dir\Game\Physics\Raycaster.cpp.s
 
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/LightSource.cpp
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj -MF CMakeFiles\2DProject.dir\Game\LightSource.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\LightSource.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\LightSource.cpp
+
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/LightSource.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\LightSource.cpp > CMakeFiles\2DProject.dir\Game\LightSource.cpp.i
+
+CMakeFiles/2DProject.dir/Game/LightSource.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/LightSource.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\LightSource.cpp -o CMakeFiles\2DProject.dir\Game\LightSource.cpp.s
+
+CMakeFiles/2DProject.dir/Game/Component.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/Component.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/Component.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/Component.cpp
+CMakeFiles/2DProject.dir/Game/Component.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/2DProject.dir/Game/Component.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/Component.cpp.obj -MF CMakeFiles\2DProject.dir\Game\Component.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\Component.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\Component.cpp
+
+CMakeFiles/2DProject.dir/Game/Component.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/Component.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\Component.cpp > CMakeFiles\2DProject.dir\Game\Component.cpp.i
+
+CMakeFiles/2DProject.dir/Game/Component.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/Component.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\Component.cpp -o CMakeFiles\2DProject.dir\Game\Component.cpp.s
+
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/UiObject.cpp
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj -MF CMakeFiles\2DProject.dir\Game\UiObject.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\UiObject.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\UiObject.cpp
+
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/UiObject.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\UiObject.cpp > CMakeFiles\2DProject.dir\Game\UiObject.cpp.i
+
+CMakeFiles/2DProject.dir/Game/UiObject.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/UiObject.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\UiObject.cpp -o CMakeFiles\2DProject.dir\Game\UiObject.cpp.s
+
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/UiObjectFont.cpp
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj -MF CMakeFiles\2DProject.dir\UiObjectFont.cpp.obj.d -o CMakeFiles\2DProject.dir\UiObjectFont.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\UiObjectFont.cpp
+
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/UiObjectFont.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\UiObjectFont.cpp > CMakeFiles\2DProject.dir\UiObjectFont.cpp.i
+
+CMakeFiles/2DProject.dir/UiObjectFont.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/UiObjectFont.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\UiObjectFont.cpp -o CMakeFiles\2DProject.dir\UiObjectFont.cpp.s
+
+CMakeFiles/2DProject.dir/TextFont.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/TextFont.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/TextFont.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/TextFont.cpp
+CMakeFiles/2DProject.dir/TextFont.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/2DProject.dir/TextFont.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/TextFont.cpp.obj -MF CMakeFiles\2DProject.dir\TextFont.cpp.obj.d -o CMakeFiles\2DProject.dir\TextFont.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\TextFont.cpp
+
+CMakeFiles/2DProject.dir/TextFont.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/TextFont.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\TextFont.cpp > CMakeFiles\2DProject.dir\TextFont.cpp.i
+
+CMakeFiles/2DProject.dir/TextFont.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/TextFont.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\TextFont.cpp -o CMakeFiles\2DProject.dir\TextFont.cpp.s
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/IP_Games/Knight/Knight_Game.cpp
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj -MF CMakeFiles\2DProject.dir\IP_Games\Knight\Knight_Game.cpp.obj.d -o CMakeFiles\2DProject.dir\IP_Games\Knight\Knight_Game.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Knight_Game.cpp
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Knight_Game.cpp > CMakeFiles\2DProject.dir\IP_Games\Knight\Knight_Game.cpp.i
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Knight_Game.cpp -o CMakeFiles\2DProject.dir\IP_Games\Knight\Knight_Game.cpp.s
+
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Settings/Parser.cpp
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj -MF CMakeFiles\2DProject.dir\Settings\Parser.cpp.obj.d -o CMakeFiles\2DProject.dir\Settings\Parser.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Settings\Parser.cpp
+
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Settings/Parser.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Settings\Parser.cpp > CMakeFiles\2DProject.dir\Settings\Parser.cpp.i
+
+CMakeFiles/2DProject.dir/Settings/Parser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Settings/Parser.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Settings\Parser.cpp -o CMakeFiles\2DProject.dir\Settings\Parser.cpp.s
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/IP_Games/Knight/Player.cpp
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj -MF CMakeFiles\2DProject.dir\IP_Games\Knight\Player.cpp.obj.d -o CMakeFiles\2DProject.dir\IP_Games\Knight\Player.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Player.cpp
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Player.cpp > CMakeFiles\2DProject.dir\IP_Games\Knight\Player.cpp.i
+
+CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Player.cpp -o CMakeFiles\2DProject.dir\IP_Games\Knight\Player.cpp.s
+
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/SheetAnimator.cpp
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj -MF CMakeFiles\2DProject.dir\Game\SheetAnimator.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\SheetAnimator.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\SheetAnimator.cpp
+
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\SheetAnimator.cpp > CMakeFiles\2DProject.dir\Game\SheetAnimator.cpp.i
+
+CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\SheetAnimator.cpp -o CMakeFiles\2DProject.dir\Game\SheetAnimator.cpp.s
+
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/AnimationCycle.cpp
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj -MF CMakeFiles\2DProject.dir\Game\AnimationCycle.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\AnimationCycle.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\AnimationCycle.cpp
+
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\AnimationCycle.cpp > CMakeFiles\2DProject.dir\Game\AnimationCycle.cpp.i
+
+CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\AnimationCycle.cpp -o CMakeFiles\2DProject.dir\Game\AnimationCycle.cpp.s
+
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj: CMakeFiles/2DProject.dir/flags.make
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj: CMakeFiles/2DProject.dir/includes_CXX.rsp
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj: C:/Users/shawn/CLionProjects/2DProject/Game/CycleManager.cpp
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj: CMakeFiles/2DProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj -MF CMakeFiles\2DProject.dir\Game\CycleManager.cpp.obj.d -o CMakeFiles\2DProject.dir\Game\CycleManager.cpp.obj -c C:\Users\shawn\CLionProjects\2DProject\Game\CycleManager.cpp
+
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/2DProject.dir/Game/CycleManager.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\shawn\CLionProjects\2DProject\Game\CycleManager.cpp > CMakeFiles\2DProject.dir\Game\CycleManager.cpp.i
+
+CMakeFiles/2DProject.dir/Game/CycleManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/2DProject.dir/Game/CycleManager.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.1\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\shawn\CLionProjects\2DProject\Game\CycleManager.cpp -o CMakeFiles\2DProject.dir\Game\CycleManager.cpp.s
+
 # Object files for target 2DProject
 2DProject_OBJECTS = \
 "CMakeFiles/2DProject.dir/main.cpp.obj" \
@@ -293,7 +458,18 @@ CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.s: cmake_force
 "CMakeFiles/2DProject.dir/Game/Collider.cpp.obj" \
 "CMakeFiles/2DProject.dir/Game/Camera.cpp.obj" \
 "CMakeFiles/2DProject.dir/Game/Scene.cpp.obj" \
-"CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj"
+"CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/Component.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj" \
+"CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj" \
+"CMakeFiles/2DProject.dir/TextFont.cpp.obj" \
+"CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj" \
+"CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj" \
+"CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj" \
+"CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj"
 
 # External object files for target 2DProject
 2DProject_EXTERNAL_OBJECTS =
@@ -312,11 +488,22 @@ CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.s: cmake_force
 2DProject.exe: CMakeFiles/2DProject.dir/Game/Camera.cpp.obj
 2DProject.exe: CMakeFiles/2DProject.dir/Game/Scene.cpp.obj
 2DProject.exe: CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/Component.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/TextFont.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj
+2DProject.exe: CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj
 2DProject.exe: CMakeFiles/2DProject.dir/build.make
 2DProject.exe: CMakeFiles/2DProject.dir/linkLibs.rsp
 2DProject.exe: CMakeFiles/2DProject.dir/objects1.rsp
 2DProject.exe: CMakeFiles/2DProject.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable 2DProject.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\shawn\CLionProjects\2DProject\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Linking CXX executable 2DProject.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\2DProject.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

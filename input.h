@@ -22,6 +22,11 @@ enum MouseButton {
     //others to come soon
 };
 
+enum Direction {
+    Vertical,
+    Horizontal
+};
+
 //Class to deal with input
 class input {
 
@@ -29,6 +34,8 @@ private:
     static DWORD currentPID;
     static HWND windowHandle;
     static BOOL CALLBACK EnumWindowsProcMy(HWND hwnd,LPARAM lParam);
+    static double horizontalSmoother;
+    static double verticalSmoother;
 
 public:
     static void onKeyDown(SDL_Keycode pressed);
@@ -45,6 +52,8 @@ public:
 
     static MouseState getMouseInputState(const MouseButton& mouseButton);
     static void updateMouseInputState(const Uint8& key, const bool& down);
+
+    static double getMovement(const Direction& direction);
 };
 
 

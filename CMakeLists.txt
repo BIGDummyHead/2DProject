@@ -61,15 +61,27 @@ add_executable(2DProject main.cpp
         Game/UiObject.cpp
         Game/UiObject.h
         Game/Physics/Castable.h
-        UiFont.h
+        TextFont.h
+        UiObjectFont.cpp
+        UiObjectFont.h
+        TextFont.cpp
+        IP_Games/Knight/Knight_Game.cpp
+        IP_Games/Knight/Knight_Game.h
+        Settings/Parser.cpp
+        Settings/Parser.h
+        IP_Games/Knight/Player.cpp
+        IP_Games/Knight/Player.h
+        IP_Games/Knight/PlayerStats.h
+        Game/SheetAnimator.cpp
+        Game/SheetAnimator.h
+        Game/AnimationCycle.h
+        Game/AnimationCycle.cpp
+        Game/CycleManager.cpp
+        Game/CycleManager.h
 )
 
 # Link against SDL2 libraries
-target_link_libraries(2DProject SDL2 SDL2main)
-
-target_link_libraries(2DProject SDL2_image SDL2_image)
-
-target_link_libraries(2DProject SDL2_ttf)
+target_link_libraries(2DProject SDL2 SDL2main SDL2_image SDL2_ttf)
 
 # Enable debugging symbols
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_BUILD_TYPE Debug)

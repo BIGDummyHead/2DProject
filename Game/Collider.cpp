@@ -14,7 +14,7 @@
 #include <algorithm>
 
 //Ensure that sheet.renderedTexture is set before calling this function
-Vector2 Collider::createBoxFromTexture(const Sheet &sheet) {
+Vector2 Collider::createBoxFromSheet(const Sheet &sheet) {
 
     //produces 40
     //std::cout << textureSheet.renderedTexture.w / textureSheet.totalCols() / 2 << std::endl;
@@ -29,6 +29,14 @@ Vector2 Collider::createBoxFromTexture(const Sheet &sheet) {
 
     return v;
 }
+
+Vector2 Collider::createBoxFromTexture(const Texture &text) {
+    const int x = text.renderedTexture.y / 2;
+    const int y = text.renderedTexture.x / 2;
+    const Vector2 v(x,y);
+    return v;
+}
+
 
 bool Collider::isColliding(const Collider& other, Vector2& push) const {
     // Get the bounds of this collider

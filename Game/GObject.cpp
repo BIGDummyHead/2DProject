@@ -4,6 +4,8 @@
 
 #include "GObject.h"
 
+#include <SDL_log.h>
+
 std::unordered_set<GObject*> GObject::registeredObjects;
 std::unordered_set<GObject*> GObject::activeObjects;
 std::unordered_set<GObject*> GObject::inactiveObjects;
@@ -14,6 +16,29 @@ bool GObject::getIsActive() const {
 
 void GObject::update() {
 }
+void GObject::start() {
+
+}
+
+Collider *GObject::automaticCollider(const bool& setStatic, const bool& useSheet) const {
+    if(!texture) {
+        SDL_LogError(
+            SDL_LOG_CATEGORY_ERROR,
+            "Texture you are trying to generate a collider for was null");
+        return nullptr;
+    }
+    //render this once for the following calls
+    texture->render(*drawTool, transform->getPosition());
+
+    const Vector2 box = useSheet ?
+        Collider::createBoxFromSheet(*dynamic_cast<Sheet*>(texture)) :
+        Collider::createBoxFromTexture(*texture);
+
+    return new Collider(box.x, box.y, setStatic);
+}
+
+
+
 
 void GObject::onRender(const Vector2& drawnAt) {
 
@@ -32,6 +57,11 @@ void GObject::destroy() {
 }
 
 void GObject::updateFrame() {
+
+    if(!hasStarted) {
+        start();
+        hasStarted = true;
+    }
 
     for(const auto comp : activeComponents) {
 

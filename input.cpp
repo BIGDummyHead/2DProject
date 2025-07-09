@@ -114,6 +114,7 @@ MouseState input::getMouseInputState(const MouseButton &mouseButton) {
 }
 
 
+//For internal use, updates the input states.
 void input::pollInput() {
     SDL_Event event;
 
@@ -141,12 +142,12 @@ void input::pollInput() {
 }
 
 long input::clampLong( const long& val,  const long& min, const long& max) {
+
     if(val < min)
         return min;
-    else if(val > max)
-        return max;
 
-    return val;
+    return val > max ? max : val;
+
 }
 
 
@@ -159,14 +160,12 @@ Vector2 input::getMousePosition() {
     Vector2 finalPosition;
 
     POINT cursorPoint;
-    HWND currentHandle = windowHandle;
     if(GetCursorPos(&cursorPoint)) {
-        if(ScreenToClient(currentHandle, &cursorPoint)) {
+        if(ScreenToClient(windowHandle, &cursorPoint)) {
             finalPosition.x = clampLong(cursorPoint.x, 0, SCREEN_WIDTH);
             finalPosition.y = clampLong(cursorPoint.y, 0, SCREEN_HEIGHT);
         }
     }
-
 
     return finalPosition;
 }
@@ -194,5 +193,16 @@ bool input::windowHasFocus() {
 
 
 
+double input::getMovement(const Direction &direction) {
+
+    //check if any up/right keys are being held per direction
+    const bool leftSideAr = direction == Vertical ? isKeyHeld(SDLK_w) || isKeyHeld(SDLK_UP) : isKeyHeld(SDLK_d) || isKeyHeld(SDLK_RIGHT);
+
+    //check if any down/left keys are being held per direction
+    const bool rightSideAr = direction == Vertical ? isKeyHeld(SDLK_s) || isKeyHeld(SDLK_DOWN) :  isKeyHeld(SDLK_a) || isKeyHeld(SDLK_LEFT);
+
+    //(up/right) - (down/left)
+    return static_cast<int>(leftSideAr) - static_cast<int>(rightSideAr);
+}
 
 

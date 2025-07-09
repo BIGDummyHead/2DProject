@@ -4,6 +4,8 @@
 
 #include "Scene.h"
 
+#include <SDL_log.h>
+
 Scene* Scene::currentlyLoadedScene = nullptr;
 std::unordered_map<std::string, Scene*> Scene::createdScenes;
 
@@ -17,18 +19,37 @@ std::string Scene::getName() {
 
 void Scene::loadScene(const std::string &name, const SceneInformation scene)  {
 
-    //destroys the current loaded scene if any
-    destroyScene();
-
     if(!createdScenes.contains(name)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No scene with this name exist");
         return;
     }
 
     Scene* loadingScene = createdScenes[name];
-    loadingScene->onSceneLoad(scene);
-    currentlyLoadedScene = loadingScene;
+
+    loadScene(loadingScene, scene);
+
 }
+
+void Scene::loadScene(Scene *scene, const SceneInformation sceneInfo) {
+
+    if(scene == nullptr) {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid scene tried loading");
+        return;
+    }
+    //destroys the current loaded scene if any
+    destroyScene();
+
+    scene->onSceneLoad(sceneInfo);
+    currentlyLoadedScene = scene;
+}
+
+
+void Scene::loadFirstAvalScene(const SceneInformation scene) {
+
+    loadScene(createdScenes.begin()->first, scene);
+
+}
+
 
 void Scene::destroyScene() {
     if (currentlyLoadedScene == nullptr) //destroy the scene

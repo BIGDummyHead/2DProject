@@ -40,9 +40,12 @@ public:
     virtual void onSceneLoad(SceneInformation sceneInfo);
 
     static void loadScene(const std::string& name, SceneInformation scene);
+    static void loadScene(Scene* scene, SceneInformation sceneInfo);
 
     //Destroy the currentlyLoadedScene if there is any scene.
     static void destroyScene();
+
+    static void loadFirstAvalScene(SceneInformation scene);
 };
 
 

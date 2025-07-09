@@ -8,13 +8,239 @@
 #include "Game/Sheet.h"
 #include <chrono>
 
+#include "UiObjectFont.h"
+#include "UiObjectFont.h"
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
-#include "Game/UiObject.h"
 #include "Game/Physics/Raycaster.h"
+#include "IP_Games/Knight/Knight_Game.h"
 
 #include "SDL_ttf/include/SDL_ttf.h"
+#include "Settings/Parser.h"
+
+Scene *getKnightGame() {
+    auto *game = new Knight_Game();
+    return game;
+}
+
+[[noreturn]] int main() {
+
+    //Initialize the application
+    App myApp;
+    myApp.name = "Knight Game";
+    init::initSDL(myApp);
+
+    //create a drawtool from application
+    draw drawTool(&myApp);
+
+    //Center of the Screen, can be used for rendering
+
+    //Create a camera to use for later, this will control scrolling
+    const Camera cam(Vector2(SCREEN_WIDTH + 150, SCREEN_HEIGHT + 250), Vector2{0, 0});
+
+    const SceneInformation sceneInfo{&myApp, &drawTool};
+
+    //Scene::loadScene("Main Scene", sceneInfo);
+
+    Scene *kGame = getKnightGame();
+
+    Scene::loadScene(kGame, sceneInfo);
+
+    //    Scene::loadFirstAvalScene(sceneInfo);
+
+    Uint32 lastTick = -1;
+    while (true) {
+        const Uint32 thisTick = SDL_GetTicks();
+        if (thisTick - lastTick < 1000 / FPS) {
+            continue;
+        }
+        lastTick = thisTick;
+
+        //Prepare the scene for rendering
+        drawTool.prepareScene();
+
+        //Poll for inputs, updates the input sectors
+        input::pollInput();
+
+
+        //Loop over active scene objects.
+        for (auto activeObj: GObject::activeObjects) {
+            //Ensure this object is not null for drawing
+            if (activeObj == nullptr || activeObj->transform == nullptr) {
+                continue;
+            }
+
+            //important to only call this once
+            const Vector2 vel = activeObj->transform->getVelocity();
+
+            //check if the object is even in the render view
+            if (cam.isInRenderView(activeObj->transform->getPosition())) {
+                //determine where to draw this object
+                Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
+
+                //test collision before updating position
+                if (activeObj->collider != nullptr) {
+                    activeObj->collider->center = drawnAt;
+
+                    //we have to loop through all the active objects again and make sure there is not collision
+                    for (auto comparingObj: GObject::activeObjects) {
+                        //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
+                        if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
+                            isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
+                                comparingObj->transform->getPosition()))
+                            continue;
+
+
+                        //determine the center of this collider
+                        comparingObj->collider->center =
+                                comparingObj->transform->getPosition() - cam.transform->getPosition();
+
+
+                        //dynamic or heaviest
+                        GObject *left = nullptr;
+
+                        //static or lightest
+                        GObject *right = nullptr;
+
+                        if (comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
+                            //both are dynamic
+
+                            //choose the fastest and heaviest object
+
+                            //get the last stored velocity, avoids the recalcuation step
+                            const Vector2 comparingVelocity = comparingObj->transform->getVelocity(true);
+                            const double comparingWeight = comparingObj->collider->mass;
+                            const double myWeight = activeObj->collider->mass;
+
+                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
+                                       ? comparingObj
+                                       : activeObj;
+                            right = left == activeObj ? comparingObj : activeObj;
+                        } else {
+                            //one is static and the other is dynamic
+                            //static object
+                            left = comparingObj->collider->isStatic ? activeObj : comparingObj;
+
+                            //dynamic object
+                            right = left == activeObj ? comparingObj : activeObj;
+                        }
+
+                        Vector2 push; //check for collision
+                        if (left->collider->isColliding(*right->collider, push)) {
+                            if (left->collider->isStatic == false && right->collider->isStatic == false) {
+                                Transform *rightTrans = right->transform;
+
+                                //fix for object clipping when one was heavier.
+                                rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
+                            }
+
+                            //collision gives us back the amount that we need to push the nonStaticObject
+                            Transform *trans = left->transform;
+                            const Vector2 newLocation = trans->getPosition() + push;
+                            trans->setPosition(newLocation);
+
+                            //send a notification
+                            right->onCollision(left->collider);
+                            left->onCollision(right->collider);
+                        }
+                    }
+
+
+                    //debug: draw the collider box so we can see it
+                    activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
+                }
+
+
+                //render the object
+                if (activeObj->texture != nullptr)
+                    activeObj->texture->render(drawTool, drawnAt);
+
+                activeObj->onRender(drawnAt);
+            }
+
+            activeObj->updateFrame();
+        }
+
+
+        //Lights:
+        //TOOD: reimplement this code for later
+        /*SDL_Texture *lightmap = drawTool.startLightMap();
+
+
+        drawTool.drawLights();
+        drawTool.endLightMap();
+
+
+        // Set multiply (modulate) blending mode so black hides, white reveals
+        SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
+        SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);*/
+
+
+        //Implementation of a texxt component
+        /*
+        SDL_Color foreGround(255, 255, 255, 255);
+        UiFont font(R"(assets\fonts\font.ttf)", foreGround);
+        SDL_Texture* text = drawTool.createTextTexture(font, "Hello Peyton");
+
+        SDL_Rect textDest(100, 100, 500, 300);
+        SDL_RenderCopy(drawTool.getApp().renderer, text, nullptr, &textDest);
+        */
+
+        //Render UI
+        RayInfo rayInfo;
+        const bool hasHitUI = Raycaster::castUI(&rayInfo);
+        for (auto *uiObject: UiObject::getRegisteredUI()) {
+            uiObject->render(); //always draw the object
+
+            if (uiObject->collider == nullptr)
+                continue; //go onto the next one
+
+            //start any event calls here:
+            if (uiObject == rayInfo.uiObjectHit) {
+                if (!uiObject->isMouseFocused()) {
+                    uiObject->setMouseIn();
+                } else {
+                    uiObject->whileMouseOver();
+                }
+
+                switch (input::getMouseInputState(Left)) {
+                    case Down:
+                        uiObject->onMouseClick();
+                        break;
+                    case Up:
+                        uiObject->onMouseRelease();
+                        break;
+                    case Held:
+                        uiObject->whileMouseDown();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                if (uiObject->isMouseFocused()) {
+                    uiObject->setMouseOut();
+                } else {
+                    uiObject->whileMouseOut();
+                }
+            }
+        }
+
+        //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene
+        drawTool.presentScene();
+
+        //Give a delay between render
+        SDL_Delay(RENDER_DELAY_MS);
+    }
+
+    //quit out of everything!!!!
+    IMG_Quit();
+    TTF_Quit();
+    SDL_Quit();
+}
+
+/* Old test code
+
 
 
 class Test_Player final : public GObject {
@@ -154,7 +380,8 @@ public:
 
     void update() override {
         /*std::cout << "This is a UPDATE message from test_component" << std::endl;*/
-    }
+//}
+/*
 
     void destroy() override {
         std::cout << "This is a destroyed message from test_component" << std::endl;
@@ -190,13 +417,15 @@ public:
         obj->transform->setPosition(where + Vector2{-250, 0});
         sheet->scale *= 2.5;
         obj->texture = sheet;
-    }
+
+
+        }
 
 
     //OBJECTS MUST BE ALLOCATED ON THE HEAP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void onSceneLoad(const SceneInformation sceneInfo) override {
         if (Camera::mainCamera == nullptr)
-            throw std::runtime_error("No camera was instantiated");
+            throw std::runtime_error("No camera was instantiated");cc
 
         const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         createDeathObject(sceneInfo, center, 1, "left object");
@@ -205,6 +434,7 @@ public:
         auto *light = new Test_Light(sceneInfo.drawingTool);
 
         /* Player Object */
+/*
         auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
         playerObject->addComponent<Test_Component>();
 
@@ -233,211 +463,24 @@ public:
             std::cout << "None" << std::endl;
         }*/
 
-
+/*
         playerObject->cam = Camera::mainCamera; // Hook the camera up to the GObject
+
+
+        constexpr SDL_Color white(255,255,255,255);
+
+        auto* tFont = new TextFont("Google", R"(assets\fonts\font.ttf)", white, true);
+        // UiFont font(sceneInfo.drawingTool, tFont);
+
+        auto* googleFont = TextFont::getFontByName("Google");
+
+        auto* objFont = new UiObjectFont(sceneInfo.drawingTool, googleFont, "Hello world!");
+        objFont->position = Vector2{100, 100};
     }
 };
 
 
-[[noreturn]] int main() {
-    //Initialize the application
-    App myApp;
-    myApp.name = "My Game!";
-    init::initSDL(myApp);
-
-    //create a drawtool from application
-    draw drawTool(&myApp);
-
-    //Center of the Screen, can be used for rendering
-
-    //Create a camera to use for later, this will control scrolling
-    const Camera cam(Vector2(SCREEN_WIDTH + 150, SCREEN_HEIGHT + 250), Vector2{0, 0});
-
-    const SceneInformation sceneInfo{&myApp, &drawTool};
-
-    Test_Scene firstScene;
-
-    Scene::loadScene("Main Scene", sceneInfo);
-
-    Uint32 lastTick = -1;
-    while (true) {
-        const Uint32 thisTick = SDL_GetTicks();
-        if (thisTick - lastTick < 1000 / FPS) {
-            continue;
-        }
-        lastTick = thisTick;
-
-        //Prepare the scene for rendering
-        drawTool.prepareScene();
-
-        //Poll for inputs, updates the input sectors
-        input::pollInput();
-
-        //Loop over active scene objects.
-        for (auto activeObj: GObject::activeObjects) {
-            //Ensure this object is not null for drawing
-            if (activeObj == nullptr || activeObj->transform == nullptr) {
-                continue;
-            }
-
-            //important to only call this once
-            const Vector2 vel = activeObj->transform->getVelocity();
-
-            //check if the object is even in the render view
-            if (cam.isInRenderView(activeObj->transform->getPosition())) {
-                //determine where to draw this object
-                Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
-
-                //test collision before updating position
-                if (activeObj->collider != nullptr) {
-                    activeObj->collider->center = drawnAt;
-
-                    //we have to loop through all the active objects again and make sure there is not collision
-                    for (auto comparingObj: GObject::activeObjects) {
-                        //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
-                        if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
-                            isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
-                                comparingObj->transform->getPosition()))
-                            continue;
-
-
-                        //determine the center of this collider
-                        comparingObj->collider->center =
-                                comparingObj->transform->getPosition() - cam.transform->getPosition();
-
-
-                        //dynamic or heaviest
-                        GObject *left = nullptr;
-
-                        //static or lightest
-                        GObject *right = nullptr;
-
-                        if (comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
-                            //both are dynamic
-
-                            //choose the fastest and heaviest object
-
-                            //get the last stored velocity, avoids the recalcuation step
-                            const Vector2 comparingVelocity = comparingObj->transform->getVelocity(true);
-                            const double comparingWeight = comparingObj->collider->mass;
-                            const double myWeight = activeObj->collider->mass;
-
-                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
-                                       ? comparingObj
-                                       : activeObj;
-                            right = left == activeObj ? comparingObj : activeObj;
-                        } else {
-                            //one is static and the other is dynamic
-                            //static object
-                            left = comparingObj->collider->isStatic ? activeObj : comparingObj;
-
-                            //dynamic object
-                            right = left == activeObj ? comparingObj : activeObj;
-                        }
-
-                        Vector2 push; //check for collision
-                        if (left->collider->isColliding(*right->collider, push)) {
-                            if (left->collider->isStatic == false && right->collider->isStatic == false) {
-                                Transform *rightTrans = right->transform;
-
-                                //fix for object clipping when one was heavier.
-                                rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
-                            }
-
-                            //collision gives us back the amount that we need to push the nonStaticObject
-                            Transform *trans = left->transform;
-                            const Vector2 newLocation = trans->getPosition() + push;
-                            trans->setPosition(newLocation);
-
-                            //send a notification
-                            right->onCollision(left->collider);
-                            left->onCollision(right->collider);
-                        }
-                    }
-
-
-                    //debug: draw the collider box so we can see it
-                    activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
-                }
-
-
-                //render the object
-                if (activeObj->texture != nullptr)
-                    activeObj->texture->render(drawTool, drawnAt);
-
-                activeObj->onRender(drawnAt);
-            }
-
-
-            activeObj->updateFrame();
-        }
-
-
-        //Lights:
-        SDL_Texture *lightmap = drawTool.startLightMap();
-        drawTool.drawLights();
-        drawTool.endLightMap();
-
-        // Set multiply (modulate) blending mode so black hides, white reveals
-        SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
-        SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);
 
 
 
-
-
-        //Render UI
-        RayInfo rayInfo;
-        const bool hasHitUI = Raycaster::castUI(&rayInfo);
-        for (auto *uiObject: UiObject::getRegisteredUI()) {
-            uiObject->render(); //always draw the object
-
-            if (uiObject->collider == nullptr)
-                continue; //go onto the next one
-
-            //start any event calls here:
-            if (uiObject == rayInfo.uiObjectHit) {
-
-
-                if (!uiObject->isMouseFocused()) {
-                    uiObject->setMouseIn();
-                } else {
-                    uiObject->whileMouseOver();
-                }
-
-                switch (input::getMouseInputState(Left)) {
-                    case Down:
-                        uiObject->onMouseClick();
-                        break;
-                    case Up:
-                        uiObject->onMouseRelease();
-                        break;
-                    case Held:
-                        uiObject->whileMouseDown();
-                        break;
-                    default:
-                        break;
-                }
-
-            } else {
-                if (uiObject->isMouseFocused()) {
-                    uiObject->setMouseOut();
-                } else {
-                    uiObject->whileMouseOut();
-                }
-            }
-        }
-
-        //Once everything is ready to be rendered (what to render, collision, and final rendering) present the scene
-        drawTool.presentScene();
-
-        //Give a delay between render
-        SDL_Delay(RENDER_DELAY_MS);
-    }
-
-    //quit out of everything!!!!
-    IMG_Quit();
-    TTF_Quit();
-    SDL_Quit();
-
-}
+ */

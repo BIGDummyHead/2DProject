@@ -128,6 +128,30 @@ depend:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/build
 .PHONY : 2DProject/fast
 
+Game/AnimationCycle.obj: Game/AnimationCycle.cpp.obj
+.PHONY : Game/AnimationCycle.obj
+
+# target to build an object file
+Game/AnimationCycle.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj
+.PHONY : Game/AnimationCycle.cpp.obj
+
+Game/AnimationCycle.i: Game/AnimationCycle.cpp.i
+.PHONY : Game/AnimationCycle.i
+
+# target to preprocess a source file
+Game/AnimationCycle.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.i
+.PHONY : Game/AnimationCycle.cpp.i
+
+Game/AnimationCycle.s: Game/AnimationCycle.cpp.s
+.PHONY : Game/AnimationCycle.s
+
+# target to generate assembly for a file
+Game/AnimationCycle.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.s
+.PHONY : Game/AnimationCycle.cpp.s
+
 Game/Background.obj: Game/Background.cpp.obj
 .PHONY : Game/Background.obj
 
@@ -200,6 +224,54 @@ Game/Collider.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Collider.cpp.s
 .PHONY : Game/Collider.cpp.s
 
+Game/Component.obj: Game/Component.cpp.obj
+.PHONY : Game/Component.obj
+
+# target to build an object file
+Game/Component.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Component.cpp.obj
+.PHONY : Game/Component.cpp.obj
+
+Game/Component.i: Game/Component.cpp.i
+.PHONY : Game/Component.i
+
+# target to preprocess a source file
+Game/Component.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Component.cpp.i
+.PHONY : Game/Component.cpp.i
+
+Game/Component.s: Game/Component.cpp.s
+.PHONY : Game/Component.s
+
+# target to generate assembly for a file
+Game/Component.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Component.cpp.s
+.PHONY : Game/Component.cpp.s
+
+Game/CycleManager.obj: Game/CycleManager.cpp.obj
+.PHONY : Game/CycleManager.obj
+
+# target to build an object file
+Game/CycleManager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj
+.PHONY : Game/CycleManager.cpp.obj
+
+Game/CycleManager.i: Game/CycleManager.cpp.i
+.PHONY : Game/CycleManager.i
+
+# target to preprocess a source file
+Game/CycleManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/CycleManager.cpp.i
+.PHONY : Game/CycleManager.cpp.i
+
+Game/CycleManager.s: Game/CycleManager.cpp.s
+.PHONY : Game/CycleManager.s
+
+# target to generate assembly for a file
+Game/CycleManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/CycleManager.cpp.s
+.PHONY : Game/CycleManager.cpp.s
+
 Game/GObject.obj: Game/GObject.cpp.obj
 .PHONY : Game/GObject.obj
 
@@ -224,6 +296,78 @@ Game/GObject.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/GObject.cpp.s
 .PHONY : Game/GObject.cpp.s
 
+Game/LightSource.obj: Game/LightSource.cpp.obj
+.PHONY : Game/LightSource.obj
+
+# target to build an object file
+Game/LightSource.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj
+.PHONY : Game/LightSource.cpp.obj
+
+Game/LightSource.i: Game/LightSource.cpp.i
+.PHONY : Game/LightSource.i
+
+# target to preprocess a source file
+Game/LightSource.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/LightSource.cpp.i
+.PHONY : Game/LightSource.cpp.i
+
+Game/LightSource.s: Game/LightSource.cpp.s
+.PHONY : Game/LightSource.s
+
+# target to generate assembly for a file
+Game/LightSource.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/LightSource.cpp.s
+.PHONY : Game/LightSource.cpp.s
+
+Game/Physics/Raycaster.obj: Game/Physics/Raycaster.cpp.obj
+.PHONY : Game/Physics/Raycaster.obj
+
+# target to build an object file
+Game/Physics/Raycaster.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj
+.PHONY : Game/Physics/Raycaster.cpp.obj
+
+Game/Physics/Raycaster.i: Game/Physics/Raycaster.cpp.i
+.PHONY : Game/Physics/Raycaster.i
+
+# target to preprocess a source file
+Game/Physics/Raycaster.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.i
+.PHONY : Game/Physics/Raycaster.cpp.i
+
+Game/Physics/Raycaster.s: Game/Physics/Raycaster.cpp.s
+.PHONY : Game/Physics/Raycaster.s
+
+# target to generate assembly for a file
+Game/Physics/Raycaster.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.s
+.PHONY : Game/Physics/Raycaster.cpp.s
+
+Game/Scene.obj: Game/Scene.cpp.obj
+.PHONY : Game/Scene.obj
+
+# target to build an object file
+Game/Scene.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Scene.cpp.obj
+.PHONY : Game/Scene.cpp.obj
+
+Game/Scene.i: Game/Scene.cpp.i
+.PHONY : Game/Scene.i
+
+# target to preprocess a source file
+Game/Scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Scene.cpp.i
+.PHONY : Game/Scene.cpp.i
+
+Game/Scene.s: Game/Scene.cpp.s
+.PHONY : Game/Scene.s
+
+# target to generate assembly for a file
+Game/Scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Scene.cpp.s
+.PHONY : Game/Scene.cpp.s
+
 Game/Sheet.obj: Game/Sheet.cpp.obj
 .PHONY : Game/Sheet.obj
 
@@ -247,6 +391,30 @@ Game/Sheet.s: Game/Sheet.cpp.s
 Game/Sheet.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Sheet.cpp.s
 .PHONY : Game/Sheet.cpp.s
+
+Game/SheetAnimator.obj: Game/SheetAnimator.cpp.obj
+.PHONY : Game/SheetAnimator.obj
+
+# target to build an object file
+Game/SheetAnimator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj
+.PHONY : Game/SheetAnimator.cpp.obj
+
+Game/SheetAnimator.i: Game/SheetAnimator.cpp.i
+.PHONY : Game/SheetAnimator.i
+
+# target to preprocess a source file
+Game/SheetAnimator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.i
+.PHONY : Game/SheetAnimator.cpp.i
+
+Game/SheetAnimator.s: Game/SheetAnimator.cpp.s
+.PHONY : Game/SheetAnimator.s
+
+# target to generate assembly for a file
+Game/SheetAnimator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.s
+.PHONY : Game/SheetAnimator.cpp.s
 
 Game/Texture.obj: Game/Texture.cpp.obj
 .PHONY : Game/Texture.obj
@@ -295,6 +463,150 @@ Game/Transform.s: Game/Transform.cpp.s
 Game/Transform.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/Transform.cpp.s
 .PHONY : Game/Transform.cpp.s
+
+Game/UiObject.obj: Game/UiObject.cpp.obj
+.PHONY : Game/UiObject.obj
+
+# target to build an object file
+Game/UiObject.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj
+.PHONY : Game/UiObject.cpp.obj
+
+Game/UiObject.i: Game/UiObject.cpp.i
+.PHONY : Game/UiObject.i
+
+# target to preprocess a source file
+Game/UiObject.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/UiObject.cpp.i
+.PHONY : Game/UiObject.cpp.i
+
+Game/UiObject.s: Game/UiObject.cpp.s
+.PHONY : Game/UiObject.s
+
+# target to generate assembly for a file
+Game/UiObject.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Game/UiObject.cpp.s
+.PHONY : Game/UiObject.cpp.s
+
+IP_Games/Knight/Knight_Game.obj: IP_Games/Knight/Knight_Game.cpp.obj
+.PHONY : IP_Games/Knight/Knight_Game.obj
+
+# target to build an object file
+IP_Games/Knight/Knight_Game.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj
+.PHONY : IP_Games/Knight/Knight_Game.cpp.obj
+
+IP_Games/Knight/Knight_Game.i: IP_Games/Knight/Knight_Game.cpp.i
+.PHONY : IP_Games/Knight/Knight_Game.i
+
+# target to preprocess a source file
+IP_Games/Knight/Knight_Game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.i
+.PHONY : IP_Games/Knight/Knight_Game.cpp.i
+
+IP_Games/Knight/Knight_Game.s: IP_Games/Knight/Knight_Game.cpp.s
+.PHONY : IP_Games/Knight/Knight_Game.s
+
+# target to generate assembly for a file
+IP_Games/Knight/Knight_Game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.s
+.PHONY : IP_Games/Knight/Knight_Game.cpp.s
+
+IP_Games/Knight/Player.obj: IP_Games/Knight/Player.cpp.obj
+.PHONY : IP_Games/Knight/Player.obj
+
+# target to build an object file
+IP_Games/Knight/Player.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj
+.PHONY : IP_Games/Knight/Player.cpp.obj
+
+IP_Games/Knight/Player.i: IP_Games/Knight/Player.cpp.i
+.PHONY : IP_Games/Knight/Player.i
+
+# target to preprocess a source file
+IP_Games/Knight/Player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.i
+.PHONY : IP_Games/Knight/Player.cpp.i
+
+IP_Games/Knight/Player.s: IP_Games/Knight/Player.cpp.s
+.PHONY : IP_Games/Knight/Player.s
+
+# target to generate assembly for a file
+IP_Games/Knight/Player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.s
+.PHONY : IP_Games/Knight/Player.cpp.s
+
+Settings/Parser.obj: Settings/Parser.cpp.obj
+.PHONY : Settings/Parser.obj
+
+# target to build an object file
+Settings/Parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj
+.PHONY : Settings/Parser.cpp.obj
+
+Settings/Parser.i: Settings/Parser.cpp.i
+.PHONY : Settings/Parser.i
+
+# target to preprocess a source file
+Settings/Parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Settings/Parser.cpp.i
+.PHONY : Settings/Parser.cpp.i
+
+Settings/Parser.s: Settings/Parser.cpp.s
+.PHONY : Settings/Parser.s
+
+# target to generate assembly for a file
+Settings/Parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/Settings/Parser.cpp.s
+.PHONY : Settings/Parser.cpp.s
+
+TextFont.obj: TextFont.cpp.obj
+.PHONY : TextFont.obj
+
+# target to build an object file
+TextFont.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/TextFont.cpp.obj
+.PHONY : TextFont.cpp.obj
+
+TextFont.i: TextFont.cpp.i
+.PHONY : TextFont.i
+
+# target to preprocess a source file
+TextFont.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/TextFont.cpp.i
+.PHONY : TextFont.cpp.i
+
+TextFont.s: TextFont.cpp.s
+.PHONY : TextFont.s
+
+# target to generate assembly for a file
+TextFont.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/TextFont.cpp.s
+.PHONY : TextFont.cpp.s
+
+UiObjectFont.obj: UiObjectFont.cpp.obj
+.PHONY : UiObjectFont.obj
+
+# target to build an object file
+UiObjectFont.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj
+.PHONY : UiObjectFont.cpp.obj
+
+UiObjectFont.i: UiObjectFont.cpp.i
+.PHONY : UiObjectFont.i
+
+# target to preprocess a source file
+UiObjectFont.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/UiObjectFont.cpp.i
+.PHONY : UiObjectFont.cpp.i
+
+UiObjectFont.s: UiObjectFont.cpp.s
+.PHONY : UiObjectFont.s
+
+# target to generate assembly for a file
+UiObjectFont.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\2DProject.dir\build.make CMakeFiles/2DProject.dir/UiObjectFont.cpp.s
+.PHONY : UiObjectFont.cpp.s
 
 Vector2.obj: Vector2.cpp.obj
 .PHONY : Vector2.obj
@@ -425,6 +737,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... 2DProject
+	@echo ... Game/AnimationCycle.obj
+	@echo ... Game/AnimationCycle.i
+	@echo ... Game/AnimationCycle.s
 	@echo ... Game/Background.obj
 	@echo ... Game/Background.i
 	@echo ... Game/Background.s
@@ -434,18 +749,54 @@ help:
 	@echo ... Game/Collider.obj
 	@echo ... Game/Collider.i
 	@echo ... Game/Collider.s
+	@echo ... Game/Component.obj
+	@echo ... Game/Component.i
+	@echo ... Game/Component.s
+	@echo ... Game/CycleManager.obj
+	@echo ... Game/CycleManager.i
+	@echo ... Game/CycleManager.s
 	@echo ... Game/GObject.obj
 	@echo ... Game/GObject.i
 	@echo ... Game/GObject.s
+	@echo ... Game/LightSource.obj
+	@echo ... Game/LightSource.i
+	@echo ... Game/LightSource.s
+	@echo ... Game/Physics/Raycaster.obj
+	@echo ... Game/Physics/Raycaster.i
+	@echo ... Game/Physics/Raycaster.s
+	@echo ... Game/Scene.obj
+	@echo ... Game/Scene.i
+	@echo ... Game/Scene.s
 	@echo ... Game/Sheet.obj
 	@echo ... Game/Sheet.i
 	@echo ... Game/Sheet.s
+	@echo ... Game/SheetAnimator.obj
+	@echo ... Game/SheetAnimator.i
+	@echo ... Game/SheetAnimator.s
 	@echo ... Game/Texture.obj
 	@echo ... Game/Texture.i
 	@echo ... Game/Texture.s
 	@echo ... Game/Transform.obj
 	@echo ... Game/Transform.i
 	@echo ... Game/Transform.s
+	@echo ... Game/UiObject.obj
+	@echo ... Game/UiObject.i
+	@echo ... Game/UiObject.s
+	@echo ... IP_Games/Knight/Knight_Game.obj
+	@echo ... IP_Games/Knight/Knight_Game.i
+	@echo ... IP_Games/Knight/Knight_Game.s
+	@echo ... IP_Games/Knight/Player.obj
+	@echo ... IP_Games/Knight/Player.i
+	@echo ... IP_Games/Knight/Player.s
+	@echo ... Settings/Parser.obj
+	@echo ... Settings/Parser.i
+	@echo ... Settings/Parser.s
+	@echo ... TextFont.obj
+	@echo ... TextFont.i
+	@echo ... TextFont.s
+	@echo ... UiObjectFont.obj
+	@echo ... UiObjectFont.i
+	@echo ... UiObjectFont.s
 	@echo ... Vector2.obj
 	@echo ... Vector2.i
 	@echo ... Vector2.s

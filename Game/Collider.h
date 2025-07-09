@@ -29,6 +29,16 @@ public:
         this->isStatic = isStatic;
     }
 
+    //Create a collider from a SDL_Rect object
+    explicit Collider(const SDL_Rect& from, const bool isStatic = true) : Collider(from.w, from.h, isStatic) {
+
+    }
+
+    //Copy over an existing collider
+    Collider(const Collider& ref) : Collider(ref.width, ref.height, ref.isStatic) {
+
+    }
+
     //Check if this collider is colliding with another collider
     [[nodiscard]] bool isColliding(const Collider& other, Vector2& push) const;
 
@@ -36,14 +46,15 @@ public:
 
     void drawColliderBox(SDL_Renderer* renderer, const Vector2& drawnAt) const;
 
-    [[nodiscard]] Vector2 getTopLeft() const;
+    [[nodiscard]]Vector2 getTopLeft() const;
     [[nodiscard]]Vector2 getTopRight() const;
     [[nodiscard]]Vector2 getBottomLeft() const;
     [[nodiscard]]Vector2 getBottomRight() const;
 
     void pushOut(Collider* other, Transform* thisColliderTransform, Transform* otherTransform);
 
-    static Vector2 createBoxFromTexture(const Sheet& sheet);
+    static Vector2 createBoxFromSheet(const Sheet& sheet);
+    static  Vector2 createBoxFromTexture(const Texture& text);
 
 };
 

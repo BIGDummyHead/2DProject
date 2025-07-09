@@ -8,6 +8,8 @@
 #include <SDL_render.h>
 #include <SDL_surface.h>
 #include <bits/stl_algo.h>
+#include <SDL2/SDL_image.h>
+
 #include "defs.h"
 #include "Game/Camera.h"
 #include "Game/Physics/Ray.h"
@@ -259,8 +261,7 @@ void draw::drawLights() const {
     }
 }
 
-
-SDL_Texture *draw::createTextTexture(UiFont &uiFont, const char *text) const {
+SDL_Texture* draw::createTextTexture(TextFont& uiFont, const char* text) {
     //TTF_Font* font = TTF_OpenFont(R"(assets\fonts\font.ttf)", 24);
     TTF_Font *font = TTF_OpenFont(uiFont.getPath(), uiFont.size);
     if (!font) {
@@ -273,7 +274,7 @@ SDL_Texture *draw::createTextTexture(UiFont &uiFont, const char *text) const {
 
     //TODO: Add in other render styles
     switch (uiFont.renderStyle) {
-        case UiFont::Type::Solid:
+        case TextFont::Type::Solid:
             surface = TTF_RenderText_Solid(font, text, uiFont.color);
             break;
         default:
@@ -285,6 +286,7 @@ SDL_Texture *draw::createTextTexture(UiFont &uiFont, const char *text) const {
         SDL_LogError(SDL_LOG_PRIORITY_ERROR, "Failed to render solid text: %s\n", TTF_GetError());
         return nullptr;
     }
+
 
     SDL_Renderer *renderer = getApp().renderer;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);

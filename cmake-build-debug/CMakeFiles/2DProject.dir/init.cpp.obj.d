@@ -318,4 +318,5 @@ CMakeFiles/2DProject.dir/init.cpp.obj: \
  C:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2/SDL_version.h \
  C:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2/begin_code.h \
  C:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2/close_code.h \
- C:\Users\shawn\CLionProjects\2DProject\defs.h
+ C:\Users\shawn\CLionProjects\2DProject\defs.h \
+ C:\Users\shawn\CLionProjects\2DProject\SDL_ttf/include/SDL_ttf.h

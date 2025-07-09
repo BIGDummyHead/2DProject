@@ -11,7 +11,7 @@
 
 #include "Vector2.h"
 #include "Game/LightSource.h"
-#include "UiFont.h"
+#include "TextFont.h"
 
 //Class to help with drawing features and scene rendering
 class draw {
@@ -53,7 +53,8 @@ public:
 
     void drawGradientLine(Vector2 start, Vector2 end, double totalDistance, Uint8 r, Uint8 g, Uint8 b, double intensity) const;
 
-    [[nodiscard]] SDL_Texture* createTextTexture(UiFont uiFont&, const char* text) const;
+    //[[nodiscard]] SDL_Texture* createTextTexture(UiFont& uiFont, const char* text) const;
+    SDL_Texture* createTextTexture(TextFont& uiFont, const char* text);
 };
 
 
