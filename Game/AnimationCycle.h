@@ -52,6 +52,7 @@ private:
 
 public:
 
+    bool placeHolderSheet = false;
 
     //The next animation cycle
     //The time until next animation

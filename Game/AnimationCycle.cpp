@@ -72,10 +72,22 @@ bool AnimationCycle::isReady() const {
 }
 
 Sheet* AnimationCycle::getPresentingSheet() {
+
+    if(placeHolderSheet) {
+        const auto nextAnimatingSheet = moveNext();
+
+        if(!nextAnimatingSheet) {
+            return nullptr;
+        }
+
+        return nextAnimatingSheet->animating;
+    }
+
     if (!animating) {
-        SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Cannot set the row/col to present, since animating was null");
+        SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Cannot present, since animating was null");
         return nullptr;
     }
+
     //copy over this
     loadedTexture = animating->loadedTexture;
     animating->setRow(row);

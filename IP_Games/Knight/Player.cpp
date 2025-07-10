@@ -17,20 +17,21 @@ void Player::start() {
     cycleManager = new CycleManager(idleSheet, 0,0);
 
 
+    //Create the animations for each state here:
     auto* idleCenter = AnimationCycle::createCycleForRow(idleSheet, 0, 200);
     auto* idleLeft = AnimationCycle::createCycleForRow(idleSheet, 1, 200);
     auto* idleRight = AnimationCycle::createCycleForRow(idleSheet, 2, 200);
     auto* idleAway = AnimationCycle::createCycleForRow(idleSheet, 3, 200);
 
-    auto* attackCenter = AnimationCycle::createCycleForRow(attackSheet, 0, 100);
-    auto* attackLeft = AnimationCycle::createCycleForRow(attackSheet, 1, 100);
-    auto* attackRight = AnimationCycle::createCycleForRow(attackSheet, 2, 100);
-    auto* attackAway = AnimationCycle::createCycleForRow(attackSheet, 3, 100);
+    auto* attackCenter = AnimationCycle::createCycleForRow(attackSheet, 0, 50);
+    auto* attackLeft = AnimationCycle::createCycleForRow(attackSheet, 1, 50);
+    auto* attackRight = AnimationCycle::createCycleForRow(attackSheet, 2, 50);
+    auto* attackAway = AnimationCycle::createCycleForRow(attackSheet, 3, 50);
 
-    auto* walkCenter = AnimationCycle::createCycleForRow(moveSheet, 0, 100);
-    auto* walkLeft = AnimationCycle::createCycleForRow(moveSheet, 1, 100);
-    auto* walkRight = AnimationCycle::createCycleForRow(moveSheet, 2, 100);
-    auto* walkAway = AnimationCycle::createCycleForRow(moveSheet, 3, 100);
+    auto* walkCenter = AnimationCycle::createCycleForRow(moveSheet, 0, 50);
+    auto* walkLeft = AnimationCycle::createCycleForRow(moveSheet, 1, 50);
+    auto* walkRight = AnimationCycle::createCycleForRow(moveSheet, 2, 50);
+    auto* walkAway = AnimationCycle::createCycleForRow(moveSheet, 3, 50);
 
     cycleManager->addAnimationCycle("idling_center", idleCenter);
     cycleManager->addAnimationCycle("idling_left", idleLeft);
@@ -52,7 +53,7 @@ void Player::start() {
 
         const auto mag = movement.magnitude();
 
-        std::string action = mag != 0 ? "walk" : "idle";
+        std::string action = mag != 0 ? "walk" : "idling";
 
         //other things like attacking and other movements should go here!
 
@@ -72,10 +73,10 @@ void Player::start() {
             lastDirection = "_center";
         }
 
-        action = "idle";
-        lastDirection = "_right";
+        //action = "idle";
+        //lastDirection = "_right";
         const auto anim = cycleManager->getAnimationCycle(action + lastDirection);
-        //cycleManager->mainCycle->loadedTexture = anim->loadedTexture;
+
         return anim;
     };
 

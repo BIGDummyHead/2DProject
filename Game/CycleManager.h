@@ -26,6 +26,7 @@ public:
         mainCycle =
             new AnimationCycle(defaultTexture, row, col, timeTillNextAnimMs);
         mainCycle->loop = true;
+        mainCycle->placeHolderSheet = true;
     }
 
     explicit CycleManager(Sheet* defaultSheet, const int& timeTillNextAnimMs = 0)
