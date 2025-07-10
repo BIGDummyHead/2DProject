@@ -63,7 +63,7 @@ std::chrono::steady_clock::time_point AnimationCycle::now() {
 
 
 bool AnimationCycle::isReady() const {
-    if (isFirstAnimationCycle || findCondition())
+    if (isFirstAnimationCycle /*|| findCondition()*/)
         return true;
 
     //measure if the time of the last time this was animated(+ delay) is greater than now
@@ -95,40 +95,18 @@ Sheet* AnimationCycle::getPresentingSheet() {
     return animating;
 }
 
-AnimationCycle *AnimationCycle::findCondition() const {
-    for (const auto &val: *conditions | std::views::values) {
-        const Branch *condBranch = val;
-
-        if (!condBranch) {
-            SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Invalid condition");
-            continue;
-        }
-
-        //if this condition is true
-        if (auto newCyc = condBranch->condition(this)) {
-            return newCyc;
-        }
-    }
-
-    return nullptr;
-}
 
 
 AnimationCycle *AnimationCycle::moveNext() const {
-    now() + std::chrono::milliseconds(delayOfNextAnimation);
 
-    AnimationCycle *theNextCycle = findCondition();
-    if (!theNextCycle) {
-        //if not EOC then choose next, if not check restartOnMove:
-        //(true)->choose the starting cycle
-        //(false)->choose a nullptr, signifying EOC...
-        theNextCycle =
-                !isEndOfCycle() ? next : (this->start->loop ? start : nullptr);
-    }
+    const bool loopAnimation = start != nullptr ? start->loop : false;
+    AnimationCycle *theNextCycle = !isEndOfCycle() ? next : (loopAnimation ? start : nullptr);
 
     if (theNextCycle) {
         theNextCycle->timeOfNextAnimation = now() + std::chrono::milliseconds(delayOfNextAnimation);
     }
+
+    //may return a null pointer
     return theNextCycle;
 }
 
@@ -136,26 +114,8 @@ AnimationCycle *AnimationCycle::moveNextWhenReady() const {
     return isReady() ? moveNext() : nullptr;
 }
 
-AnimationCycle *AnimationCycle::getCondition(const std::string &identifier) const {
-    return nullptr;
-    //return conditions->contains(identifier) ? conditions->operator[](identifier)->newCycle : nullptr;
-}
 
 
-void AnimationCycle::addCondition(
-        const std::string &identifier,
-        const  ConditionalFunc &condition) const {
-    if (conditions->contains(identifier)) {
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                     ("A key with the name '" + identifier + "' already exist in your conditions branch").c_str());
-        return;
-    }
-
-    auto *b = new Branch();
-    b->condition = condition;
-
-    conditions->operator[](identifier) = b;
-}
 
 
 void AnimationCycle::render(const draw &drawTool, Vector2 where) {

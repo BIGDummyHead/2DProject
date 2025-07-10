@@ -11,31 +11,49 @@
 #include "AnimationCycle.h"
 
 class CycleManager {
-private:
-    std::unordered_map<std::string, AnimationCycle*> animations;
 
 public:
+    typedef std::function<AnimationCycle* (const CycleManager* manager)> ConditionalFunc;
+
+private:
+    std::unordered_map<std::string, AnimationCycle*> animations;
+    struct Branch {
+    public:
+        ConditionalFunc condition;
+    };
+
+    std::unordered_map<std::string, Branch *> *conditions;
+
+    AnimationCycle* theOriginalCondition = nullptr;
+    AnimationCycle* animatingCondition = nullptr;
+public:
     //The cycle to add upon via conditions
-    AnimationCycle* mainCycle;
+    //AnimationCycle* mainCycle;
 
-    explicit CycleManager(Sheet* defaultTexture,
-        const int& row,
-        const int& col,
-        const int& timeTillNextAnimMs = 0) {
+    explicit CycleManager()  {
 
-        mainCycle =
+        conditions = new std::unordered_map<std::string, Branch *>;
+        /*  mainCycle =
             new AnimationCycle(defaultTexture, row, col, timeTillNextAnimMs);
         mainCycle->loop = true;
-        mainCycle->placeHolderSheet = true;
-    }
-
-    explicit CycleManager(Sheet* defaultSheet, const int& timeTillNextAnimMs = 0)
-    : CycleManager(defaultSheet, defaultSheet->getCurrentRow(), defaultSheet->getCurrentCol(), timeTillNextAnimMs) {
-
+        mainCycle->placeHolderSheet = true; */
     }
 
     AnimationCycle* getAnimationCycle(const std::string& name);
     bool addAnimationCycle(const std::string& name, AnimationCycle* animation);
+
+
+    //Finds the best condition that is true. If false, returns nullptr
+    [[nodiscard]] AnimationCycle* findCondition() const;
+    [[nodiscard]] AnimationCycle* getCondition(const std::string& identifier) const;
+
+    //Adds a condition, if the condition is true, switches to the new condition.
+    //It is important to note that conditions are applied to literally every cycle created
+    void addCondition(
+        const std::string& identifier,
+        const ConditionalFunc &condition) ;
+
+    Sheet* getAnimatedTexture();
 };
 
 

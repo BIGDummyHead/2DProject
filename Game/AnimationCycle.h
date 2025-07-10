@@ -11,14 +11,8 @@
 //COde:
 class AnimationCycle final : public Texture {
 
-public:
-    typedef std::function<AnimationCycle* (const AnimationCycle* anim)> ConditionalFunc;
-
 private:
-    struct Branch {
-    public:
-        ConditionalFunc condition;
-    };
+
 
     int row = 0;
     int column = 0;
@@ -28,12 +22,11 @@ private:
     AnimationCycle *next = nullptr;
     AnimationCycle *start;
 
-    std::unordered_map<std::string, Branch *> *conditions;
+   //std::unordered_map<std::string, Branch *> *conditions;
 
     const bool isFirstAnimationCycle;
 
-    //Finds the best condition that is true. If false, returns nullptr
-    [[nodiscard]] AnimationCycle* findCondition() const;
+    //[[nodiscard]] AnimationCycle* findCondition() const;
 
     AnimationCycle(Sheet *animatingTexture, const int &row, const int &column, const bool &isFirst,
                    const int &timeTillNextMs, AnimationCycle *start)
@@ -46,7 +39,7 @@ private:
 
         //If this is the first item of the branch then create a newconditions map
         //if not. use the original
-        conditions = isFirst ? new std::unordered_map<std::string, Branch *> : start->conditions;
+        //conditions = isFirst ? new std::unordered_map<std::string, Branch *> : start->conditions;
 
     }
 
@@ -110,11 +103,11 @@ public:
 
     //Adds a condition, if the condition is true, switches to the new condition.
     //It is important to note that conditions are applied to literally every cycle created
-    void addCondition(
+    /*void addCondition(
         const std::string &identifier,
-        const ConditionalFunc &condition) const;
+        const ConditionalFunc &condition) const;*/
 
-    [[nodiscard]] AnimationCycle* getCondition(const std::string& identifier) const;
+    //[[nodiscard]] AnimationCycle* getCondition(const std::string& identifier) const;
 
     void render(const draw &drawTool, Vector2 where) override;
 

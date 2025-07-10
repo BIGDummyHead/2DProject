@@ -28,6 +28,8 @@ private:
     static constexpr int ANIMATION_DELAY_MS = 100;
     CycleManager* cycleManager = nullptr;
 
+    bool isDead = false;
+
 public:
 
     Sheet* idleSheet = nullptr;

@@ -13,25 +13,37 @@ void Player::start() {
     deathSheet = new Sheet(drawTool->loadTexture(PLAYER_DEATH_FILE), 4,11);
     moveSheet = new Sheet(drawTool->loadTexture(PLAYER_MOVE_FILE), 4,6);
 
+    idleSheet->scale *= 2;
+    attackSheet->scale *= 2;
+    deathSheet->scale *= 2;
+    moveSheet->scale *= 2;
 
-    cycleManager = new CycleManager(idleSheet, 0,0);
+    cycleManager = new CycleManager();
 
+
+    constexpr auto WALKING_DELAY = 100;
+    constexpr auto ATTACKING_DELAY = 100;
+    constexpr auto IDLE_DELAY = 200;
+    constexpr auto DEATH_DELAY = 50;
 
     //Create the animations for each state here:
-    auto* idleCenter = AnimationCycle::createCycleForRow(idleSheet, 0, 200);
-    auto* idleLeft = AnimationCycle::createCycleForRow(idleSheet, 1, 200);
-    auto* idleRight = AnimationCycle::createCycleForRow(idleSheet, 2, 200);
-    auto* idleAway = AnimationCycle::createCycleForRow(idleSheet, 3, 200);
+    auto* idleCenter = AnimationCycle::createCycleForRow(idleSheet, 0, IDLE_DELAY);
+    auto* idleLeft = AnimationCycle::createCycleForRow(idleSheet, 1, IDLE_DELAY);
+    auto* idleRight = AnimationCycle::createCycleForRow(idleSheet, 2, IDLE_DELAY);
+    auto* idleAway = AnimationCycle::createCycleForRow(idleSheet, 3, IDLE_DELAY);
 
-    auto* attackCenter = AnimationCycle::createCycleForRow(attackSheet, 0, 50);
-    auto* attackLeft = AnimationCycle::createCycleForRow(attackSheet, 1, 50);
-    auto* attackRight = AnimationCycle::createCycleForRow(attackSheet, 2, 50);
-    auto* attackAway = AnimationCycle::createCycleForRow(attackSheet, 3, 50);
+    auto* attackCenter = AnimationCycle::createCycleForRow(attackSheet, 0, ATTACKING_DELAY);
+    auto* attackLeft = AnimationCycle::createCycleForRow(attackSheet, 1, ATTACKING_DELAY);
+    auto* attackRight = AnimationCycle::createCycleForRow(attackSheet, 2, ATTACKING_DELAY);
+    auto* attackAway = AnimationCycle::createCycleForRow(attackSheet, 3, ATTACKING_DELAY);
 
-    auto* walkCenter = AnimationCycle::createCycleForRow(moveSheet, 0, 50);
-    auto* walkLeft = AnimationCycle::createCycleForRow(moveSheet, 1, 50);
-    auto* walkRight = AnimationCycle::createCycleForRow(moveSheet, 2, 50);
-    auto* walkAway = AnimationCycle::createCycleForRow(moveSheet, 3, 50);
+    auto* walkCenter = AnimationCycle::createCycleForRow(moveSheet, 0, WALKING_DELAY);
+    auto* walkLeft = AnimationCycle::createCycleForRow(moveSheet, 1, WALKING_DELAY);
+    auto* walkRight = AnimationCycle::createCycleForRow(moveSheet, 2, WALKING_DELAY);
+    auto* walkAway = AnimationCycle::createCycleForRow(moveSheet, 3, WALKING_DELAY);
+
+    auto* deathAnimation = AnimationCycle::createCycleForRow(deathSheet, 0, DEATH_DELAY);
+    deathAnimation->loop = false;
 
     cycleManager->addAnimationCycle("idling_center", idleCenter);
     cycleManager->addAnimationCycle("idling_left", idleLeft);
@@ -48,7 +60,15 @@ void Player::start() {
     cycleManager->addAnimationCycle("walk_right", walkRight);
     cycleManager->addAnimationCycle("walk_away", walkAway);
 
-    AnimationCycle::ConditionalFunc conditioner = [this](const AnimationCycle* current) -> AnimationCycle* {
+    cycleManager->addAnimationCycle("dead", deathAnimation);
+
+    lastDirection = "_center";
+    CycleManager::ConditionalFunc conditioner = [this](const CycleManager* manager) -> AnimationCycle* {
+
+        if(isDead) {
+            return cycleManager->getAnimationCycle("dead");
+        }
+
         const auto movement = getMovement();
 
         const auto mag = movement.magnitude();
@@ -73,6 +93,11 @@ void Player::start() {
             lastDirection = "_center";
         }
 
+        const auto leftState = input::getMouseInputState(Left);
+        if(leftState == Held || leftState == Down) {
+            action = "attack";
+        }
+
         //action = "idle";
         //lastDirection = "_right";
         const auto anim = cycleManager->getAnimationCycle(action + lastDirection);
@@ -81,10 +106,10 @@ void Player::start() {
     };
 
 
-    cycleManager->mainCycle->addCondition("main_conditioner", conditioner);
+    //cycleManager->mainCycle->addCondition("main_conditioner", conditioner);
+    cycleManager->addCondition("main_conditioner", conditioner);
 
-
-    texture = cycleManager->mainCycle;
+    texture = cycleManager->findCondition();
 
 
     //must come after setting texture
@@ -107,28 +132,17 @@ void Player::doMovement(Vector2 relativeMove) const {
 
 }
 
-bool Player::testCondition(AnimationCycle *currentCycle) {
-
-    auto mag = getMovement().magnitude();
-
-    if(mag > 0) {
-        std::cout << "HAHA" << std::endl;
-    }
-
-    return false;
-}
-
-
 void Player::animateMovement(const Vector2 &move, const double &magnitude) {
 
-    if(cycleManager->mainCycle->isReady()) {
+    /*if(cycleManager->mainCycle->isReady()) {
         if(auto* nextMove = cycleManager->mainCycle->moveNext()) {
             cycleManager->mainCycle = nextMove;
             texture = cycleManager->mainCycle->getPresentingSheet();
 
         }
-    }
+    }*/
 
+    texture = cycleManager->getAnimatedTexture();
 }
 
 Vector2 Player::getMovement() {
@@ -146,6 +160,9 @@ void Player::update() {
     Vector2 relMovement = getMovement();
     const double magnitude = relMovement.magnitude();
 
+    if(!isDead && input::getMouseInputState(Right) == Down) {
+        isDead = true;
+    }
 
 
     if(magnitude > 0) { //the character is moving
