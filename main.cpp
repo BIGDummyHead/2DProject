@@ -10,11 +10,13 @@
 
 #include "UiObjectFont.h"
 #include "UiObjectFont.h"
+#include "Audio/AudioManager.h"
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
 #include "Game/Physics/Raycaster.h"
 #include "IP_Games/Knight/Knight_Game.h"
+
 
 #include "SDL_ttf/include/SDL_ttf.h"
 #include "Settings/Parser.h"
@@ -24,8 +26,16 @@ Scene *getKnightGame() {
     return game;
 }
 
-[[noreturn]] int main() {
+int main() {
 
+    auto* device = AudioManager::getDefaultDevice();
+
+    Sound sound("pac.wav");
+
+    AudioManager::startRendering(device);
+
+
+    return 0;
     //Initialize the application
     App myApp;
     myApp.name = "Knight Game";
@@ -48,6 +58,7 @@ Scene *getKnightGame() {
     Scene::loadScene(kGame, sceneInfo);
 
     //    Scene::loadFirstAvalScene(sceneInfo);
+
 
     Uint32 lastTick = -1;
     while (true) {

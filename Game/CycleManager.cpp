@@ -53,7 +53,7 @@ AnimationCycle *CycleManager::getCondition(const std::string &identifier) const 
 }
 
 
-void CycleManager::addCondition(const std::string& identifier, const ConditionalFunc &condition)  {
+void CycleManager::addCondition(const std::string& identifier, const ConditionalFunc &condition) const {
     if (conditions->contains(identifier)) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                      ("A key with the name '" + identifier + "' already exist in your conditions branch").c_str());

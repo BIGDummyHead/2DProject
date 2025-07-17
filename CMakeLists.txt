@@ -22,6 +22,8 @@ link_directories(${SDL2_image_PATH}/lib)
 include_directories(${SDL2_ttf_PATH}/include)
 link_directories(${SDL2_ttf_PATH}/lib/x64)
 
+
+
 # Add your executable
 add_executable(2DProject main.cpp
         defs.h
@@ -78,10 +80,16 @@ add_executable(2DProject main.cpp
         Game/AnimationCycle.cpp
         Game/CycleManager.cpp
         Game/CycleManager.h
+        Audio/AudioManager.cpp
+        Audio/AudioManager.h
+        Audio/Device.h
+        Audio/Sound.cpp
+        Audio/Sound.h
+        Audio/WavFileHeader.h
 )
 
 # Link against SDL2 libraries
-target_link_libraries(2DProject SDL2 SDL2main SDL2_image SDL2_ttf)
+target_link_libraries(2DProject SDL2 SDL2main SDL2_image SDL2_ttf winmm)
 
 # Enable debugging symbols
 set(CMAKE_BUILD_TYPE Debug)

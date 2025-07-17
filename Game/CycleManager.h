@@ -51,7 +51,7 @@ public:
     //It is important to note that conditions are applied to literally every cycle created
     void addCondition(
         const std::string& identifier,
-        const ConditionalFunc &condition) ;
+        const ConditionalFunc &condition) const;
 
     Sheet* getAnimatedTexture();
 };
