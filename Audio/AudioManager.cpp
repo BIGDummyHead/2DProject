@@ -198,6 +198,7 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         return result;
     }
 
+
     //File wave format
     WAVEFORMATEX *fw_Format = sound->getFileHeader()->getAsWavFormatEx();
 
@@ -246,6 +247,21 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         return result;
     }
 
+    ISimpleAudioVolume *a_Volume;
+    result = a_Client->GetService(__uuidof(ISimpleAudioVolume), reinterpret_cast<void **>(&a_Volume));
+    if (logFail(result, "Failed to get an audio volume service")) {
+        std::cout << result << std::endl;
+        return result;
+    }
+
+    //initially set the sound and volume
+    sound->setAudioController(a_Volume);
+    result = sound->setVolume(sound->getVolume());
+
+    if (logFail(result, "Failed to set the volume of the audio client")) {
+        return result;
+    }
+
     BYTE *bufferData;
 
     result = a_RenderClient->GetBuffer(bufferFrameCount, &bufferData);
@@ -265,8 +281,8 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         return result;
     }
 
-    REFERENCE_TIME hnsActualDuration =
-            (double) REFTIMES_PER_SEC * bufferFrameCount / fw_Format->nSamplesPerSec;
+    const REFERENCE_TIME hnsActualDuration =
+            REFTIMES_PER_SEC * bufferFrameCount / fw_Format->nSamplesPerSec;
 
     //the padding to the buffer
     UINT32 numFramesPadding;
@@ -278,9 +294,17 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         return result;
     }
 
+    const REFERENCE_TIME sleepMs = hnsActualDuration / REFTIMES_PER_MILLISEC / 2;
+
     while (flags != AUDCLNT_BUFFERFLAGS_SILENT) {
         //sleep for half the buffer duration
-        Sleep(static_cast<DWORD>(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
+
+        while (sound->paused()) {
+            Sleep(sleepMs);
+        }
+
+        Sleep(sleepMs);
+        sound->addTime(sleepMs);
 
         result = a_Client->GetCurrentPadding(&numFramesPadding);
 
@@ -306,13 +330,33 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         }
     }
 
-    Sleep(static_cast<DWORD>(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
+    Sleep(sleepMs);
+    sound->addTime(sleepMs);
+
+    //close the sound file
+    sound->stop();
 
     result = a_Client->Stop();
-    if (logFail(result, "Failed to stop the audio client")) {
-        return result;
-    }
 
-    return S_OK;
+    logFail(result, "Failed to stop the audio client");
+
+    return result;
 }
+
+std::thread AudioManager::getRenderingOnThread(const Device *device, Sound *sound) {
+    return std::thread([device, sound] {
+        HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+        if (FAILED(hr)) {
+            return hr;
+        }
+        hr = startRendering(device, sound);
+        if (FAILED(hr)) {
+            return hr;
+        }
+
+        CoUninitialize();
+        return S_OK;
+    });
+}
+
 

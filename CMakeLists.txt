@@ -86,6 +86,7 @@ add_executable(2DProject main.cpp
         Audio/Sound.cpp
         Audio/Sound.h
         Audio/WavFileHeader.h
+        Audio/TimeSound.h
 )
 
 # Link against SDL2 libraries

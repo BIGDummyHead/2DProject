@@ -27,12 +27,18 @@ Scene *getKnightGame() {
 }
 
 int main() {
+    auto *device = AudioManager::getDefaultDevice();
 
-    auto* device = AudioManager::getDefaultDevice();
+    auto *sound = new Sound("pac.wav");
+    auto *exmpWav = new Sound("myfile.wav");
 
-    Sound sound("pac.wav");
+    exmpWav->setVolume(.2f);
+    exmpWav->loop = true;
+    AudioManager::getRenderingOnThread(device, exmpWav).detach();
 
-    AudioManager::startRendering(device);
+    while(!exmpWav->stopped()) {
+
+    }
 
 
     return 0;

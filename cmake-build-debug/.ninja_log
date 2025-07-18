@@ -1,12 +1,12 @@
 # ninja log v6
 1079	2004	7738164282563081	CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj	70cd9ff2414054ec
-6	2316	7744906413350070	CMakeFiles/2DProject.dir/main.cpp.obj	ae9f67e192787d4e
-2316	2679	7744906436444252	2DProject.exe	b7b0c0fc8fc6dd43
+7	2309	7745812909401846	CMakeFiles/2DProject.dir/main.cpp.obj	ae9f67e192787d4e
+2310	2675	7745812932432425	2DProject.exe	b7b0c0fc8fc6dd43
 17	2307	7738164271943107	CMakeFiles/2DProject.dir/input.cpp.obj	e0c59ebe9b3fa70b
 49	1048	7738164272263095	CMakeFiles/2DProject.dir/Game/Camera.cpp.obj	cf530276dab11107
 24	919	7738164272003073	CMakeFiles/2DProject.dir/Vector2.cpp.obj	2e2921a58116175e
 27	1194	7738164272043084	CMakeFiles/2DProject.dir/Game/GObject.cpp.obj	f12b6fe6482e51cb
-3	186	7744876259502971	build.ninja	f25c861cff750f42
+3	187	7745833318646555	build.ninja	f25c861cff750f42
 32	2265	7739101449804122	CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj	7123a92e3e7e65a4
 14	1264	7738164271913100	CMakeFiles/2DProject.dir/init.cpp.obj	ab70bbe88577475b
 966	1837	7738164281433080	CMakeFiles/2DProject.dir/TextFont.cpp.obj	3a5aa34d655685b7
@@ -26,10 +26,5 @@
 1264	2614	7738164284413079	CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj	4e061ee51e59fa33
 21	3353	7739101449694136	CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj	e8e3ae321ade50f8
 26	3260	7739101449744122	CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj	77e3b95cbdabd408
-10	1436	7744906227553659	CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj	b586873753a1e490
-12	1166	7744899343739629	CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj	ba1f4953836c2e62
-10	1117	7744908639836281	CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj	ba1f4953836c2e62
-8	2375	7744908639816280	CMakeFiles/2DProject.dir/main.cpp.obj	ae9f67e192787d4e
-2375	2738	7744908663492092	2DProject.exe	b7b0c0fc8fc6dd43
-6	2346	7744910433824562	CMakeFiles/2DProject.dir/main.cpp.obj	ae9f67e192787d4e
-2347	2707	7744910457234523	2DProject.exe	b7b0c0fc8fc6dd43
+9	1643	7745805409310922	CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj	b586873753a1e490
+10	1023	7745812348281770	CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj	ba1f4953836c2e62

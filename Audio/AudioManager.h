@@ -17,12 +17,14 @@
 #include <functiondiscoverykeys_devpkey.h>
 #include <memory>
 #include <SDL_log.h>
+#include <thread>
 
 #include "Sound.h"
 
 
 class AudioManager {
 private:
+
     static IMMDeviceEnumerator *deviceEnumerator;
 
     static bool logFail(const HRESULT &result, const char *logError);
@@ -32,6 +34,7 @@ private:
     static Device *createFromIMMDevice(IMMDevice *theDevice, EDataFlow flow, ERole role);
 
 public:
+
     static std::unique_ptr<std::vector<std::unique_ptr<Device> > > getDevices(
         EDataFlow dataFlowType = eRender, ERole role = eMultimedia);
 
@@ -42,7 +45,9 @@ public:
 
     static bool sameFormat(const WAVEFORMATEX *formatA, const WAVEFORMATEX *formatB);
 
-    static HRESULT startRendering(const Device* usingDevice,  Sound* sound);
+    static HRESULT startRendering(const Device* usingDevice, Sound* sound);
+    static std::thread getRenderingOnThread(const Device* device, Sound* sound);
+
 };
 
 
