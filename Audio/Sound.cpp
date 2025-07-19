@@ -8,14 +8,7 @@
 
 #include "AudioManager.h"
 
-
-HRESULT Sound::setAudioSystemFormat(WAVEFORMATEX *w_Format) {
-    if(w_Format == nullptr) {
-        return E_FAIL;
-    }
-    audioSystemFormat = w_Format;
-    return S_OK;
-}
+std::vector<Sound*> Sound::sounds;
 
 WavFileHeader *Sound::getFileHeader() {
     wavFStream = std::ifstream(wavFilePath, std::ios::binary);
@@ -215,4 +208,10 @@ HRESULT Sound::play(const Device *device, const bool& onCurrentThread) {
 }
 
 
+std::string Sound::getFilePath() const {
+    return  wavFilePath;
+}
 
+ISimpleAudioVolume *Sound::getAudioController() {
+    return a_Volume;
+}

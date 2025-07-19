@@ -27,14 +27,16 @@ Scene *getKnightGame() {
 }
 
 int main() {
-    auto *device = AudioManager::getDefaultDevice();
 
-    auto *sound = new Sound("pac.wav");
-    auto *exmpWav = new Sound("tense.wav");
+    auto* device = AudioManager::getDefaultDevice();
 
-    exmpWav->setVolume(.2f);
-    exmpWav->loop = true;
-    exmpWav->play();
+    std::vector<Sound*> backgroundMusic { new Sound("tense.wav"), new Sound("exam.wav") };
+
+    std::thread([device, backgroundMusic]() {
+        const HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+        AudioManager::startRenderingMultiple(device, backgroundMusic);
+        CoUninitialize();
+    }).detach();
 
     //Initialize the application
     App myApp;

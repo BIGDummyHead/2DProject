@@ -18,9 +18,19 @@
 #include <memory>
 #include <SDL_log.h>
 #include <thread>
-
 #include "Sound.h"
+#include <algorithm>
+#include <cstdint>
+#include <initguid.h>
+#include <guiddef.h>
+#include <span>
+#include <limits>
 
+DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT,
+0x00000003, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
+
+DEFINE_GUID(KSDATAFORMAT_SUBTYPE_PCM,
+0x00000001, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 
 class AudioManager {
 private:
@@ -32,6 +42,16 @@ private:
     static IMMDeviceEnumerator *getDeviceEnumerator();
 
     static Device *createFromIMMDevice(IMMDevice *theDevice, EDataFlow flow, ERole role);
+
+    //Sound mixer functions, jesus christ this was annoying
+    static void mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerData, std::span<const std::byte> soundData);
+
+    static void pcm16ConversionToFloat(std::span<float> mixer, std::span<const int16_t> sound);
+
+    template <typename T, typename T_Sum>
+    static void mixAudioPCM(std::span<T> mixer, std::span<const T> sound);
+
+    static void mixAudioFloat(std::span<float> mixer, std::span<const float> sound);
 
 public:
 
@@ -46,9 +66,13 @@ public:
     static bool sameFormat(const WAVEFORMATEX *formatA, const WAVEFORMATEX *formatB);
 
     static HRESULT startRendering(const Device* usingDevice, Sound* sound);
+    static HRESULT startRenderingMultiple(const Device *usingDevice, const std::vector<Sound *> &sounds);
+
     static std::thread getRenderingOnThread(const Device* device, Sound* sound);
 
+
 };
+
 
 
 #endif //AUDIOMANAGER_H

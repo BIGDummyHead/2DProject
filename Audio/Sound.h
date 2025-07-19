@@ -17,6 +17,7 @@
 #include "Device.h"
 #include "TimeSound.h"
 #include "WavFileHeader.h"
+#include <vector>
 
 #ifndef AUD_CLNT_FLAG_OK
 #define AUD_CLNT_FLAG_OK 0
@@ -40,7 +41,6 @@ private:
     ISimpleAudioVolume* a_Volume = nullptr;
     std::string wavFilePath;
     std::ifstream wavFStream;
-    WAVEFORMATEX* audioSystemFormat = nullptr;
     WavFileHeader* fileFormat = nullptr;
     long long msElapsed = 0;
     TIME* time = nullptr;
@@ -54,19 +54,19 @@ private:
 
 public:
 
+    static std::vector<Sound*> sounds;
+
     //Loop audio after finishing
     bool loop = false;
 
     explicit Sound(const std::string& wavFPath) {
         //Load the file path and get some kind of buffer for the AudioManager.
         wavFilePath = wavFPath;
+        sounds.push_back(this);
     }
 
     //Load data into the buffer from the file. Internal usage.
     HRESULT loadData(UINT32 numFramesAvailable, BYTE* bufferData, DWORD* audioFlags);
-
-    //Set the audio systems format, not the file.
-    HRESULT setAudioSystemFormat(WAVEFORMATEX* w_Format);
 
     //Read and get the WAV files header.
     WavFileHeader* getFileHeader();
@@ -87,7 +87,7 @@ public:
     //Determine if the sound file is open
     [[nodiscard]] bool isOpen();
 
-    //Set the volume ( 0.0 -> 1.0 )
+    //Set the volume ( 0.0 -> 1.0 ). Note this may affect multiple sounds if you are rendering multiple sounds.
     HRESULT setVolume(float vol);
 
     //Get the current volume
@@ -120,10 +120,15 @@ public:
     //Set the simple audio controller to control volume. Should not be set by user.
     void setAudioController(ISimpleAudioVolume* a_Volume);
 
+    ISimpleAudioVolume* getAudioController();
+
     //Play using the AudioManager on a specific chosen device, determine if you want to start on this thread.
     HRESULT play(const Device* device, const bool& onCurrentThread = false);
     //Play using the AudioManager on the default device, determine if you want to start on this thread.
     HRESULT play(const bool& onCurrentThread = false);
+
+
+    std::string getFilePath() const;
 };
 
 
