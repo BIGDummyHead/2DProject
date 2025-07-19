@@ -9,7 +9,11 @@
 #include <fstream>
 #include <string>
 #include <Windows.h>
+#include <cstdint>
+#include <cstring>
+
 #include <audioclient.h>
+
 #include "Device.h"
 #include "TimeSound.h"
 #include "WavFileHeader.h"

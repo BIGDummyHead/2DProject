@@ -30,19 +30,12 @@ int main() {
     auto *device = AudioManager::getDefaultDevice();
 
     auto *sound = new Sound("pac.wav");
-    auto *exmpWav = new Sound("myfile.wav");
+    auto *exmpWav = new Sound("tense.wav");
 
     exmpWav->setVolume(.2f);
-    exmpWav->loop = false;
+    exmpWav->loop = true;
+    exmpWav->play();
 
-
-
-    while(!exmpWav->stopped()) {
-
-    }
-
-
-    return 0;
     //Initialize the application
     App myApp;
     myApp.name = "Knight Game";

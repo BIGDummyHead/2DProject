@@ -155,8 +155,6 @@ HRESULT Sound::setVolume(float vol) {
 
     this->volume = vol;
 
-    //Everything went normal, if the audio volume is null, than master volume could not be set, which is okay
-    //If it is not null, set it and return that result
     return a_Volume == nullptr ? S_OK : a_Volume->SetMasterVolume(volume, nullptr);
 }
 
