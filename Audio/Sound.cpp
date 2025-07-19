@@ -6,12 +6,14 @@
 
 #include <audioclient.h>
 
+#include "AudioManager.h"
 
-HRESULT Sound::setFormat(WAVEFORMATEX *w_Format) {
-    if (waveFormat != nullptr) {
+
+HRESULT Sound::setAudioSystemFormat(WAVEFORMATEX *w_Format) {
+    if(w_Format == nullptr) {
         return E_FAIL;
     }
-    waveFormat = w_Format;
+    audioSystemFormat = w_Format;
     return S_OK;
 }
 
@@ -41,12 +43,13 @@ TIME Sound::getTimeElapsed() const {
 
 TIME *Sound::getTotalDuration() {
     if (time == nullptr) {
-        if (waveFileHeader == nullptr)
+
+        if (fileFormat == nullptr)
             return nullptr;
 
-        const auto dSize = waveFileHeader->dataSize * TIME_MS_MULTIPLIER;
-        const auto samples = waveFileHeader->sampleRate * waveFileHeader->numChannels * (
-                                 waveFileHeader->bitsPerSample / 8);
+        const auto dSize = fileFormat->dataSize * TIME_MS_MULTIPLIER;
+        const auto samples = fileFormat->sampleRate * fileFormat->numChannels * (
+                                 fileFormat->bitsPerSample / 8);
 
         const auto msTotal = dSize / samples;
 
@@ -72,22 +75,24 @@ bool Sound::setTime(const TIME &time) {
         return false;
     }
 
-    if (waveFileHeader == nullptr) {
-        waveFileHeader = getFileHeader();
+    if (fileFormat == nullptr) {
+        fileFormat = getFileHeader();
     }
 
     const auto *totalTime = getTotalDuration();
-    if (!waveFileHeader || !totalTime || *totalTime < time) {
+    if (!fileFormat || !totalTime || *totalTime < time) {
         return false;
     }
 
 
     //calculate where we want the index to go...
-    const auto bytesPerSample = waveFileHeader->bitsPerSample / 8;
+    const auto bytesPerSample = fileFormat->bitsPerSample / 8;
     const auto index =
-            WAV_HEADER_DATA_BYTES + time.getSeconds() * waveFileHeader->sampleRate * waveFileHeader->numChannels *
+            WAV_HEADER_DATA_BYTES + time.getSeconds() * fileFormat->sampleRate * fileFormat->numChannels *
             bytesPerSample;
 
+
+    //clear flags, seek the index required and update the elapsed time
     wavFStream.clear();
     wavFStream.seekg(index, std::ifstream::beg);
     msElapsed = time.getMilliseconds();
@@ -97,34 +102,35 @@ bool Sound::setTime(const TIME &time) {
 
 HRESULT Sound::loadData(const UINT32 numFramesAvailable, BYTE *bufferData, DWORD *audioFlags) {
     if (isStopped) {
+        //tell the audio manager to stop playing.
         *audioFlags |= AUDCLNT_BUFFERFLAGS_SILENT;
         return S_OK;
     }
 
-    if (!waveFileHeader) {
-        waveFileHeader = getFileHeader();
-        if (!waveFileHeader)
+    //get the file's format if there is none
+    if (!fileFormat) {
+        fileFormat = getFileHeader();
+        if (!fileFormat)
             return AUD_READ_FILE_FAILED;
     }
 
     //Read the numFramesAvaiable from the wavFStream, write into the bufferData, and set the audio flags accordingly.
-    const long long bytesPerFrame = waveFileHeader->numChannels * waveFileHeader->bitsPerSample / 8;
+    const long long bytesPerFrame = fileFormat->numChannels * fileFormat->bitsPerSample / 8;
     const long long bytesToRead = numFramesAvailable * bytesPerFrame;
     wavFStream.read(reinterpret_cast<char *>(bufferData), bytesToRead);
 
+    //fill in gaps if looping, so there is not silent audio.
     const auto actualBytesRead = wavFStream.gcount();
-
     if(actualBytesRead < bytesToRead && loop && restart()) {
         wavFStream.read(reinterpret_cast<char*>(bufferData + actualBytesRead), bytesToRead - actualBytesRead);
     }
 
+    //If we have reached an endpoint to the file, and there is no looping, time to go.
     if ((actualBytesRead < bytesToRead || wavFStream.eof()) && !loop) {
         *audioFlags |= AUDCLNT_BUFFERFLAGS_SILENT;
     } else {
         *audioFlags = 0;
     }
-
-    //std::cout << "Read " << wavFStream.gcount() << " bytes from WAV" << std::endl;
 
     return S_OK;
 }
@@ -169,6 +175,7 @@ void Sound::resume() {
 void Sound::stop() {
     close();
     isStopped = true;
+    isPlaying = false;
 }
 
 bool Sound::stopped() const {
@@ -183,3 +190,31 @@ bool Sound::restart() {
 void Sound::setAudioController(ISimpleAudioVolume *a_Volume) {
     this->a_Volume = a_Volume;
 }
+
+HRESULT Sound::play(const bool& onCurrentThread) {
+    const auto* device = AudioManager::getDefaultDevice();
+    return play(device, onCurrentThread);
+}
+
+HRESULT Sound::play(const Device *device, const bool& onCurrentThread) {
+
+    if(isPlaying) {
+        return S_FALSE;
+    }
+
+    HRESULT result = S_OK;
+    if(onCurrentThread) {
+        result = AudioManager::startRendering(device, this);
+    }else {
+        auto thread = AudioManager::getRenderingOnThread(device, this);
+        thread.detach();
+    }
+
+    isPlaying = SUCCEEDED(result);
+    isStopped = !isPlaying;
+
+    return result;
+}
+
+
+

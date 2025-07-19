@@ -229,7 +229,7 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
         return result;
     }
 
-    result = sound->setFormat(fw_Format);
+    result = sound->setAudioSystemFormat(fw_Format);
     if (logFail(result, "Failed to set the sound's format")) {
         return result;
     }

@@ -33,8 +33,9 @@ int main() {
     auto *exmpWav = new Sound("myfile.wav");
 
     exmpWav->setVolume(.2f);
-    exmpWav->loop = true;
-    AudioManager::getRenderingOnThread(device, exmpWav).detach();
+    exmpWav->loop = false;
+
+
 
     while(!exmpWav->stopped()) {
 
