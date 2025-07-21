@@ -38,10 +38,10 @@ typedef TimeSound TIME;
 class Sound {
 
 private:
-    ISimpleAudioVolume* a_Volume = nullptr;
     std::string wavFilePath;
     std::ifstream wavFStream;
     WavFileHeader* fileFormat = nullptr;
+    WAVEFORMATEX* audioStreamFormat = nullptr;
     long long msElapsed = 0;
     TIME* time = nullptr;
     float volume = 1.0f;
@@ -87,8 +87,8 @@ public:
     //Determine if the sound file is open
     [[nodiscard]] bool isOpen();
 
-    //Set the volume ( 0.0 -> 1.0 ). Note this may affect multiple sounds if you are rendering multiple sounds.
-    HRESULT setVolume(float vol);
+    //Set the volume ( 0.0 -> 1.0 )
+    void setVolume(float vol);
 
     //Get the current volume
     float getVolume() const;
@@ -105,7 +105,7 @@ public:
     //Set flag to continue audio. Does not play it.
     void resume();
 
-    //Completely stops the audio. Meaning that it will restart from the beginning if play is called again.
+    //Stops the audio completly.
     void stop();
 
     //Determine if the audio has been stopped.
@@ -117,16 +117,8 @@ public:
     //Set time to TIME(0)
     bool restart();
 
-    //Set the simple audio controller to control volume. Should not be set by user.
-    void setAudioController(ISimpleAudioVolume* a_Volume);
-
-    ISimpleAudioVolume* getAudioController();
-
-    //Play using the AudioManager on a specific chosen device, determine if you want to start on this thread.
-    HRESULT play(const Device* device, const bool& onCurrentThread = false);
-    //Play using the AudioManager on the default device, determine if you want to start on this thread.
-    HRESULT play(const bool& onCurrentThread = false);
-
+    WAVEFORMATEX* getAudioSystemFormat() const;
+    void setAudioSystemFormat(WAVEFORMATEX* format);
 
     std::string getFilePath() const;
 };

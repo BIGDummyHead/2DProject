@@ -181,204 +181,37 @@ bool AudioManager::sameFormat(const WAVEFORMATEX *formatA, const WAVEFORMATEX *f
 
 
 //Code from https://learn.microsoft.com/en-us/windows/win32/coreaudio/rendering-a-stream
-HRESULT AudioManager::startRendering(const Device *usingDevice, Sound *sound) {
-    HRESULT result = usingDevice == nullptr || usingDevice->getDevice() == nullptr ? E_FAIL : S_OK;
-
-    //using device will not be null.
-    if (logFail(result, "The device you wish to render on is null.")) {
-        return result;
-    }
-
-    //IAudioClient *a_Client = usingDevice->getAudioClient();
-
-    IMMDevice *m_Device = usingDevice->getDevice();
-    IAudioClient *a_Client;
-    result = m_Device->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, reinterpret_cast<void **>(&a_Client));
-    //    result = a_Client == nullptr ? E_FAIL : S_OK;
-    //Ensures that a_Client is not a null pointer.
-    if (logFail(result, "Failed to get audio client interface.")) {
-        return result;
-    }
-
-
-    //File wave format
-    WAVEFORMATEX *fw_Format = sound->getFileHeader()->getAsWavFormatEx();
-
-    //Audio system wave format
-    WAVEFORMATEX *as_Format;
-    result = a_Client->GetMixFormat(&as_Format);
-    if (logFail(result, "Failed to get the mixer format.")) {
-        return result;
-    }
-
-    const DWORD streamingFlags =
-            sameFormat(fw_Format, as_Format)
-                ? 0
-                : AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM | AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY;
-
-
-    constexpr REFERENCE_TIME hnsRequestedDuration = REFTIMES_PER_SEC;
-
-    result = a_Client->Initialize(
-        AUDCLNT_SHAREMODE_SHARED,
-        streamingFlags,
-        hnsRequestedDuration,
-        0,
-        fw_Format,
-        nullptr);
-
-    if (logFail(result, "Failed to initialize the interface audio client")) {
-        return result;
-    }
-
-    /*result = sound->setAudioSystemFormat(fw_Format);
-    if (logFail(result, "Failed to set the sound's format")) {
-        return result;
-    }*/
-
-    UINT32 bufferFrameCount;
-    result = a_Client->GetBufferSize(&bufferFrameCount);
-
-    if (logFail(result, "Failed to get the buffer size.")) {
-        return result;
-    }
-
-    IAudioRenderClient *a_RenderClient;
-    result = a_Client->GetService(__uuidof(IAudioRenderClient), reinterpret_cast<void **>(&a_RenderClient));
-    if (logFail(result, "Failed to get service IAudioRenderClient from the Audio Client")) {
-        return result;
-    }
-
-    ISimpleAudioVolume *a_Volume;
-    result = a_Client->GetService(__uuidof(ISimpleAudioVolume), reinterpret_cast<void **>(&a_Volume));
-    if (logFail(result, "Failed to get an audio volume service")) {
-        std::cout << result << std::endl;
-        return result;
-    }
-
-    //initially set the sound and volume
-    sound->setAudioController(a_Volume);
-    result = sound->setVolume(sound->getVolume());
-
-    if (logFail(result, "Failed to set the volume of the audio client")) {
-        return result;
-    }
-
-    BYTE *bufferData;
-    DWORD flags = 0;
-
-    result = a_RenderClient->GetBuffer(bufferFrameCount, &bufferData);
-    if (logFail(result, "Failed to get the buffer from the audio render client.")) {
-        return result;
-    }
-
-    result = sound->loadData(bufferFrameCount, bufferData, &flags);
-    if (logFail(result, "Failed to load data into the sound's buffer")) {
-        return result;
-    }
-
-    result = a_RenderClient->ReleaseBuffer(bufferFrameCount, flags);
-    if (logFail(result, "Failed to release the buffer first time for Rendering client")) {
-        return result;
-    }
-
-    const REFERENCE_TIME hnsActualDuration =
-            REFTIMES_PER_SEC * bufferFrameCount / fw_Format->nSamplesPerSec;
-
-    //the padding to the buffer
-    UINT32 numFramesPadding;
-
-    //The actual number of frames avaiable to write.
-    result = a_Client->Start();
-
-    if (logFail(result, "Failed to start rendering audio client")) {
-        return result;
-    }
-
-    const REFERENCE_TIME sleepMs = hnsActualDuration / REFTIMES_PER_MILLISEC / 2;
-
-    while (flags != AUDCLNT_BUFFERFLAGS_SILENT) {
-        //sleep for half the buffer duration
-
-        while (sound->paused()) {
-            Sleep(sleepMs);
-        }
-
-        Sleep(sleepMs);
-        sound->addTime(sleepMs);
-
-        result = a_Client->GetCurrentPadding(&numFramesPadding);
-
-        if (logFail(result, "Failed to get the padding for the audio rendering.")) {
-            return result;
-        }
-
-        const UINT32 numFramesAvaiable = bufferFrameCount - numFramesPadding;
-
-        result = a_RenderClient->GetBuffer(numFramesAvaiable, &bufferData);
-        if (logFail(result, "Failed to get the buffer for the device for audio rendering.")) {
-            return result;
-        }
-
-        result = sound->loadData(numFramesAvaiable, bufferData, &flags);
-        if (logFail(result, "Failed to load data into the sound's buffer")) {
-            return result;
-        }
-
-        result = a_RenderClient->ReleaseBuffer(numFramesAvaiable, flags);
-        if (logFail(result, "Failed to release the buffer into the audio render client")) {
-            return result;
-        }
-    }
-
-    Sleep(sleepMs);
-    sound->addTime(sleepMs);
-
-    //close the sound file
-    sound->stop();
-
-    result = a_Client->Stop();
-
-    //free resources.
-    a_Volume->Release();
-    a_RenderClient->Release();
-    CoTaskMemFree(as_Format);
-    a_Client->Release();
-
-    logFail(result, "Failed to stop the audio client");
-
-    return result;
-}
 
 // Helper to mix float samples, clamping the result
-void AudioManager::mixAudioFloat(std::span<float> mixer, std::span<const float> sound) {
+void AudioManager::mixAudioFloat(std::span<float> mixer, const std::span<const float> sound, const float& volume) {
     for (size_t i = 0; i < mixer.size(); ++i) {
-        mixer[i] = std::clamp(mixer[i] + sound[i], -1.0f, 1.0f);
+        const float adjustedSample = sound[i] * volume;
+        mixer[i] = std::clamp(mixer[i] + adjustedSample, -1.0f, 1.0f);
     }
 }
 
 // Template helper to mix integer PCM samples, preventing overflow
 template <typename T, typename T_Sum>
-void AudioManager::mixAudioPCM(std::span<T> mixer, std::span<const T> sound) {
+void AudioManager::mixAudioPCM(std::span<T> mixer, std::span<const T> sound, const float& volume) {
     const T min_val = std::numeric_limits<T>::min();
     const T max_val = std::numeric_limits<T>::max();
 
     for (size_t i = 0; i < mixer.size(); ++i) {
-        T_Sum sum = static_cast<T_Sum>(mixer[i]) + static_cast<T_Sum>(sound[i]);
-        mixer[i] = static_cast<T>( std::clamp(sum, static_cast<T_Sum>(min_val), static_cast<T_Sum>(max_val)));
+        auto adjustedSample = static_cast<T_Sum>(sound[i] * volume);  // apply volume here
+        T_Sum sum = static_cast<T_Sum>(mixer[i]) + adjustedSample;
+        mixer[i] = static_cast<T>(std::clamp(sum, static_cast<T_Sum>(min_val), static_cast<T_Sum>(max_val)));
     }
 }
 
-// Special case: convert 16-bit PCM to float and then mix
-void AudioManager::pcm16ConversionToFloat(std::span<float> mixer, std::span<const int16_t> sound) {
-    constexpr float pcm16_to_float_divisor = 32768.0f;
+void AudioManager::pcm16ConversionToFloat(std::span<float> mixer, const std::span<const int16_t> sound, const float& volume) {
     for (size_t i = 0; i < mixer.size(); ++i) {
-        const float converted_sample = static_cast<float>(sound[i]) / pcm16_to_float_divisor;
+        constexpr float pcm16_to_float_divisor = 32768.0f;
+        const float converted_sample = (static_cast<float>(sound[i]) / pcm16_to_float_divisor) * volume;
         mixer[i] = std::clamp(mixer[i] + converted_sample, -1.0f, 1.0f);
     }
 }
 
-void AudioManager::mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerData, std::span<const std::byte> soundData) {
+void AudioManager::mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerData, std::span<const std::byte> soundData, const float& volume) {
     if (as_Format->wFormatTag == WAVE_FORMAT_EXTENSIBLE) {
         auto* wfex = reinterpret_cast<WAVEFORMATEXTENSIBLE*>(as_Format);
 
@@ -387,28 +220,28 @@ void AudioManager::mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerD
             pcm16ConversionToFloat(
                 {reinterpret_cast<float*>(mixerData.data()), mixerData.size_bytes() / sizeof(float)},
                 {reinterpret_cast<const int16_t*>(soundData.data()), soundData.size_bytes() / sizeof(int16_t)}
-            );
+            , volume);
         } else if (wfex->SubFormat == KSDATAFORMAT_SUBTYPE_PCM && as_Format->wBitsPerSample == 32) {
             mixAudioPCM<int32_t, int64_t>(
                 {reinterpret_cast<int32_t*>(mixerData.data()), mixerData.size_bytes() / sizeof(int32_t)},
                 {reinterpret_cast<const int32_t*>(soundData.data()), soundData.size_bytes() / sizeof(int32_t)}
-            );
+            , volume);
         }
     } else if (as_Format->wFormatTag == WAVE_FORMAT_IEEE_FLOAT) {
         mixAudioFloat(
             {reinterpret_cast<float*>(mixerData.data()), mixerData.size_bytes() / sizeof(float)},
             {reinterpret_cast<const float*>(soundData.data()), soundData.size_bytes() / sizeof(float)}
-        );
+        , volume);
     } else if (as_Format->wBitsPerSample == 16) {
         mixAudioPCM<int16_t, int32_t>(
             {reinterpret_cast<int16_t*>(mixerData.data()), mixerData.size_bytes() / sizeof(int16_t)},
             {reinterpret_cast<const int16_t*>(soundData.data()), soundData.size_bytes() / sizeof(int16_t)}
-        );
+        , volume);
     }
 }
 
 
-HRESULT AudioManager::startRenderingMultiple(const Device *usingDevice, const std::vector<Sound *> &sounds) {
+HRESULT AudioManager::startRendering(const Device *usingDevice, std::vector<Sound *> &sounds, ISimpleAudioVolume* masterAudioController, bool stopOnSilence) {
     HRESULT result = usingDevice == nullptr || usingDevice->getDevice() == nullptr ? E_FAIL : S_OK;
 
     //using device will not be null.
@@ -461,8 +294,7 @@ HRESULT AudioManager::startRenderingMultiple(const Device *usingDevice, const st
         return result;
     }
 
-    ISimpleAudioVolume *a_Volume;
-    result = a_Client->GetService(__uuidof(ISimpleAudioVolume), reinterpret_cast<void **>(&a_Volume));
+    result = a_Client->GetService(__uuidof(ISimpleAudioVolume), reinterpret_cast<void **>(&masterAudioController));
     if (logFail(result, "Failed to get an audio volume service")) {
         return result;
     }
@@ -502,15 +334,27 @@ HRESULT AudioManager::startRenderingMultiple(const Device *usingDevice, const st
         std::vector mixerData(bufferSizeBytes, std::byte{0});
 
         bool anySoundPlaying = false;
-        for (auto* sound : sounds) {
+
+        //Do not use for range looped, since this way we remove items from the sound block when stopped.
+        for(size_t i = 0; i < sounds.size(); i++) {
+            auto* sound = sounds[i];
+
             // skip paused or stopped sounds
-            if (sound->paused() || sound->stopped()) {
+            if (sound->paused()) {
                 continue;
             }
 
-            if(!sound->getAudioController()) {
-                sound->setAudioController(a_Volume);
+            if(sound->stopped()) {
+                sounds.erase(sounds.begin() + i);
+                i--;
+                continue;
             }
+
+            //set the format before loading any data into here as this can handle the volume and other data.
+            if(!sound->getAudioSystemFormat()) {
+                sound->setAudioSystemFormat(as_Format);
+            }
+
 
             std::vector soundData(bufferSizeBytes, std::byte{0});
             DWORD currentDataSoundFlags = 0;
@@ -526,26 +370,29 @@ HRESULT AudioManager::startRenderingMultiple(const Device *usingDevice, const st
             anySoundPlaying = true;
             sound->addTime(sleepMs);
 
-            mixSound(as_Format, mixerData, soundData);
+            mixSound(as_Format, mixerData, soundData, sound->getVolume());
         }
 
-        std::memcpy(bufferData, mixerData.data(), bufferSizeBytes);
+        //only render sound when there was sound detected.
+        if(anySoundPlaying) {
+            std::memcpy(bufferData, mixerData.data(), bufferSizeBytes);
 
-        result = a_RenderClient->ReleaseBuffer(numFramesAvailable, flags);
-        if (logFail(result, "Failed to release the buffer into the audio render client")) {
-            return result;
+            result = a_RenderClient->ReleaseBuffer(numFramesAvailable, flags);
+            if (logFail(result, "Failed to release the buffer into the audio render client")) {
+                return result;
+            }
+        }
+        else if(stopOnSilence) { //break on silence when no sound playing as well...
+           break;
         }
 
         Sleep(sleepMs);
-
-        if (!anySoundPlaying)
-            break;
     }
 
     result = a_Client->Stop();
 
     //free resources.
-    a_Volume->Release();
+    masterAudioController->Release();
     a_RenderClient->Release();
     CoTaskMemFree(as_Format);
     a_Client->Release();
@@ -554,17 +401,3 @@ HRESULT AudioManager::startRenderingMultiple(const Device *usingDevice, const st
 
     return result;
 }
-
-
-
-std::thread AudioManager::getRenderingOnThread(const Device *device, Sound *sound) {
-    return std::thread([device, sound] {
-        const HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-        if (SUCCEEDED(hr)) {
-            startRendering(device, sound);
-        }
-        CoUninitialize();
-    });
-}
-
-

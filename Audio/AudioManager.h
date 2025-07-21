@@ -44,14 +44,14 @@ private:
     static Device *createFromIMMDevice(IMMDevice *theDevice, EDataFlow flow, ERole role);
 
     //Sound mixer functions, jesus christ this was annoying
-    static void mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerData, std::span<const std::byte> soundData);
+    static void mixSound(WAVEFORMATEX* as_Format, std::span<std::byte> mixerData, std::span<const std::byte> soundData, const float& volume);
 
-    static void pcm16ConversionToFloat(std::span<float> mixer, std::span<const int16_t> sound);
+    static void pcm16ConversionToFloat(std::span<float> mixer, std::span<const int16_t> sound, const float& volume);
 
     template <typename T, typename T_Sum>
-    static void mixAudioPCM(std::span<T> mixer, std::span<const T> sound);
+    static void mixAudioPCM(std::span<T> mixer, std::span<const T> sound, const float& volume);
 
-    static void mixAudioFloat(std::span<float> mixer, std::span<const float> sound);
+    static void mixAudioFloat(std::span<float> mixer, std::span<const float> sound, const float& volume);
 
 public:
 
@@ -65,10 +65,7 @@ public:
 
     static bool sameFormat(const WAVEFORMATEX *formatA, const WAVEFORMATEX *formatB);
 
-    static HRESULT startRendering(const Device* usingDevice, Sound* sound);
-    static HRESULT startRenderingMultiple(const Device *usingDevice, const std::vector<Sound *> &sounds);
-
-    static std::thread getRenderingOnThread(const Device* device, Sound* sound);
+    static HRESULT startRendering(const Device *usingDevice,  std::vector<Sound *> &sounds, ISimpleAudioVolume* masterAudioController, bool stopOnSilence = false);
 
 
 };

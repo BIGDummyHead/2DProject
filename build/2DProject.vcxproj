@@ -86,8 +86,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) -g</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -106,10 +105,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -117,8 +116,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64;C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -132,8 +131,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) -g</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -153,10 +151,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -164,8 +162,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64;C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -179,8 +177,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) -g</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -200,10 +197,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -211,8 +208,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64;C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -226,8 +223,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) -g</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -246,10 +242,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\shawn\CLionProjects\2DProject\SDL\include;C:\Users\shawn\CLionProjects\2DProject\SDL\include\SDL2;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include;C:\Users\shawn\CLionProjects\2DProject\SDL_image\include\SDL3_image;C:\Users\shawn\CLionProjects\2DProject\SDL_ttf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -257,8 +253,8 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/shawn/CLionProjects/2DProject/SDL/lib;C:/Users/shawn/CLionProjects/2DProject/SDL/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib;C:/Users/shawn/CLionProjects/2DProject/SDL_image/lib/$(Configuration);C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64;C:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -359,6 +355,37 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\Physics\Raycaster.h" />
     <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\Physics\RayInfo.h" />
     <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\Physics\Ray.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\LightSource.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\LightSource.cpp" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\Component.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\Component.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\UiObject.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\UiObject.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\Physics\Castable.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\TextFont.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\UiObjectFont.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\UiObjectFont.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\TextFont.cpp" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Knight_Game.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Knight_Game.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Settings\Parser.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Settings\Parser.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Player.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\Player.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\IP_Games\Knight\PlayerStats.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\SheetAnimator.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\SheetAnimator.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\AnimationCycle.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\AnimationCycle.cpp" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Game\CycleManager.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Game\CycleManager.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Audio\AudioManager.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Audio\AudioManager.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Audio\Device.h" />
+    <ClCompile Include="C:\Users\shawn\CLionProjects\2DProject\Audio\Sound.cpp" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Audio\Sound.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Audio\WavFileHeader.h" />
+    <ClInclude Include="C:\Users\shawn\CLionProjects\2DProject\Audio\TimeSound.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\shawn\CLionProjects\2DProject\build\ZERO_CHECK.vcxproj">

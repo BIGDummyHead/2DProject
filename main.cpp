@@ -30,13 +30,26 @@ int main() {
 
     auto* device = AudioManager::getDefaultDevice();
 
-    std::vector<Sound*> backgroundMusic { new Sound("tense.wav"), new Sound("exam.wav") };
+    auto* backgroundNoise = new Sound("tense.wav");
+    backgroundNoise->setVolume(.4f);
 
-    std::thread([device, backgroundMusic]() {
+    auto *noises = new std::vector<Sound *>();
+    noises->push_back(backgroundNoise);
+
+    std::thread([device, noises]() {
         const HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-        AudioManager::startRenderingMultiple(device, backgroundMusic);
+
+        if(FAILED(hr)) {
+            exit(hr);
+        }
+
+        ISimpleAudioVolume* ma_Controller = nullptr;
+        HRESULT renderResult = AudioManager::startRendering(device, *noises, ma_Controller);
         CoUninitialize();
+
     }).detach();
+
+    backgroundNoise->pause();
 
     //Initialize the application
     App myApp;

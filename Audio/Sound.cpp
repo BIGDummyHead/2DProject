@@ -120,6 +120,7 @@ HRESULT Sound::loadData(const UINT32 numFramesAvailable, BYTE *bufferData, DWORD
 
     //If we have reached an endpoint to the file, and there is no looping, time to go.
     if ((actualBytesRead < bytesToRead || wavFStream.eof()) && !loop) {
+        stop(); //kill the audio and queue it up to be removed from whereever
         *audioFlags |= AUDCLNT_BUFFERFLAGS_SILENT;
     } else {
         *audioFlags = 0;
@@ -140,15 +141,13 @@ float Sound::getVolume() const {
     return volume;
 }
 
-HRESULT Sound::setVolume(float vol) {
+void Sound::setVolume(float vol) {
     if (vol < MIN_VOLUME)
         vol = MIN_VOLUME;
 
     vol = vol > MAX_VOLUME ? MAX_VOLUME : vol;
 
     this->volume = vol;
-
-    return a_Volume == nullptr ? S_OK : a_Volume->SetMasterVolume(volume, nullptr);
 }
 
 void Sound::pause() {
@@ -178,40 +177,19 @@ bool Sound::restart() {
     return !paused() && !stopped() && setTime(TIME(0));
 }
 
-void Sound::setAudioController(ISimpleAudioVolume *a_Volume) {
-    this->a_Volume = a_Volume;
-}
-
-HRESULT Sound::play(const bool& onCurrentThread) {
-    const auto* device = AudioManager::getDefaultDevice();
-    return play(device, onCurrentThread);
-}
-
-HRESULT Sound::play(const Device *device, const bool& onCurrentThread) {
-
-    if(isPlaying) {
-        return S_FALSE;
-    }
-
-    HRESULT result = S_OK;
-    if(onCurrentThread) {
-        result = AudioManager::startRendering(device, this);
-    }else {
-        auto thread = AudioManager::getRenderingOnThread(device, this);
-        thread.detach();
-    }
-
-    isPlaying = SUCCEEDED(result);
-    isStopped = !isPlaying;
-
-    return result;
-}
-
 
 std::string Sound::getFilePath() const {
     return  wavFilePath;
 }
 
-ISimpleAudioVolume *Sound::getAudioController() {
-    return a_Volume;
+WAVEFORMATEX *Sound::getAudioSystemFormat() const {
+    return audioStreamFormat;
 }
+
+void Sound::setAudioSystemFormat(WAVEFORMATEX *format) {
+    this->audioStreamFormat = format;
+}
+
+
+
+
