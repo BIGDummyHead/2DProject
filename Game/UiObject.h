@@ -7,7 +7,7 @@
 #include <SDL.h>
 
 #include "Collider.h"
-#include "../draw.h"
+#include "../Draw.h"
 
 
 class UiObject {
@@ -20,7 +20,6 @@ private:
 public:
     virtual ~UiObject() = default;
 
-    draw* drawTool = nullptr;
     Texture* drawingTexture;
 
     Vector2 position;
@@ -28,12 +27,9 @@ public:
     //The UI's collider, that is interacted with via the mouse
     Collider* collider = nullptr;
 
-    UiObject(draw* tool, Texture* texture) {
-        drawTool = tool;
+    explicit UiObject(Texture* texture) {
         drawingTexture = texture;
-
         registeredUI.push_back(this);
-
     }
 
     //Render this UI Object.

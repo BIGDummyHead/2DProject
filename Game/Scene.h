@@ -10,7 +10,7 @@
 
 typedef struct {
     App* runningApplication;
-    draw* drawingTool;
+    Draw* drawingTool;
 } SceneInformation;
 
 class Scene {

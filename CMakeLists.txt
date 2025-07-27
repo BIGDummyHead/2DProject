@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.29)
 project(2DProject)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # SDL2 Root Path
 set(SDL2_PATH "SDL")
@@ -27,7 +29,6 @@ link_directories(${SDL2_ttf_PATH}/lib/x64)
 # Add your executable
 add_executable(2DProject main.cpp
         defs.h
-        structs.h
         init.cpp
         init.h
         input.cpp
@@ -87,6 +88,11 @@ add_executable(2DProject main.cpp
         Audio/Sound.h
         Audio/WavFileHeader.h
         Audio/TimeSound.h
+        App.h
+        App.cpp
+        Audio/SoundPack.h
+        Audio/SoundPack.cpp
+        Generator.h
 )
 
 # Link against SDL2 libraries

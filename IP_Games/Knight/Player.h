@@ -5,7 +5,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "PlayerStats.h"
-#include "../../input.h"
+#include "../../Input.h"
 #include "../../Game/AnimationCycle.h"
 #include "../../Game/Camera.h"
 #include "../../Game/CycleManager.h"
@@ -32,6 +32,8 @@ private:
 
 public:
 
+    bool canMove = true;
+
     Sheet* idleSheet = nullptr;
     Sheet* deathSheet = nullptr;
     Sheet* attackSheet = nullptr;
@@ -51,8 +53,8 @@ public:
     void animateMovement(const Vector2& move, const double& magnitude);
 
 
-    explicit Player(const Vector2& spawn, draw* drawTool, PlayerStats* pStats = nullptr) :
-    GObject(drawTool, "Player"),
+    explicit Player(const Vector2& spawn, PlayerStats* pStats = nullptr) :
+    GObject("Player"),
     initSpawn(spawn) {
         cam = Camera::mainCamera;
         stats = pStats ? pStats : new PlayerStats();

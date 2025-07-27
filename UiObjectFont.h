@@ -4,7 +4,7 @@
 
 #ifndef UIOBJECTFONT_H
 #define UIOBJECTFONT_H
-#include "draw.h"
+#include "Draw.h"
 #include "TextFont.h"
 #include "Game/UiObject.h"
 
@@ -18,7 +18,7 @@ public:
     TextFont *renderingFont;
 
 
-    UiObjectFont(draw* tool, TextFont* font, const char* text = nullptr) : UiObject(tool, nullptr) {
+    explicit UiObjectFont(TextFont* font, const char* text = nullptr) : UiObject(nullptr) {
         renderingFont = font;
 
         renderingText = text == nullptr ? "" : text;

@@ -7,7 +7,7 @@
 #include <bits/stl_algo.h>
 
 #include "../Camera.h"
-#include "../../input.h"
+#include "../../Input.h"
 
 bool Raycaster::lineIntersectsRect(const Vector2& rayStart, const Vector2& rayEnd, const Vector2& position, const Collider* collider, Vector2* intersection) {
 
@@ -60,7 +60,7 @@ Vector2 Raycaster::createEndPoint(const Ray &ray) {
 
 bool Raycaster::castUI(RayInfo *rayInformation) {
 
-      const Ray mouseRay(input::getMousePosition(), 0, 10);
+      const Ray mouseRay(Input::getMousePosition(), 0, 10);
 
       const Vector2& rayEndPoint = createEndPoint(mouseRay);
 
@@ -101,7 +101,10 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
       auto closestDistance = DBL_MAX;
       rayInformation->castFrom = ray.position;
 
-      for(auto* obj : GObject::activeObjects) {
+      auto coIterObjects = GObject::getGameObjects(false);
+
+      for(int iterObj = 0; coIterObjects; iterObj++) {
+            auto* obj = coIterObjects();
 
             //ignore anything without a collider.
             if(obj->collider == nullptr)
@@ -124,7 +127,6 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
                         rayInformation->positionHit = intersection;
                   }
             }
-
       }
 
       return rayInformation->gameObjectHit != nullptr; //we have to have set something
@@ -159,7 +161,7 @@ void Raycaster::drawCast(const Ray &ray, SDL_Renderer* renderer, const RayInfo& 
 //Create a cast from the mouse
 bool Raycaster::castFromMouse(RayInfo *rayInformation, const double &radius, SDL_Renderer *shouldRender) {
 
-      Vector2 mouse = input::getMousePosition();
+      Vector2 mouse = Input::getMousePosition();
 
       if (Camera::mainCamera != nullptr) {
             mouse += Camera::mainCamera->transform->getPosition();

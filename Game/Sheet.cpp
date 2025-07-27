@@ -4,8 +4,8 @@
 
 #include "Sheet.h"
 
-void Sheet::render(const draw &drawTool, Vector2 where) {
-    renderedTexture = drawTool.blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
+void Sheet::render(Vector2 where) {
+    renderedTexture = Draw::getInstance()->blitSheet(loadedTexture, initRows, initCols, currentRow, currentCol, where, scale);
 }
 
 

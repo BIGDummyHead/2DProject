@@ -6,11 +6,14 @@
 #define TEXTURE_H
 #include <SDL_render.h>
 
-#include "../draw.h"
+#include "../Draw.h"
 
 
 class Texture {
+
 public:
+
+
     virtual ~Texture() = default;
 
     SDL_Texture* loadedTexture;
@@ -24,7 +27,9 @@ public:
         loadedTexture = text;
     }
 
-    virtual void render(const draw &drawTool, Vector2 where);
+    virtual void render(Vector2 where);
+
+
 };
 
 

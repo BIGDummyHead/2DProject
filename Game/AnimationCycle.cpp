@@ -118,12 +118,12 @@ AnimationCycle *AnimationCycle::moveNextWhenReady() const {
 
 
 
-void AnimationCycle::render(const draw &drawTool, Vector2 where) {
+void AnimationCycle::render(Vector2 where) {
     if(!animating) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No animation for render.");
         return;
     }
-    animating->render(drawTool, where);
+    animating->render(where);
 }
 
 

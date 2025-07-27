@@ -8,6 +8,7 @@
 
 //Called once initialized
 void Player::start() {
+    auto* drawTool = Draw::getInstance();
     idleSheet = new Sheet(drawTool->loadTexture(PLAYER_IDLE_FILE), 4,4);
     attackSheet = new Sheet(drawTool->loadTexture(PLAYER_ATTACK_FILE), 4,6);
     deathSheet = new Sheet(drawTool->loadTexture(PLAYER_DEATH_FILE), 4,11);
@@ -93,7 +94,7 @@ void Player::start() {
             lastDirection = "_center";
         }
 
-        const auto leftState = input::getMouseInputState(Left);
+        const auto leftState = Input::getMouseInputState(Left);
         if(leftState == Held || leftState == Down) {
             action = "attack";
         }
@@ -146,8 +147,8 @@ void Player::animateMovement(const Vector2 &move, const double &magnitude) {
 }
 
 Vector2 Player::getMovement() {
-    const double horiMovement = input::getMovement(Horizontal);
-    const double vertMovement = input::getMovement(Vertical);
+    const double horiMovement = Input::getMovement(Horizontal);
+    const double vertMovement = Input::getMovement(Vertical);
 
     const Vector2 relMovement {horiMovement, vertMovement};
     return  relMovement;
@@ -157,10 +158,11 @@ Vector2 Player::getMovement() {
 
 //Called every update
 void Player::update() {
+
     Vector2 relMovement = getMovement();
     const double magnitude = relMovement.magnitude();
 
-    if(!isDead && input::getMouseInputState(Right) == Down) {
+    if(!isDead && Input::getMouseInputState(Right) == Down) {
         isDead = true;
     }
 
@@ -171,6 +173,11 @@ void Player::update() {
     else { //the character is not moving
 
     }
-    animateMovement(relMovement, magnitude);
+
+    if(canMove) {
+        relMovement.y = relMovement.y * -1;
+        animateMovement(relMovement, magnitude);
+        doMovement(relMovement);
+    }
 }
 

@@ -10,6 +10,10 @@
 #include "Component.h"
 #include "Texture.h"
 #include "Transform.h"
+#include <algorithm>
+#include <coroutine>
+
+#include "../Generator.h"
 
 class GObject {
 
@@ -17,20 +21,27 @@ private:
     bool isActive = true;
     std::vector<Component*> activeComponents{};
     bool hasStarted = false;
+    unsigned int renderLayer = 0;
+
+
+    void removeFromBucket();
 
 public:
     virtual ~GObject() = default;
 
-    static std::unordered_set<GObject*> registeredObjects;
-    static  std::unordered_set<GObject*> activeObjects;
-    static std::unordered_set<GObject*> inactiveObjects;
+    static std::vector<int> registeredLayers;
+    static std::unordered_map<int, std::vector<GObject*>> layeredGameObjects;
+
+    static Generator<GObject*> getGameObjects(bool includeInactive = false);
 
 
+    [[nodiscard]] int getRenderLayer() const;
+    //Set the render layer.
+    void setRenderLayer(const int& layer);
 
     std::string name;
     Transform* transform;
     Texture* texture = nullptr;
-    draw* drawTool;
     Collider* collider = nullptr;
 
     bool destroyOnSceneLoad = true;
@@ -41,29 +52,25 @@ public:
 
     [[nodiscard]] bool getIsActive() const;
 
-    explicit GObject(draw* drawTool) {
+    explicit GObject(const int layerIndex = 0) {
 
-        this->drawTool = drawTool;
         if(name.empty()) {
-            name = "GObject " + registeredObjects.size();
+            name = "GObject " + layeredGameObjects.size();
         }
 
-        registeredObjects.insert(this);
-        activeObjects.insert(this);
+        //setup the render layer
+        setRenderLayer(layerIndex);
 
         transform = new Transform();
         GObject::start();
     }
 
-    explicit GObject(draw* drawTool, const std::string &name) : GObject(drawTool) {
+    explicit GObject(const std::string &name, const int layerIndex = 0) : GObject(layerIndex) {
         this->name = name;
     }
 
-
-
-
     //Automatically create a collider based on your texture (if it is a sheet), does not set the collider
-    Collider* automaticCollider(const bool& setStatic, const bool& useSheet = false) const;
+    [[nodiscard]] Collider* automaticCollider(const bool& setStatic, const bool& useSheet = false) const;
     void updateFrame();
 
     template<typename T> requires std::is_base_of_v<Component, T>

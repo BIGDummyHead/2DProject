@@ -33,5 +33,5 @@ void Knight_Game::onSceneLoad(SceneInformation sceneInfo) {
     camera = new Camera(fov, Vector2{0,0});
 
 //    auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
-    thePlayer = new Player(center, sceneInfo.drawingTool);
+    thePlayer = new Player(center);
 }

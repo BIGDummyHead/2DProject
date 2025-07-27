@@ -1,9 +1,9 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 
-#include "draw.h"
-#include "init.h"
-#include "input.h"
+#include "Draw.h"
+#include "Init.h"
+#include "Input.h"
 #include "Game/GObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
@@ -11,6 +11,7 @@
 #include "UiObjectFont.h"
 #include "UiObjectFont.h"
 #include "Audio/AudioManager.h"
+#include "Audio/SoundPack.h"
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
@@ -28,7 +29,7 @@ Scene *getKnightGame() {
 
 int main() {
 
-    auto* device = AudioManager::getDefaultDevice();
+    /*auto* device = AudioManager::getDefaultDevice();
 
     auto* backgroundNoise = new Sound("tense.wav");
     backgroundNoise->setVolume(.4f);
@@ -49,15 +50,15 @@ int main() {
 
     }).detach();
 
-    backgroundNoise->pause();
+    backgroundNoise->pause();*/
 
     //Initialize the application
     App myApp;
     myApp.name = "Knight Game";
-    init::initSDL(myApp);
+    Init::initSDL(&myApp);
 
     //create a drawtool from application
-    draw drawTool(&myApp);
+    Draw drawTool;
 
     //Center of the Screen, can be used for rendering
 
@@ -87,105 +88,111 @@ int main() {
         drawTool.prepareScene();
 
         //Poll for inputs, updates the input sectors
-        input::pollInput();
+        Input::pollInput();
 
 
         //Loop over active scene objects.
-        for (auto activeObj: GObject::activeObjects) {
-            //Ensure this object is not null for drawing
-            if (activeObj == nullptr || activeObj->transform == nullptr) {
-                continue;
-            }
+        for (unsigned int layer: GObject::registeredLayers) {
 
-            //important to only call this once
-            const Vector2 vel = activeObj->transform->getVelocity();
-
-            //check if the object is even in the render view
-            if (cam.isInRenderView(activeObj->transform->getPosition())) {
-                //determine where to draw this object
-                Vector2 drawnAt = activeObj->transform->getPosition() - cam.transform->getPosition();
-
-                //test collision before updating position
-                if (activeObj->collider != nullptr) {
-                    activeObj->collider->center = drawnAt;
-
-                    //we have to loop through all the active objects again and make sure there is not collision
-                    for (auto comparingObj: GObject::activeObjects) {
-                        //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
-                        if (comparingObj == activeObj || comparingObj->collider == nullptr || activeObj->collider->
-                            isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
-                                comparingObj->transform->getPosition()))
-                            continue;
-
-
-                        //determine the center of this collider
-                        comparingObj->collider->center =
-                                comparingObj->transform->getPosition() - cam.transform->getPosition();
-
-
-                        //dynamic or heaviest
-                        GObject *left = nullptr;
-
-                        //static or lightest
-                        GObject *right = nullptr;
-
-                        if (comparingObj->collider->isStatic == false && activeObj->collider->isStatic == false) {
-                            //both are dynamic
-
-                            //choose the fastest and heaviest object
-
-                            //get the last stored velocity, avoids the recalcuation step
-                            const Vector2 comparingVelocity = comparingObj->transform->getVelocity(true);
-                            const double comparingWeight = comparingObj->collider->mass;
-                            const double myWeight = activeObj->collider->mass;
-
-                            left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
-                                       ? comparingObj
-                                       : activeObj;
-                            right = left == activeObj ? comparingObj : activeObj;
-                        } else {
-                            //one is static and the other is dynamic
-                            //static object
-                            left = comparingObj->collider->isStatic ? activeObj : comparingObj;
-
-                            //dynamic object
-                            right = left == activeObj ? comparingObj : activeObj;
-                        }
-
-                        Vector2 push; //check for collision
-                        if (left->collider->isColliding(*right->collider, push)) {
-                            if (left->collider->isStatic == false && right->collider->isStatic == false) {
-                                Transform *rightTrans = right->transform;
-
-                                //fix for object clipping when one was heavier.
-                                rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
-                            }
-
-                            //collision gives us back the amount that we need to push the nonStaticObject
-                            Transform *trans = left->transform;
-                            const Vector2 newLocation = trans->getPosition() + push;
-                            trans->setPosition(newLocation);
-
-                            //send a notification
-                            right->onCollision(left->collider);
-                            left->onCollision(right->collider);
-                        }
-                    }
-
-
-                    //debug: draw the collider box so we can see it
-                    activeObj->collider->drawColliderBox(myApp.renderer, drawnAt);
+            for (auto currentGameObject: GObject::layeredGameObjects[layer]) {
+                //Ensure this object is not null for drawing
+                if (currentGameObject == nullptr || !currentGameObject->getIsActive() || currentGameObject->transform == nullptr) {
+                    continue;
                 }
 
+                //important to only call this once
+                const Vector2 vel = currentGameObject->transform->getVelocity();
 
-                //render the object
-                if (activeObj->texture != nullptr)
-                    activeObj->texture->render(drawTool, drawnAt);
+                //check if the object is even in the render view
+                if (cam.isInRenderView(currentGameObject->transform->getPosition())) {
+                    //determine where to draw this object
+                    Vector2 drawnAt = currentGameObject->transform->getPosition() - cam.transform->getPosition();
 
-                activeObj->onRender(drawnAt);
+                    //test collision before updating position
+                    if (currentGameObject->collider != nullptr) {
+                        currentGameObject->collider->center = drawnAt;
+
+
+                        auto coroutineGameObjects =
+                            GObject::getGameObjects(false);
+
+                        for(int coIter = 0; coroutineGameObjects; coIter++) {
+                            auto comparingObj = coroutineGameObjects();
+
+                            //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
+                            if (comparingObj == currentGameObject || comparingObj->collider == nullptr || currentGameObject->collider->
+                                isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
+                                    comparingObj->transform->getPosition()))
+                                continue;
+
+
+                            //determine the center of this collider
+                            comparingObj->collider->center =
+                                    comparingObj->transform->getPosition() - cam.transform->getPosition();
+
+
+                            //dynamic or heaviest
+                            GObject *left = nullptr;
+
+                            //static or lightest
+                            GObject *right = nullptr;
+
+                            if (comparingObj->collider->isStatic == false && currentGameObject->collider->isStatic == false) {
+                                //both are dynamic
+
+                                //choose the fastest and heaviest object
+
+                                //get the last stored velocity, avoids the recalcuation step
+                                const Vector2 comparingVelocity = comparingObj->transform->getVelocity(true);
+                                const double comparingWeight = comparingObj->collider->mass;
+                                const double myWeight = currentGameObject->collider->mass;
+
+                                left = (comparingVelocity.magnitude() * comparingWeight) > (vel.magnitude() * myWeight)
+                                           ? comparingObj
+                                           : currentGameObject;
+                                right = left == currentGameObject ? comparingObj : currentGameObject;
+                            } else {
+                                //one is static and the other is dynamic
+                                //static object
+                                left = comparingObj->collider->isStatic ? currentGameObject : comparingObj;
+
+                                //dynamic object
+                                right = left == currentGameObject ? comparingObj : currentGameObject;
+                            }
+
+                            Vector2 push; //check for collision
+                            if (left->collider->isColliding(*right->collider, push)) {
+                                if (left->collider->isStatic == false && right->collider->isStatic == false) {
+                                    Transform *rightTrans = right->transform;
+
+                                    //fix for object clipping when one was heavier.
+                                    rightTrans->setPosition(rightTrans->getPosition() - push / left->collider->mass);
+                                }
+
+                                //collision gives us back the amount that we need to push the nonStaticObject
+                                Transform *trans = left->transform;
+                                const Vector2 newLocation = trans->getPosition() + push;
+                                trans->setPosition(newLocation);
+
+                                //send a notification
+                                right->onCollision(left->collider);
+                                left->onCollision(right->collider);
+                            }
+                        }
+
+                        //debug: draw the collider box so we can see it
+                        currentGameObject->collider->drawColliderBox(Draw::getRenderer(), drawnAt);
+                    }
+
+                    //render the object
+                    if (currentGameObject->texture != nullptr)
+                        currentGameObject->texture->render(drawnAt);
+
+                    currentGameObject->onRender(drawnAt);
+                }
+
+                currentGameObject->updateFrame();
             }
-
-            activeObj->updateFrame();
         }
 
 
@@ -230,7 +237,7 @@ int main() {
                     uiObject->whileMouseOver();
                 }
 
-                switch (input::getMouseInputState(Left)) {
+                switch (Input::getMouseInputState(Left)) {
                     case Down:
                         uiObject->onMouseClick();
                         break;

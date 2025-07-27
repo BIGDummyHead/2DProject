@@ -51,189 +51,203 @@ build cmake_object_order_depends_target_2DProject: phony || .
 
 build CMakeFiles/2DProject.dir/main.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/main.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/init.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/init.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\init.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/input.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/input.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\input.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/draw.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/draw.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\draw.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/Vector2.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Vector2.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Vector2.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/Game/GObject.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/GObject.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\GObject.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Transform.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Transform.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Transform.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Texture.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Texture.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Texture.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Sheet.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Sheet.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Background.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Background.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Background.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Collider.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Collider.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Collider.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Camera.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Camera.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Camera.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Scene.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Scene.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Scene.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Physics/Raycaster.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Physics\Raycaster.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game\Physics
 
 build CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/LightSource.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\LightSource.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/Component.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/Component.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\Component.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/UiObject.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\UiObject.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/UiObjectFont.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\UiObjectFont.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/TextFont.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/TextFont.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\TextFont.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
 
 build CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/IP_Games/Knight/Knight_Game.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\IP_Games\Knight\Knight_Game.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\IP_Games\Knight
 
 build CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Settings/Parser.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Settings\Parser.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Settings
 
 build CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/IP_Games/Knight/Player.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\IP_Games\Knight\Player.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\IP_Games\Knight
 
 build CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/SheetAnimator.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\SheetAnimator.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/AnimationCycle.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\AnimationCycle.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Game/CycleManager.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Game\CycleManager.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Game
 
 build CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Audio/AudioManager.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Audio\AudioManager.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Audio
 
 build CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Audio/Sound.cpp || cmake_object_order_depends_target_2DProject
   DEP_FILE = CMakeFiles\2DProject.dir\Audio\Sound.cpp.obj.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
+  OBJECT_DIR = CMakeFiles\2DProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Audio
+
+build CMakeFiles/2DProject.dir/App.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/App.cpp || cmake_object_order_depends_target_2DProject
+  DEP_FILE = CMakeFiles\2DProject.dir\App.cpp.obj.d
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
+  OBJECT_DIR = CMakeFiles\2DProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\2DProject.dir
+
+build CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Audio/SoundPack.cpp || cmake_object_order_depends_target_2DProject
+  DEP_FILE = CMakeFiles\2DProject.dir\Audio\SoundPack.cpp.obj.d
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Audio
@@ -246,7 +260,7 @@ build CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj: CXX_COMPILER__2DProject_unsc
 #############################################
 # Link the executable 2DProject.exe
 
-build 2DProject.exe: CXX_EXECUTABLE_LINKER__2DProject_Debug CMakeFiles/2DProject.dir/main.cpp.obj CMakeFiles/2DProject.dir/init.cpp.obj CMakeFiles/2DProject.dir/input.cpp.obj CMakeFiles/2DProject.dir/draw.cpp.obj CMakeFiles/2DProject.dir/Vector2.cpp.obj CMakeFiles/2DProject.dir/Game/GObject.cpp.obj CMakeFiles/2DProject.dir/Game/Transform.cpp.obj CMakeFiles/2DProject.dir/Game/Texture.cpp.obj CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj CMakeFiles/2DProject.dir/Game/Background.cpp.obj CMakeFiles/2DProject.dir/Game/Collider.cpp.obj CMakeFiles/2DProject.dir/Game/Camera.cpp.obj CMakeFiles/2DProject.dir/Game/Scene.cpp.obj CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj CMakeFiles/2DProject.dir/Game/Component.cpp.obj CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj CMakeFiles/2DProject.dir/TextFont.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj
+build 2DProject.exe: CXX_EXECUTABLE_LINKER__2DProject_Debug CMakeFiles/2DProject.dir/main.cpp.obj CMakeFiles/2DProject.dir/init.cpp.obj CMakeFiles/2DProject.dir/input.cpp.obj CMakeFiles/2DProject.dir/draw.cpp.obj CMakeFiles/2DProject.dir/Vector2.cpp.obj CMakeFiles/2DProject.dir/Game/GObject.cpp.obj CMakeFiles/2DProject.dir/Game/Transform.cpp.obj CMakeFiles/2DProject.dir/Game/Texture.cpp.obj CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj CMakeFiles/2DProject.dir/Game/Background.cpp.obj CMakeFiles/2DProject.dir/Game/Collider.cpp.obj CMakeFiles/2DProject.dir/Game/Camera.cpp.obj CMakeFiles/2DProject.dir/Game/Scene.cpp.obj CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj CMakeFiles/2DProject.dir/Game/Component.cpp.obj CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj CMakeFiles/2DProject.dir/TextFont.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj CMakeFiles/2DProject.dir/App.cpp.obj CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lSDL2  -lSDL2main  -lSDL2_image  -lSDL2_ttf  -lwinmm  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/shawn/CLionProjects/2DProject/SDL/lib   -LC:/Users/shawn/CLionProjects/2DProject/SDL_image/lib   -LC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64

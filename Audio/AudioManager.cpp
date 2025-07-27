@@ -5,6 +5,8 @@
 #include "AudioManager.h"
 
 
+
+
 IMMDeviceEnumerator *AudioManager::deviceEnumerator;
 
 bool AudioManager::logFail(const HRESULT &result, const char *logError) {
@@ -242,7 +244,7 @@ void AudioManager::mixSound(WAVEFORMATEX *as_Format, std::span<std::byte> mixerD
 }
 
 
-HRESULT AudioManager::startRendering(const Device *usingDevice, std::vector<Sound *> &sounds,
+HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& soundPacker,
                                      const RenderSettings &settings, RenderResult *r_Result) {
     HRESULT result = usingDevice == nullptr || usingDevice->getDevice() == nullptr ? E_FAIL : S_OK;
 
@@ -350,25 +352,28 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, std::vector<Soun
 
         bool anySoundPlaying = false;
 
-        //Do not use for range looped, since this way we remove items from the sound block when stopped.
-        for (size_t i = 0; i < sounds.size(); i++) {
-            auto *sound = sounds[i];
 
-            // skip paused or stopped sounds
-            if (sound->paused()) {
-                continue;
-            }
+        for(auto&[packName, sounds] : soundPacker.getPacks()) {
 
-            if (sound->stopped()) {
-                sounds.erase(sounds.begin() + i);
-                i--;
-                continue;
-            }
+            //Do not use for range looped, since this way we remove items from the sound block when stopped.
+            for(size_t i = 0; i < sounds.size(); i++) {
+                auto* sound = sounds[i];
 
-            //Set the audio system format, if non exist.
-            if (!sound->getAudioSystemFormat()) {
-                sound->setAudioSystemFormat(as_Format);
-            }
+                // skip paused or stopped sounds
+                if (sound->paused()) {
+                    continue;
+                }
+
+                if(sound->stopped()) {
+                    sounds.erase(sounds.begin() + i);
+                    i--;
+                    continue;
+                }
+
+                //set the format before loading any data into here as this can handle the volume and other data.
+                if(!sound->getAudioSystemFormat()) {
+                    sound->setAudioSystemFormat(as_Format);
+                }
 
 
             std::vector soundData(bufferSizeBytes, std::byte{0});
@@ -376,12 +381,12 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, std::vector<Soun
             result = sound->loadData(numFramesAvailable, reinterpret_cast<BYTE *>(soundData.data()),
                                      &currentDataSoundFlags);
 
-            if (logFail(result, "Failed to load data into sound data")) {
-                return result;
-            }
+                if (logFail(result, "Failed to load data into sound data")) {
+                    return result;
+                }
 
-            if (currentDataSoundFlags == AUDCLNT_BUFFERFLAGS_SILENT)
-                continue;
+                if (currentDataSoundFlags == AUDCLNT_BUFFERFLAGS_SILENT)
+                    continue;
 
             anySoundPlaying = true;
             sound->addTime(sleepMs);
@@ -389,19 +394,19 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, std::vector<Soun
             mixSound(as_Format, mixerData, soundData, sound->getVolume());
         }
 
-        //only render sound when there was sound detected.
-        if (anySoundPlaying) {
-            constexpr DWORD flags = 0;
-            std::memcpy(bufferData, mixerData.data(), bufferSizeBytes);
+            //only render sound when there was sound detected.
+            if(anySoundPlaying) {
+                constexpr DWORD flags = 0;
+                std::memcpy(bufferData, mixerData.data(), bufferSizeBytes);
 
-            result = a_RenderClient->ReleaseBuffer(numFramesAvailable, flags);
-            if (logFail(result, "Failed to release the buffer into the audio render client")) {
-                return result;
+                result = a_RenderClient->ReleaseBuffer(numFramesAvailable, flags);
+                if (logFail(result, "Failed to release the buffer into the audio render client")) {
+                    return result;
+                }
             }
-        } else if (settings.stopOnSilence) {
-            //break on silence when no sound playing as well...
-            break;
         }
+
+
 
         Sleep(sleepMs);
     }

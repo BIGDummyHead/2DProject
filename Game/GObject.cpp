@@ -6,9 +6,8 @@
 
 #include <SDL_log.h>
 
-std::unordered_set<GObject*> GObject::registeredObjects;
-std::unordered_set<GObject*> GObject::activeObjects;
-std::unordered_set<GObject*> GObject::inactiveObjects;
+std::unordered_map< int, std::vector<GObject*>> GObject::layeredGameObjects;
+std::vector< int> GObject::registeredLayers;
 
 bool GObject::getIsActive() const {
     return isActive;
@@ -28,7 +27,7 @@ Collider *GObject::automaticCollider(const bool& setStatic, const bool& useSheet
         return nullptr;
     }
     //render this once for the following calls
-    texture->render(*drawTool, transform->getPosition());
+    texture->render(transform->getPosition());
 
     const Vector2 box = useSheet ?
         Collider::createBoxFromSheet(*dynamic_cast<Sheet*>(texture)) :
@@ -48,11 +47,81 @@ void GObject::onCollision(Collider *other) {
 
 }
 
+void GObject::removeFromBucket() {
+    std::vector<GObject*>* bucket = &layeredGameObjects[renderLayer];
+
+    auto obj = std::ranges::find(*bucket, this);
+
+    if(obj != bucket->end()) {
+        bucket->erase(obj);
+    }
+
+    if(bucket->empty()) {
+        //remove from buckets
+        auto layerIter = layeredGameObjects.find(renderLayer);
+        if(layerIter != layeredGameObjects.end()) {
+            layeredGameObjects.erase(layerIter);
+        }
+    }
+}
+
+ int GObject::getRenderLayer() const {
+    return renderLayer;
+}
+
+void GObject::setRenderLayer(const int &layer) {
+
+    if(layeredGameObjects.contains(renderLayer)) {
+        removeFromBucket();
+    }
+
+    renderLayer = layer;
+
+    if(!layeredGameObjects.contains(renderLayer)) {
+        layeredGameObjects[renderLayer] = {};
+    }
+
+    layeredGameObjects[renderLayer].push_back(this);
+
+    const auto it =
+        std::ranges::find(registeredLayers, renderLayer);
+
+    if(it == registeredLayers.end()) {
+        registeredLayers.push_back(renderLayer);
+        std::ranges::sort(registeredLayers);
+    }
+}
+
+
+Generator<GObject*> GObject::getGameObjects(bool includeInactive) {
+    for(const auto&[layer, objs] : layeredGameObjects) {
+        for(GObject* obj : objs) {
+            if(!includeInactive && !obj->isActive) {
+                continue;
+            }
+
+            co_yield obj;
+        }
+    }
+
+    co_return;
+}
+
+
+
+
+
+
+
 void GObject::destroy() {
     setIsActive(false);
     delete collider;
     delete transform;
-    inactiveObjects.erase(this);
+
+    //remove this from the bucket completely
+    removeFromBucket();
+
+    //inactiveObjects.erase(this);
     //registeredObjects.erase(this);
 }
 
@@ -85,32 +154,7 @@ void GObject::updateFrame() {
 
 
 void GObject::setIsActive(const bool status)  {
-    if(isActive && status || !isActive && !status) { //there is nothing tto do
-        return;
-    }
-
     isActive = status;
-
-    if(isActive) {
-
-        const auto found = inactiveObjects.find(this);
-
-        if(found != inactiveObjects.end()) {
-            inactiveObjects.erase(*found);
-        }
-
-        activeObjects.insert(*found);
-
-    }
-    else {
-        const auto found = activeObjects.find(this);
-
-        if(found != activeObjects.end()) {
-            activeObjects.erase(*found);
-        }
-
-        inactiveObjects.insert(*found);
-    }
 }
 
 

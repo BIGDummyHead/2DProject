@@ -10,7 +10,7 @@
 class Background : public Texture {
 
 private:
-    void drawAround(draw drawTool, Vector2 pos);
+    void drawAround(Vector2 pos);
 
 public:
     Background() {
@@ -22,7 +22,7 @@ public:
     }
 
     int drawRadius;
-    void render(const draw &drawTool, Vector2 where) override;
+    void render(Vector2 where) override;
 };
 
 

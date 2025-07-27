@@ -109,7 +109,7 @@ public:
 
     //[[nodiscard]] AnimationCycle* getCondition(const std::string& identifier) const;
 
-    void render(const draw &drawTool, Vector2 where) override;
+    void render(Vector2 where) override;
 
     //Returns a cycle from the beginning.
     [[nodiscard]] AnimationCycle* getAt(const int& index) const;

@@ -8,7 +8,7 @@ std::vector<UiObject*> UiObject::registeredUI;
 
 void UiObject::render() {
     //virtual class
-    this->drawingTexture->render(*drawTool, position);
+    this->drawingTexture->render(position);
 }
 
 void UiObject::onMouseClick() {

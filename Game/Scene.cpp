@@ -58,7 +58,11 @@ void Scene::destroyScene() {
 
     std::vector<GObject*> cleared;
 
-    for (const auto obj: GObject::registeredObjects) {
+    auto coroutineGameObjects =
+        GObject::getGameObjects(true);
+
+    for(int i = 0; coroutineGameObjects; i++) {
+        auto obj = coroutineGameObjects();
         //* removed line from destory that would remove registeredObjects key, causing modification of list
         if (obj->destroyOnSceneLoad) {
             //destroy the item and add the item to the clearing item
@@ -68,9 +72,9 @@ void Scene::destroyScene() {
     }
 
     //delete all that were not in the cleared subcat
-    for(const auto clearing : cleared) {
-        GObject::registeredObjects.erase(clearing);
-    }
+    //for(const auto clearing : cleared) {
+      //  GObject::registeredObjects.erase(clearing);
+    //}
 
     currentlyLoadedScene = nullptr;
 }

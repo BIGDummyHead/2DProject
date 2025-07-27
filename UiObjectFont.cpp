@@ -23,7 +23,9 @@ void UiObjectFont::render() {
         SDL_RenderCopy(drawTool.getApp().renderer, text, nullptr, &textDest);
      */
 
-    SDL_Texture* text = drawTool->createTextTexture(*renderingFont, renderingText);
+    auto* drawTool = Draw::getInstance();
+
+    auto* text = drawTool->createTextTexture(*renderingFont, renderingText);
 
     drawTool->blit(text, position, nullptr);
 }
