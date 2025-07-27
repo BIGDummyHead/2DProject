@@ -56,10 +56,10 @@ void Scene::destroyScene() {
         return;
 
 
-    std::vector<GObject*> cleared;
+    std::vector<GameObject*> cleared;
 
     auto coroutineGameObjects =
-        GObject::getGameObjects(true);
+        GameObject::getGameObjects(true);
 
     for(int i = 0; coroutineGameObjects; i++) {
         auto obj = coroutineGameObjects();

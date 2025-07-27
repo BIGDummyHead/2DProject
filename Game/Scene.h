@@ -5,7 +5,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "GObject.h"
+#include "GameObject.h"
 #include <unordered_map>
 
 typedef struct {

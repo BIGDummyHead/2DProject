@@ -101,7 +101,7 @@ bool Raycaster::cast(const Ray& ray, RayInfo *rayInformation) {
       auto closestDistance = DBL_MAX;
       rayInformation->castFrom = ray.position;
 
-      auto coIterObjects = GObject::getGameObjects(false);
+      auto coIterObjects = GameObject::getGameObjects(false);
 
       for(int iterObj = 0; coIterObjects; iterObj++) {
             auto* obj = coIterObjects();

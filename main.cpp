@@ -4,7 +4,7 @@
 #include "Draw.h"
 #include "Init.h"
 #include "Input.h"
-#include "Game/GObject.h"
+#include "Game/GameObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
 
@@ -92,9 +92,9 @@ int main() {
 
 
         //Loop over active scene objects.
-        for (unsigned int layer: GObject::registeredLayers) {
+        for (unsigned int layer: GameObject::registeredLayers) {
 
-            for (auto currentGameObject: GObject::layeredGameObjects[layer]) {
+            for (auto currentGameObject: GameObject::layeredGameObjects[layer]) {
                 //Ensure this object is not null for drawing
                 if (currentGameObject == nullptr || !currentGameObject->getIsActive() || currentGameObject->transform == nullptr) {
                     continue;
@@ -114,7 +114,7 @@ int main() {
 
 
                         auto coroutineGameObjects =
-                            GObject::getGameObjects(false);
+                            GameObject::getGameObjects(false);
 
                         for(int coIter = 0; coroutineGameObjects; coIter++) {
                             auto comparingObj = coroutineGameObjects();
@@ -132,10 +132,10 @@ int main() {
 
 
                             //dynamic or heaviest
-                            GObject *left = nullptr;
+                            GameObject *left = nullptr;
 
                             //static or lightest
-                            GObject *right = nullptr;
+                            GameObject *right = nullptr;
 
                             if (comparingObj->collider->isStatic == false && currentGameObject->collider->isStatic == false) {
                                 //both are dynamic

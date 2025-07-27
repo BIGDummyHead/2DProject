@@ -37,8 +37,8 @@ add_executable(2DProject main.cpp
         draw.h
         Vector2.cpp
         Vector2.h
-        Game/GObject.cpp
-        Game/GObject.h
+        Game/GameObject.cpp
+        Game/GameObject.h
         Game/Transform.cpp
         Game/Transform.h
         Game/Texture.cpp

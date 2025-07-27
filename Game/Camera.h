@@ -6,7 +6,7 @@
 #define CAMERA_H
 #include <SDL_render.h>
 
-#include "GObject.h"
+#include "GameObject.h"
 #include "Transform.h"
 #include "../Vector2.h"
 

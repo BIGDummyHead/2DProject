@@ -6,12 +6,12 @@
 #define COMPONENT_H
 
 #pragma once
-class GObject;
+class GameObject;
 
 class Component {
 
 private:
-    GObject* attachedObject = nullptr; //Set later.
+    GameObject* attachedObject = nullptr; //Set later.
 
 public:
     bool hasStarted = false;
@@ -28,9 +28,9 @@ public:
     virtual void destroy();
 
     //Sets the attached object pointer, should not be touched.
-    void setAttachedObject(GObject* obj);
+    void setAttachedObject(GameObject* obj);
     //Gets the attached object this component was set to.
-    [[nodiscard]] GObject* getAttachedObject() const;
+    [[nodiscard]] GameObject* getAttachedObject() const;
 
 
 

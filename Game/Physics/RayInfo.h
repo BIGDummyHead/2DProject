@@ -5,7 +5,7 @@
 #ifndef RAYINFO_H
 #define RAYINFO_H
 #include "../Collider.h"
-#include "../GObject.h"
+#include "../GameObject.h"
 #include "../UiObject.h"
 #include "../../Vector2.h"
 
@@ -18,7 +18,7 @@ typedef struct {
     //The collider that was hit
     Collider* collider = nullptr;
     //The gameobject that was hit
-    GObject* gameObjectHit = nullptr;
+    GameObject* gameObjectHit = nullptr;
     UiObject* uiObjectHit = nullptr;
 
     //Where the ray came from

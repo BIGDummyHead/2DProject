@@ -3,7 +3,7 @@
 //
 
 #include "Camera.h"
-#include "GObject.h"
+#include "GameObject.h"
 
 Camera* Camera::mainCamera;
 

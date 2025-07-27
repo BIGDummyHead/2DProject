@@ -3,13 +3,13 @@
 //
 
 #include "Component.h"
-#include "GObject.h"
+#include "GameObject.h"
 
-GObject *Component::getAttachedObject() const {
+GameObject *Component::getAttachedObject() const {
     return attachedObject;
 }
 
-void Component::setAttachedObject(GObject *obj) {
+void Component::setAttachedObject(GameObject *obj) {
     attachedObject = obj;
 }
 

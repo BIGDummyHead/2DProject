@@ -15,7 +15,7 @@
 
 #include "../Generator.h"
 
-class GObject {
+class GameObject {
 
 private:
     bool isActive = true;
@@ -27,12 +27,12 @@ private:
     void removeFromBucket();
 
 public:
-    virtual ~GObject() = default;
+    virtual ~GameObject() = default;
 
     static std::vector<int> registeredLayers;
-    static std::unordered_map<int, std::vector<GObject*>> layeredGameObjects;
+    static std::unordered_map<int, std::vector<GameObject*>> layeredGameObjects;
 
-    static Generator<GObject*> getGameObjects(bool includeInactive = false);
+    static Generator<GameObject*> getGameObjects(bool includeInactive = false);
 
 
     [[nodiscard]] int getRenderLayer() const;
@@ -52,7 +52,7 @@ public:
 
     [[nodiscard]] bool getIsActive() const;
 
-    explicit GObject(const int layerIndex = 0) {
+    explicit GameObject(const int layerIndex = 0) {
 
         if(name.empty()) {
             name = "GObject " + layeredGameObjects.size();
@@ -62,10 +62,10 @@ public:
         setRenderLayer(layerIndex);
 
         transform = new Transform();
-        GObject::start();
+        GameObject::start();
     }
 
-    explicit GObject(const std::string &name, const int layerIndex = 0) : GObject(layerIndex) {
+    explicit GameObject(const std::string &name, const int layerIndex = 0) : GameObject(layerIndex) {
         this->name = name;
     }
 

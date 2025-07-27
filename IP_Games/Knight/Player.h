@@ -9,10 +9,10 @@
 #include "../../Game/AnimationCycle.h"
 #include "../../Game/Camera.h"
 #include "../../Game/CycleManager.h"
-#include "../../Game/GObject.h"
+#include "../../Game/GameObject.h"
 
 
-class Player final : public GObject {
+class Player final : public GameObject {
 private:
     std::string PLAYER_ASSETS_FOLDER = R"(assets/player/)";
     std::string PLAYER_DEATH_FILE = PLAYER_ASSETS_FOLDER + "Death/Character_Death.png";
@@ -54,7 +54,7 @@ public:
 
 
     explicit Player(const Vector2& spawn, PlayerStats* pStats = nullptr) :
-    GObject("Player"),
+    GameObject("Player"),
     initSpawn(spawn) {
         cam = Camera::mainCamera;
         stats = pStats ? pStats : new PlayerStats();
