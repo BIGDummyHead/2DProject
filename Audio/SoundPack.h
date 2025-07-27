@@ -26,6 +26,17 @@ public:
     bool removePack(const std::string& name);
 
     bool setVolume(const std::string& name, const float& newVolume);
+
+    ~SoundPack() {
+        for (const auto& [packName, pack]: packs) {
+
+            for(Sound* sound : *pack) {
+                delete sound;
+            }
+
+            delete pack;
+        }
+    }
 };
 
 #endif //SOUNDPACK_H

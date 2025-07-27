@@ -9,6 +9,7 @@
 #include <SDL2/SDL_image.h>
 
 #include "Draw.h"
+#include "Audio/SoundManager.h"
 
 App* App::applicationInstance;
 
@@ -77,13 +78,20 @@ const char* App::initialize(App::Settings* settings) {
 
     setRenderer(renderer);
 
-    //create a new Draw tool instance, uses singleton type behaviour
-    new Draw();
-
     this->settings = settings;
+
+    createTools();
 
     return nullptr;
 }
+
+void App::createTools() const {
+    //create a new Draw tool instance, uses singleton type behaviour
+    new Draw();
+    //create a new sound manager instance, uses singleton type behaviour.
+    new SoundManager(settings->audioRenderingSettings, settings->audioRenderingDevice);
+}
+
 
 App::Settings *App::getSettings() const {
     return settings;

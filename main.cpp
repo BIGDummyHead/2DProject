@@ -11,6 +11,7 @@
 #include "UiObjectFont.h"
 #include "UiObjectFont.h"
 #include "Audio/AudioManager.h"
+#include "Audio/SoundManager.h"
 #include "Audio/SoundPack.h"
 #include "Game/Camera.h"
 #include "Game/Collider.h"
@@ -29,35 +30,12 @@ Scene *getKnightGame() {
 
 int main() {
 
-    auto* device = AudioManager::getDefaultDevice();
-
-    auto* backgroundNoise = new Sound("tense.wav");
-    backgroundNoise->setVolume(.2f);
-
-
-    auto* noises = new SoundPack();
-    auto testingNoises = noises->addPack("testing");
-    testingNoises->push_back(backgroundNoise);
-
-    RenderSettings settings;
-    RenderResult results;
-
-    std::thread([device, noises, settings, &results]() {
-        const HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-
-        if(FAILED(hr)) {
-            exit(hr);
-        }
-
-        HRESULT renderResult = AudioManager::startRendering(device, *noises, settings, &results);
-
-        CoUninitialize();
-
-    }).detach();
-
     App::SCREEN_DIMENSIONS screenDimensions = {500, 500};
     App::WINDOW_FLAGS winFlags = 0;
     App::Settings appSettings(screenDimensions, winFlags);
+
+    RenderSettings audioSettings;
+    appSettings.audioRenderingSettings = &audioSettings;
 
     //Initialize the application
     App myApp("Knight Game");
@@ -69,6 +47,16 @@ int main() {
     }
 
     auto drawTool = *Draw::getInstance();
+    auto soundManager = SoundManager::getInstance();
+
+    /* Disable sound for now, way too loud for testing purposes.
+    std::vector<Sound*>* backgroundNoises =
+        soundManager->getSounds(soundManager->NOISES_BACKGROUND);
+
+    auto* tense = new Sound("tense.wav");
+    tense->setVolume(.2f);
+    backgroundNoises->push_back(tense);
+    */
 
     //Center of the Screen, can be used for rendering
 
@@ -208,8 +196,7 @@ int main() {
 
 
         //Lights:
-        //TOOD: reimplement this code for later
-        /*SDL_Texture *lightmap = drawTool.startLightMap();
+        SDL_Texture *lightmap = drawTool.startLightMap();
 
 
         drawTool.drawLights();
@@ -218,7 +205,7 @@ int main() {
 
         // Set multiply (modulate) blending mode so black hides, white reveals
         SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
-        SDL_RenderCopy(myApp.renderer, lightmap, nullptr, nullptr);*/
+        SDL_RenderCopy(myApp.getRenderer(), lightmap, nullptr, nullptr);
 
 
         //Implementation of a texxt component

@@ -90,6 +90,8 @@ add_executable(2DProject main.cpp
         Audio/SoundPack.h
         Audio/SoundPack.cpp
         Generator.h
+        Audio/SoundManager.cpp
+        Audio/SoundManager.h
 )
 
 # Link against SDL2 libraries

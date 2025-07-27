@@ -11,6 +11,8 @@
 #include <SDL2/SDL_image.h>
 
 #include "Vector2.h"
+#include "Audio/Device.h"
+#include "Audio/RenderSettings.h"
 
 
 class App {
@@ -34,6 +36,12 @@ public:
                 this->value = value;
             }
         };
+
+
+        //Settings for WASAPI rendering, must be included to have audio.
+        mutable RenderSettings* audioRenderingSettings = nullptr;
+        //Device for WASAPI to render audio. Leave null for default.
+        mutable Device* audioRenderingDevice = nullptr;
 
         Vector2 windowPosition;
         SCREEN_DIMENSIONS windowDimensions;
@@ -74,6 +82,8 @@ private:
 
 
     std::string name;
+
+    void createTools() const;
 
 public:
     void setRenderer(SDL_Renderer *renderer);

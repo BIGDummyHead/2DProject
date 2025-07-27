@@ -245,6 +245,13 @@ build CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj: CXX_COMPILER__2DProject_
   OBJECT_DIR = CMakeFiles\2DProject.dir
   OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Audio
 
+build CMakeFiles/2DProject.dir/Audio/SoundManager.cpp.obj: CXX_COMPILER__2DProject_unscanned_Debug C$:/Users/shawn/CLionProjects/2DProject/Audio/SoundManager.cpp || cmake_object_order_depends_target_2DProject
+  DEP_FILE = CMakeFiles\2DProject.dir\Audio\SoundManager.cpp.obj.d
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/shawn/CLionProjects/2DProject/SDL/include -IC:/Users/shawn/CLionProjects/2DProject/SDL/include/SDL2 -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include -IC:/Users/shawn/CLionProjects/2DProject/SDL_image/include/SDL3_image -IC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/include
+  OBJECT_DIR = CMakeFiles\2DProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\2DProject.dir\Audio
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target 2DProject
@@ -253,7 +260,7 @@ build CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj: CXX_COMPILER__2DProject_
 #############################################
 # Link the executable 2DProject.exe
 
-build 2DProject.exe: CXX_EXECUTABLE_LINKER__2DProject_Debug CMakeFiles/2DProject.dir/main.cpp.obj CMakeFiles/2DProject.dir/Input.cpp.obj CMakeFiles/2DProject.dir/Draw.cpp.obj CMakeFiles/2DProject.dir/Vector2.cpp.obj CMakeFiles/2DProject.dir/Game/GameObject.cpp.obj CMakeFiles/2DProject.dir/Game/Transform.cpp.obj CMakeFiles/2DProject.dir/Game/Texture.cpp.obj CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj CMakeFiles/2DProject.dir/Game/Background.cpp.obj CMakeFiles/2DProject.dir/Game/Collider.cpp.obj CMakeFiles/2DProject.dir/Game/Camera.cpp.obj CMakeFiles/2DProject.dir/Game/Scene.cpp.obj CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj CMakeFiles/2DProject.dir/Game/Component.cpp.obj CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj CMakeFiles/2DProject.dir/TextFont.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj CMakeFiles/2DProject.dir/App.cpp.obj CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj
+build 2DProject.exe: CXX_EXECUTABLE_LINKER__2DProject_Debug CMakeFiles/2DProject.dir/main.cpp.obj CMakeFiles/2DProject.dir/Input.cpp.obj CMakeFiles/2DProject.dir/Draw.cpp.obj CMakeFiles/2DProject.dir/Vector2.cpp.obj CMakeFiles/2DProject.dir/Game/GameObject.cpp.obj CMakeFiles/2DProject.dir/Game/Transform.cpp.obj CMakeFiles/2DProject.dir/Game/Texture.cpp.obj CMakeFiles/2DProject.dir/Game/Sheet.cpp.obj CMakeFiles/2DProject.dir/Game/Background.cpp.obj CMakeFiles/2DProject.dir/Game/Collider.cpp.obj CMakeFiles/2DProject.dir/Game/Camera.cpp.obj CMakeFiles/2DProject.dir/Game/Scene.cpp.obj CMakeFiles/2DProject.dir/Game/Physics/Raycaster.cpp.obj CMakeFiles/2DProject.dir/Game/LightSource.cpp.obj CMakeFiles/2DProject.dir/Game/Component.cpp.obj CMakeFiles/2DProject.dir/Game/UiObject.cpp.obj CMakeFiles/2DProject.dir/UiObjectFont.cpp.obj CMakeFiles/2DProject.dir/TextFont.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Knight_Game.cpp.obj CMakeFiles/2DProject.dir/Settings/Parser.cpp.obj CMakeFiles/2DProject.dir/IP_Games/Knight/Player.cpp.obj CMakeFiles/2DProject.dir/Game/SheetAnimator.cpp.obj CMakeFiles/2DProject.dir/Game/AnimationCycle.cpp.obj CMakeFiles/2DProject.dir/Game/CycleManager.cpp.obj CMakeFiles/2DProject.dir/Audio/AudioManager.cpp.obj CMakeFiles/2DProject.dir/Audio/Sound.cpp.obj CMakeFiles/2DProject.dir/App.cpp.obj CMakeFiles/2DProject.dir/Audio/SoundPack.cpp.obj CMakeFiles/2DProject.dir/Audio/SoundManager.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lSDL2  -lSDL2main  -lSDL2_image  -lSDL2_ttf  -lwinmm  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/shawn/CLionProjects/2DProject/SDL/lib   -LC:/Users/shawn/CLionProjects/2DProject/SDL_image/lib   -LC:/Users/shawn/CLionProjects/2DProject/SDL_ttf/lib/x64
