@@ -10,7 +10,6 @@
 #include <bits/stl_algo.h>
 #include <SDL2/SDL_image.h>
 
-#include "defs.h"
 #include "Game/Camera.h"
 #include "Game/Physics/Ray.h"
 #include "Game/Physics/Raycaster.h"
@@ -156,10 +155,12 @@ void Draw::addLightSource(const LightSource &source) {
 
 SDL_Texture *Draw::startLightMap() const {
 
+    const auto dimensions = App::getInstance()->getSettings()->windowDimensions;
+
     if (!lightmap) {
         //create a simple lightmap texture
-        lightmap = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH,
-                                     SCREEN_HEIGHT);
+        lightmap = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, dimensions.x,
+                                     dimensions.y);
     }
 
     // Set lightmap as render target
@@ -175,9 +176,13 @@ SDL_Texture *Draw::startLightMap() const {
 }
 
 void Draw::endLightMap(SDL_Texture *newDrawTexture) const {
+
+    const auto dimensions = App::getInstance()->getSettings()->windowDimensions;
+
+
     //add some base light into this.
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 25);
-    constexpr SDL_Rect screenRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    const SDL_Rect screenRect(0, 0, dimensions.x, dimensions.y);
     SDL_RenderFillRect(renderer, &screenRect);
 
     SDL_SetRenderTarget(renderer, newDrawTexture); // Restore default

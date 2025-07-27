@@ -28,9 +28,6 @@ link_directories(${SDL2_ttf_PATH}/lib/x64)
 
 # Add your executable
 add_executable(2DProject main.cpp
-        defs.h
-        init.cpp
-        init.h
         input.cpp
         input.h
         draw.cpp

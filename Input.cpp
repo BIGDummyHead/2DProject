@@ -7,7 +7,7 @@
 #include <iostream>
 #include <bits/algorithmfwd.h>
 
-#include "defs.h"
+#include "App.h"
 
 std::unordered_map<SDL_Keycode, bool> isDown;
 std::unordered_map<SDL_Keycode, bool> isUp;
@@ -159,11 +159,13 @@ Vector2 Input::getMousePosition() {
 
     Vector2 finalPosition;
 
+    const auto dimensions = App::getInstance()->getSettings()->windowDimensions;
+
     POINT cursorPoint;
     if(GetCursorPos(&cursorPoint)) {
         if(ScreenToClient(windowHandle, &cursorPoint)) {
-            finalPosition.x = clampLong(cursorPoint.x, 0, SCREEN_WIDTH);
-            finalPosition.y = clampLong(cursorPoint.y, 0, SCREEN_HEIGHT);
+            finalPosition.x = clampLong(cursorPoint.x, 0, dimensions.x);
+            finalPosition.y = clampLong(cursorPoint.y, 0, dimensions.y);
         }
     }
 

@@ -2,11 +2,11 @@
 #include <SDL.h>
 
 #include "Draw.h"
-#include "Init.h"
 #include "Input.h"
 #include "Game/GameObject.h"
 #include "Game/Sheet.h"
 #include <chrono>
+#include <SDL2/SDL_image.h>
 
 #include "UiObjectFont.h"
 #include "UiObjectFont.h"
@@ -29,41 +29,51 @@ Scene *getKnightGame() {
 
 int main() {
 
-    /*auto* device = AudioManager::getDefaultDevice();
+    auto* device = AudioManager::getDefaultDevice();
 
     auto* backgroundNoise = new Sound("tense.wav");
-    backgroundNoise->setVolume(.4f);
+    backgroundNoise->setVolume(.2f);
 
-    auto *noises = new std::vector<Sound *>();
-    noises->push_back(backgroundNoise);
 
-    std::thread([device, noises]() {
+    auto* noises = new SoundPack();
+    auto testingNoises = noises->addPack("testing");
+    testingNoises->push_back(backgroundNoise);
+
+    RenderSettings settings;
+    RenderResult results;
+
+    std::thread([device, noises, settings, &results]() {
         const HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
         if(FAILED(hr)) {
             exit(hr);
         }
 
-        ISimpleAudioVolume* ma_Controller = nullptr;
-        HRESULT renderResult = AudioManager::startRendering(device, *noises, ma_Controller);
+        HRESULT renderResult = AudioManager::startRendering(device, *noises, settings, &results);
+
         CoUninitialize();
 
     }).detach();
 
-    backgroundNoise->pause();*/
+    App::SCREEN_DIMENSIONS screenDimensions = {500, 500};
+    App::WINDOW_FLAGS winFlags = 0;
+    App::Settings appSettings(screenDimensions, winFlags);
 
     //Initialize the application
-    App myApp;
-    myApp.name = "Knight Game";
-    Init::initSDL(&myApp);
+    App myApp("Knight Game");
 
-    //create a drawtool from application
-    Draw drawTool;
+    const char* initResponse = myApp.initialize(&appSettings);
+    if(initResponse != nullptr) {
+        SDL_LogError(SDL_LOG_CATEGORY_SYSTEM, initResponse);
+        return -1;
+    }
+
+    auto drawTool = *Draw::getInstance();
 
     //Center of the Screen, can be used for rendering
 
     //Create a camera to use for later, this will control scrolling
-    const Camera cam(Vector2(SCREEN_WIDTH + 150, SCREEN_HEIGHT + 250), Vector2{0, 0});
+    const Camera cam(Vector2(appSettings.windowDimensions.x + 150, appSettings.windowDimensions.y + 250), Vector2{0, 0});
 
     const SceneInformation sceneInfo{&myApp, &drawTool};
 
@@ -79,7 +89,7 @@ int main() {
     Uint32 lastTick = -1;
     while (true) {
         const Uint32 thisTick = SDL_GetTicks();
-        if (thisTick - lastTick < 1000 / FPS) {
+        if (thisTick - lastTick < 1000 / 60) {
             continue;
         }
         lastTick = thisTick;
@@ -91,9 +101,10 @@ int main() {
         Input::pollInput();
 
 
-        //Loop over active scene objects.
+        //loop over each layer bucket
         for (unsigned int layer: GameObject::registeredLayers) {
 
+            //get game objects from their respective bucket
             for (auto currentGameObject: GameObject::layeredGameObjects[layer]) {
                 //Ensure this object is not null for drawing
                 if (currentGameObject == nullptr || !currentGameObject->getIsActive() || currentGameObject->transform == nullptr) {
@@ -220,7 +231,7 @@ int main() {
         SDL_RenderCopy(drawTool.getApp().renderer, text, nullptr, &textDest);
         */
 
-        //Render UI
+        //Render UI -- Comes after everything else...
         RayInfo rayInfo;
         const bool hasHitUI = Raycaster::castUI(&rayInfo);
         for (auto *uiObject: UiObject::getRegisteredUI()) {
@@ -263,7 +274,7 @@ int main() {
         drawTool.presentScene();
 
         //Give a delay between render
-        SDL_Delay(RENDER_DELAY_MS);
+        SDL_Delay(5);
     }
 
     //quit out of everything!!!!

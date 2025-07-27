@@ -65,6 +65,12 @@ public:
         sounds.push_back(this);
     }
 
+    ~Sound() {
+        delete fileFormat;
+        //DO NOT FREE AUDIO STREAM FORMAT, it may be used by the internal system
+        delete time;
+    }
+
     //Load data into the buffer from the file. Internal usage.
     HRESULT loadData(UINT32 numFramesAvailable, BYTE* bufferData, DWORD* audioFlags);
 

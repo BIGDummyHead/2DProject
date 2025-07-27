@@ -5,7 +5,6 @@
 #include "Knight_Game.h"
 
 #include "Player.h"
-#include "../../defs.h"
 #include "../../Game/Scene.h"
 
 Knight_Game* Knight_Game::instance;
@@ -27,9 +26,12 @@ void Knight_Game::onSceneLoad(SceneInformation sceneInfo) {
     //-Fonts-
     //-Audio (future)-
 
-    const Vector2 center(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    const auto dimensions = App::getInstance()->getSettings()->windowDimensions;
 
-    const Vector2 fov{ SCREEN_WIDTH + 150, SCREEN_HEIGHT + 250};
+
+    const Vector2 center(dimensions.x / 2, dimensions.y / 2);
+
+    const Vector2 fov{ dimensions.x + 150, dimensions.y + 250};
     camera = new Camera(fov, Vector2{0,0});
 
 //    auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);

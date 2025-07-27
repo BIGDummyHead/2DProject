@@ -5,8 +5,6 @@
 #include "AudioManager.h"
 
 
-
-
 IMMDeviceEnumerator *AudioManager::deviceEnumerator;
 
 bool AudioManager::logFail(const HRESULT &result, const char *logError) {
@@ -244,7 +242,7 @@ void AudioManager::mixSound(WAVEFORMATEX *as_Format, std::span<std::byte> mixerD
 }
 
 
-HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& soundPacker,
+HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack &soundPacker,
                                      const RenderSettings &settings, RenderResult *r_Result) {
     HRESULT result = usingDevice == nullptr || usingDevice->getDevice() == nullptr ? E_FAIL : S_OK;
 
@@ -277,8 +275,6 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
 
     constexpr REFERENCE_TIME hnsRequestedDuration = REFTIMES_PER_SEC;
 
-
-
     result = a_Client->Initialize(
         settings.shareMode,
         settings.streamFlags,
@@ -304,12 +300,11 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
         return result;
     }
 
-    ISimpleAudioVolume* a_Volume;
+    ISimpleAudioVolume *a_Volume;
     result = a_Client->GetService(__uuidof(ISimpleAudioVolume), reinterpret_cast<void **>(&a_Volume));
     if (logFail(result, "Failed to get an audio volume service")) {
         return result;
     }
-
 
 
     //The actual number of frames avaiable to write.
@@ -324,12 +319,14 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
     //num frames of padding per audio
     UINT32 numFramesPadding;
 
+    //set up results
     *r_Result = RenderResult();
     r_Result->audioClient = a_Client;
     r_Result->audioSystemFormat = as_Format;
     r_Result->renderClient = a_RenderClient;
     r_Result->masterVolumeController = a_Volume;
-    while (true) {
+
+    while (!r_Result->requestedStop()) {
         result = a_Client->GetCurrentPadding(&numFramesPadding);
         if (logFail(result, "Failed to get padding of the client")) {
             return result;
@@ -353,33 +350,32 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
         bool anySoundPlaying = false;
 
 
-        for(auto&[packName, sounds] : soundPacker.getPacks()) {
-
+        for (auto &[packName, sounds]: soundPacker.getPacks()) {
             //Do not use for range looped, since this way we remove items from the sound block when stopped.
-            for(size_t i = 0; i < sounds.size(); i++) {
-                auto* sound = sounds[i];
+            for (size_t i = 0; i < sounds->size(); i++) {
+                auto *sound = sounds->operator[](i);
 
                 // skip paused or stopped sounds
                 if (sound->paused()) {
                     continue;
                 }
 
-                if(sound->stopped()) {
-                    sounds.erase(sounds.begin() + i);
+                if (sound->stopped()) {
+                    sounds->erase(sounds->begin() + i);
                     i--;
                     continue;
                 }
 
                 //set the format before loading any data into here as this can handle the volume and other data.
-                if(!sound->getAudioSystemFormat()) {
+                if (!sound->getAudioSystemFormat()) {
                     sound->setAudioSystemFormat(as_Format);
                 }
 
 
-            std::vector soundData(bufferSizeBytes, std::byte{0});
-            DWORD currentDataSoundFlags = 0;
-            result = sound->loadData(numFramesAvailable, reinterpret_cast<BYTE *>(soundData.data()),
-                                     &currentDataSoundFlags);
+                std::vector soundData(bufferSizeBytes, std::byte{0});
+                DWORD currentDataSoundFlags = 0;
+                result = sound->loadData(numFramesAvailable, reinterpret_cast<BYTE *>(soundData.data()),
+                                         &currentDataSoundFlags);
 
                 if (logFail(result, "Failed to load data into sound data")) {
                     return result;
@@ -388,14 +384,14 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
                 if (currentDataSoundFlags == AUDCLNT_BUFFERFLAGS_SILENT)
                     continue;
 
-            anySoundPlaying = true;
-            sound->addTime(sleepMs);
+                anySoundPlaying = true;
+                sound->addTime(sleepMs);
 
-            mixSound(as_Format, mixerData, soundData, sound->getVolume());
-        }
+                mixSound(as_Format, mixerData, soundData, sound->getVolume());
+            }
 
             //only render sound when there was sound detected.
-            if(anySoundPlaying) {
+            if (anySoundPlaying) {
                 constexpr DWORD flags = 0;
                 std::memcpy(bufferData, mixerData.data(), bufferSizeBytes);
 
@@ -405,8 +401,6 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
                 }
             }
         }
-
-
 
         Sleep(sleepMs);
     }
@@ -419,6 +413,7 @@ HRESULT AudioManager::startRendering(const Device *usingDevice, SoundPack& sound
     CoTaskMemFree(as_Format);
     a_Client->Release();
 
+    //print is only called when failed
     logFail(result, "Failed to stop the audio client");
 
     return result;
