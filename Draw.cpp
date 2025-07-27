@@ -2,7 +2,7 @@
 // Created by shawn on 5/16/2025.
 //
 
-#include "draw.h"
+#include "Draw.h"
 #include <iostream>
 #include <SDL_log.h>
 #include <SDL_render.h>
@@ -16,24 +16,29 @@
 #include "Game/Physics/Raycaster.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 
-App draw::getApp() const {
-    if (drawingFor == nullptr) {
-        throw std::runtime_error("During draw, app was found to be a null pointer.");
-    }
+Draw* Draw::toolInstance;
+SDL_Renderer* Draw::renderer;
 
-    return *drawingFor;
+Draw *Draw::getInstance() {
+    return toolInstance;
 }
 
-void draw::prepareScene() const {
-    SDL_SetRenderDrawColor(getApp().renderer, 96, 128, 255, 255);
-    SDL_RenderClear(getApp().renderer);
+SDL_Renderer *Draw::getRenderer() {
+    return renderer;
 }
 
-void draw::presentScene() const {
-    SDL_RenderPresent(getApp().renderer);
+
+
+void Draw::prepareScene() const {
+    SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
+    SDL_RenderClear(renderer);
 }
 
-SDL_Texture *draw::loadTexture(const std::string &filePath) {
+void Draw::presentScene() const {
+    SDL_RenderPresent(renderer);
+}
+
+SDL_Texture *Draw::loadTexture(const std::string &filePath) {
     if (loadedTextures.contains(filePath)) {
         SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%s was already loaded.", filePath.c_str());
         return loadedTextures.at(filePath);
@@ -41,7 +46,7 @@ SDL_Texture *draw::loadTexture(const std::string &filePath) {
 
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filePath.c_str());
 
-    SDL_Texture *texture = IMG_LoadTexture(getApp().renderer, filePath.c_str());
+    SDL_Texture *texture = IMG_LoadTexture(renderer, filePath.c_str());
     if (!texture) {
         throw std::runtime_error("Failed to load texture: " + filePath);
     }
@@ -52,17 +57,17 @@ SDL_Texture *draw::loadTexture(const std::string &filePath) {
 }
 
 //Draws a texture at a given position. Set onlyCopy as a position from the texture to copy.
-SDL_Rect draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect *copySrc) const {
+SDL_Rect Draw::blit(SDL_Texture *texture, const Vector2 position, const SDL_Rect *copySrc) const {
     SDL_Rect dest = position.asRect();
 
     SDL_QueryTexture(texture, nullptr, nullptr, &dest.w, &dest.h);
 
-    SDL_RenderCopy(getApp().renderer, texture, copySrc, &dest);
+    SDL_RenderCopy(renderer, texture, copySrc, &dest);
 
     return dest;
 }
 
-SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow,
+SDL_Rect Draw::blitSheet(SDL_Texture *texture, const int rows, const int columns, const int renderRow,
                          const int renderCol, const Vector2 renderPosition, const Vector2 scalingFactor) const {
     int textWidth = 0;
     int textHeight = 0;
@@ -92,18 +97,17 @@ SDL_Rect draw::blitSheet(SDL_Texture *texture, const int rows, const int columns
 
 
     // Render the sprite
-    SDL_RenderCopy(getApp().renderer, texture, &srcRect, &renderRectPosition);
+    SDL_RenderCopy(renderer, texture, &srcRect, &renderRectPosition);
 
     return renderRectPosition;
 }
 
-void draw::drawLine(const Vector2 &from, const Vector2 &to) const {
-    SDL_RenderDrawLineF(getApp().renderer, from.x, from.y, to.x, to.y);
+void Draw::drawLine(const Vector2 &from, const Vector2 &to) const {
+    SDL_RenderDrawLineF(renderer, from.x, from.y, to.x, to.y);
 }
 
-void draw::drawGradientLine(const Vector2 start, const Vector2 end, const double totalDistance, const Uint8 r,
+void Draw::drawGradientLine(const Vector2 start, const Vector2 end, const double totalDistance, const Uint8 r,
                             const Uint8 g, const Uint8 b, const double intensity) const {
-    SDL_Renderer *renderer = getApp().renderer;
 
     const Vector2 delta = end - start;
     const double lineLength = delta.magnitude();
@@ -143,15 +147,14 @@ void draw::drawGradientLine(const Vector2 start, const Vector2 end, const double
 }
 
 static SDL_Texture *lightmap;
-std::vector<LightSource> draw::lightSources;
+std::vector<LightSource> Draw::lightSources;
 
-void draw::addLightSource(const LightSource &source) {
+void Draw::addLightSource(const LightSource &source) {
     lightSources.push_back(source);
 }
 
 
-SDL_Texture *draw::startLightMap() const {
-    SDL_Renderer *renderer = getApp().renderer;
+SDL_Texture *Draw::startLightMap() const {
 
     if (!lightmap) {
         //create a simple lightmap texture
@@ -171,8 +174,7 @@ SDL_Texture *draw::startLightMap() const {
     return lightmap;
 }
 
-void draw::endLightMap(SDL_Texture *newDrawTexture) const {
-    SDL_Renderer *renderer = getApp().renderer;
+void Draw::endLightMap(SDL_Texture *newDrawTexture) const {
     //add some base light into this.
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 25);
     constexpr SDL_Rect screenRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -181,8 +183,7 @@ void draw::endLightMap(SDL_Texture *newDrawTexture) const {
     SDL_SetRenderTarget(renderer, newDrawTexture); // Restore default
 }
 
-void draw::drawLight(LightSource &light) const {
-    SDL_Renderer *renderer = getApp().renderer;
+void Draw::drawLight(LightSource &light) const {
 
     //check if dynamic or not initalized
     if (light.isDynamic() || !light.hasDrawn) {
@@ -255,13 +256,13 @@ void draw::drawLight(LightSource &light) const {
                        light.indices.size());
 }
 
-void draw::drawLights() const {
+void Draw::drawLights() const {
     for (auto light: lightSources) {
         drawLight(light);
     }
 }
 
-SDL_Texture* draw::createTextTexture(TextFont& uiFont, const char* text) {
+SDL_Texture* Draw::createTextTexture(const TextFont& uiFont, const char* text) const {
     //TTF_Font* font = TTF_OpenFont(R"(assets\fonts\font.ttf)", 24);
     TTF_Font *font = TTF_OpenFont(uiFont.getPath(), uiFont.size);
     if (!font) {
@@ -288,7 +289,6 @@ SDL_Texture* draw::createTextTexture(TextFont& uiFont, const char* text) {
     }
 
 
-    SDL_Renderer *renderer = getApp().renderer;
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
 
     if (!texture) {

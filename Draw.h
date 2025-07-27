@@ -4,7 +4,6 @@
 
 #ifndef DRAW_H
 #define DRAW_H
-#include "structs.h"
 #include <map>
 #include <SDL_render.h>
 #include <vector>
@@ -12,20 +11,29 @@
 #include "Vector2.h"
 #include "Game/LightSource.h"
 #include "TextFont.h"
+#include "App.h"
 
 //Class to help with drawing features and scene rendering
-class draw {
+class Draw {
 
 private:
-    App* drawingFor;
     std::map<std::string, SDL_Texture*> loadedTextures;
+    static Draw* toolInstance;
+    static SDL_Renderer* renderer;
 
 public:
-    [[nodiscard]] App getApp() const;
+
+    static SDL_Renderer* getRenderer();
+    static Draw* getInstance();
 
 
-    explicit draw(App* drawingFor) {
-        this->drawingFor = drawingFor;
+    explicit Draw() {
+        toolInstance = this;
+        renderer = App::getInstance()->getRenderer();
+        if(!renderer) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not allocate a renderer for drawing tool");
+            exit(-1);
+        }
     }
 
     void prepareScene() const;
@@ -54,7 +62,7 @@ public:
     void drawGradientLine(Vector2 start, Vector2 end, double totalDistance, Uint8 r, Uint8 g, Uint8 b, double intensity) const;
 
     //[[nodiscard]] SDL_Texture* createTextTexture(UiFont& uiFont, const char* text) const;
-    SDL_Texture* createTextTexture(TextFont& uiFont, const char* text);
+    SDL_Texture* createTextTexture(const TextFont& uiFont, const char* text) const;
 };
 
 

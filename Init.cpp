@@ -2,11 +2,11 @@
 // Created by shawn on 5/16/2025.
 //
 
-#include "init.h"
+#include "Init.h"
 
 #include "SDL_ttf/include/SDL_ttf.h"
 
-void init::initSDL(App& app) {
+void Init::initSDL(App* app) {
     constexpr int renderFlag = SDL_RENDERER_ACCELERATED;
     constexpr int windowFlag = 0;
 
@@ -15,17 +15,20 @@ void init::initSDL(App& app) {
         exit(-1);
     }
 
-    if(app.name == nullptr) {
+    if(app->name == nullptr) {
         printf("Please provide an application name before initializing");
         exit(-1);
     }
 
-    app.window = SDL_CreateWindow(app.name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlag);
+    auto* window =
+        SDL_CreateWindow(app->name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlag);
 
-    if(!app.window) {
+    if(!window) {
         printf("SDL Failed to open %d x %d window: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
         exit(-1);
     }
+
+    app->setWindow(window);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
@@ -39,12 +42,14 @@ void init::initSDL(App& app) {
         exit(-1);
     }
 
-    app.renderer = SDL_CreateRenderer(app.window, -1, renderFlag);
+    auto* renderer = SDL_CreateRenderer(window, -1, renderFlag);
 
-    if(!app.renderer) {
+    if(!renderer) {
         printf("Failed to create the renderer: %s\n", SDL_GetError());
         exit(-1);
     }
+
+    app->setRenderer(renderer);
 }
 
 

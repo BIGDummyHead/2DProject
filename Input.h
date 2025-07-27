@@ -28,7 +28,7 @@ enum Direction {
 };
 
 //Class to deal with input
-class input {
+class Input {
 
 private:
     static DWORD currentPID;

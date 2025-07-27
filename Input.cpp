@@ -2,7 +2,7 @@
 // Created by shawn on 5/16/2025.
 //
 
-#include "input.h"
+#include "Input.h"
 #include <unordered_map>
 #include <iostream>
 #include <bits/algorithmfwd.h>
@@ -15,11 +15,11 @@ std::unordered_map<SDL_Keycode, bool> holding;
 std::unordered_map<Uint8, MouseState> mouseState;
 std::unordered_map<Uint8, MouseState> lastMouseState;
 
-DWORD input::currentPID = 0;
-HWND input::windowHandle = nullptr;
+DWORD Input::currentPID = 0;
+HWND Input::windowHandle = nullptr;
 
 
-void input::onKeyDown(const SDL_Keycode pressed) {
+void Input::onKeyDown(const SDL_Keycode pressed) {
     if(const auto iterVal = isDown.find(pressed); iterVal == isDown.end()) {
         //add the key here as it does not exist
         isDown[pressed] = true;
@@ -32,7 +32,7 @@ void input::onKeyDown(const SDL_Keycode pressed) {
 
 
 }
-void input::onKeyUp(const SDL_Keycode released) {
+void Input::onKeyUp(const SDL_Keycode released) {
     if(const auto iterVal = isUp.find(released); iterVal == isUp.end()) {
         isUp[released] = true;
         return;
@@ -43,24 +43,24 @@ void input::onKeyUp(const SDL_Keycode released) {
     isDown[released] = false;
 
 }
-void input::onKeyHeld(const SDL_Keycode pressing) {
+void Input::onKeyHeld(const SDL_Keycode pressing) {
 
     isDown[pressing] = false;
     holding[pressing] = true;
 
 }
-bool input::isKeyDown(SDL_Keycode key) {
+bool Input::isKeyDown(SDL_Keycode key) {
     const auto find = isDown.find(key);
     return find != isDown.end() && isDown[key];
 }
-bool input::isKeyUp(const SDL_Keycode key) {
+bool Input::isKeyUp(const SDL_Keycode key) {
     const auto find = isUp.find(key);
     return find == isUp.end() || isUp[key];
 }
-bool input::isKeyHeld(const SDL_Keycode key) {
+bool Input::isKeyHeld(const SDL_Keycode key) {
     return isKeyDown(key) || holding.contains(key) && holding[key];
 }
-void input::doKeyCheck(const SDL_Event& event) {
+void Input::doKeyCheck(const SDL_Event& event) {
 
     //check if isDown contains the keycode
 
@@ -77,12 +77,12 @@ void input::doKeyCheck(const SDL_Event& event) {
     }
 }
 
-void input::updateMouseInputState(const Uint8 &key, const bool& down) {
+void Input::updateMouseInputState(const Uint8 &key, const bool& down) {
     mouseState[key] = down ? Down : Up;
 }
 
 
-MouseState input::getMouseInputState(const MouseButton &mouseButton) {
+MouseState Input::getMouseInputState(const MouseButton &mouseButton) {
 
     Uint8 key;
     switch (mouseButton) {
@@ -115,7 +115,7 @@ MouseState input::getMouseInputState(const MouseButton &mouseButton) {
 
 
 //For internal use, updates the input states.
-void input::pollInput() {
+void Input::pollInput() {
     SDL_Event event;
 
     while(SDL_PollEvent(&event)) {
@@ -141,7 +141,7 @@ void input::pollInput() {
     }
 }
 
-long input::clampLong( const long& val,  const long& min, const long& max) {
+long Input::clampLong( const long& val,  const long& min, const long& max) {
 
     if(val < min)
         return min;
@@ -151,7 +151,7 @@ long input::clampLong( const long& val,  const long& min, const long& max) {
 }
 
 
-Vector2 input::getMousePosition() {
+Vector2 Input::getMousePosition() {
 
     if(!windowHasFocus()) {
         return Vector2{ 0, 0 };
@@ -172,7 +172,7 @@ Vector2 input::getMousePosition() {
 
 
 //SOURCE: https://stackoverflow.com/questions/11711417/get-hwnd-by-process-id-c
-BOOL CALLBACK input::EnumWindowsProcMy(HWND hwnd, LPARAM lParam) {
+BOOL CALLBACK Input::EnumWindowsProcMy(HWND hwnd, LPARAM lParam) {
     DWORD lpdwProcessId;
     GetWindowThreadProcessId(hwnd,&lpdwProcessId);
     if(lpdwProcessId==lParam)
@@ -183,7 +183,7 @@ BOOL CALLBACK input::EnumWindowsProcMy(HWND hwnd, LPARAM lParam) {
     return TRUE;
 }
 
-bool input::windowHasFocus() {
+bool Input::windowHasFocus() {
 
         currentPID = GetCurrentProcessId(); //retrieve the current process id
         EnumWindows(EnumWindowsProcMy, currentPID);
@@ -193,7 +193,7 @@ bool input::windowHasFocus() {
 
 
 
-double input::getMovement(const Direction &direction) {
+double Input::getMovement(const Direction &direction) {
 
     //check if any up/right keys are being held per direction
     const bool leftSideAr = direction == Vertical ? isKeyHeld(SDLK_w) || isKeyHeld(SDLK_UP) : isKeyHeld(SDLK_d) || isKeyHeld(SDLK_RIGHT);

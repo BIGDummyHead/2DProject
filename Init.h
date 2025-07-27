@@ -9,17 +9,17 @@
 #include <SDL.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
-#include "structs.h"
 #include <iostream>
 #include "SDL_image/include/SDL2/SDL_image.h"
+#include "App.h"
 
 #include "defs.h"
 
 //SDL Main Initialization logic
-class init {
+class Init {
 public:
 
-    static void initSDL(App& app);
+    static void initSDL(App* app);
 
 
 };
