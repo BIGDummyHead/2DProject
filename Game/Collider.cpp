@@ -37,6 +37,11 @@ Vector2 Collider::createBoxFromTexture(const Texture &text) {
     return v;
 }
 
+Vector2 Collider::getCenter() const {
+    return drawCenter + offset;
+}
+
+
 
 bool Collider::isColliding(const Collider& other, Vector2& push) const {
     // Get the bounds of this collider
@@ -59,10 +64,10 @@ bool Collider::isColliding(const Collider& other, Vector2& push) const {
         //2nd algo coming from the bottom
         //when coming from the top do the following: thisBottomRight.y - otherTopLeft.y
         //when coming from the bottom do the following: otherBottomRight.y - thisTopLeft.y
-        push.y = center.y < other.center.y ? (thisBottomRight.y - otherTopLeft.y) * -1: (otherBottomRight.y - thisTopLeft.y);
+        push.y = getCenter().y < other.getCenter().y ? (thisBottomRight.y - otherTopLeft.y) * -1: (otherBottomRight.y - thisTopLeft.y);
 
         //algorithm to get the pushforce for X as well
-        push.x = center.x > other.center.x ? otherBottomRight.x - thisTopLeft.x : otherTopLeft.x - thisBottomRight.x;
+        push.x = getCenter().x > other.getCenter().x ? otherBottomRight.x - thisTopLeft.x : otherTopLeft.x - thisBottomRight.x;
 
         // test which type of collision horizontal or vertical
         if (fabs(push.x) > fabs(push.y)) {
@@ -79,19 +84,19 @@ bool Collider::isColliding(const Collider& other, Vector2& push) const {
 }
 
 Vector2 Collider::getBottomLeft() const {
-    return Vector2{center.x - width, center.y + height};
+    return Vector2{getCenter().x - width, getCenter().y + height};
 }
 
 Vector2 Collider::getBottomRight() const {
-    return Vector2{center.x + width, center.y + height};
+    return Vector2{getCenter().x + width, getCenter().y + height};
 }
 
 Vector2 Collider::getTopLeft() const {
-    return Vector2{center.x - width, center.y - height};
+    return Vector2{getCenter().x - width, getCenter().y - height};
 }
 
 Vector2 Collider::getTopRight() const {
-    return Vector2{center.x + width, center.y - height};
+    return Vector2{getCenter().x + width, getCenter().y - height};
 }
 
 

@@ -27,7 +27,7 @@ int TileMap::addTile(const ROW_COLUMN &position, const bool &includeCollider) {
     return indexing - 1;
 }
 
-void TileMap::createMap(Vector2 startingPosition, const std::string &csvFilePath) {
+std::vector<GameObject*>  TileMap::createMap(Vector2 startingPosition, const std::string &csvFilePath) {
     std::vector<std::vector<int> > tileMapVector;
 
     std::ifstream csvFile(csvFilePath);
@@ -45,12 +45,13 @@ void TileMap::createMap(Vector2 startingPosition, const std::string &csvFilePath
         tileMapVector.push_back(row);
     }
 
-    createMap(startingPosition, tileMapVector);
+    return createMap(startingPosition, tileMapVector);
 }
 
 
-void TileMap::createMap(Vector2 startingPosition, const std::vector<std::vector<int> > &data) {
+std::vector<GameObject*>  TileMap::createMap(Vector2 startingPosition, const std::vector<std::vector<int> > &data) {
 
+    std::vector<GameObject*> tilesCreated;
     const float repeatX = startingPosition.x;
 
     for (size_t r = 0; r < data.size(); r++) {
@@ -80,12 +81,16 @@ void TileMap::createMap(Vector2 startingPosition, const std::vector<std::vector<
                 mapObj->collider = collider;
             }
 
+            tilesCreated.push_back(mapObj);
+
             startingPosition.x += individualTileWidth;
         }
 
         startingPosition.x = repeatX;
         startingPosition.y += individualTileHeight;
     }
+
+    return tilesCreated;
 }
 
 

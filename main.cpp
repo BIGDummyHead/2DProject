@@ -77,14 +77,19 @@ int main() {
     auto tMap = TileMap("testing_map.png", {11, 11});
 
     // Row 0
-    tMap.addTile({0, 0}, true); // Empty
+    tMap.addTile({0, 0}, false); // Empty
     tMap.addTile({7, 0}, true); // Dirt tile
-    tMap.addTile({7, 0}, true); // Stone tile
-    tMap.addTile({7, 0}, true); // Special block
+    tMap.addTile({4, 1}, false); // Special block
 
 
-    tMap.createMap({0, 0}, "tilemap.csv");
+    tMap.createMap({-300, -300}, "ex_tile.csv");
 
+
+    //TODO: Solve issue with ray casted lighting not working correctly.
+    Vector2 center = {appSettings.windowDimensions.x / 2, appSettings.windowDimensions.y / 2};
+    LightSource lSource(center, 300, 100, 0, 360);
+    lSource.createRayCastedShadowing = false;
+    drawTool.lightSources.push_back(lSource);
 
     Uint32 lastTick = -1;
     while (true) {
@@ -125,13 +130,7 @@ int main() {
                         colCenter.x += currentGameObject->collider->width;
                         colCenter.y += currentGameObject->collider->height;
 
-                        currentGameObject->collider->center = colCenter;
-
-                        std::cout << "Top left: " << currentGameObject->collider->getTopLeft().toString() << std::endl;
-                        std::cout << "Top right: " << currentGameObject->collider->getTopRight().toString() << std::endl;
-                        std::cout << "Bottom left: " << currentGameObject->collider->getBottomLeft().toString() << std::endl;
-                        std::cout << "Bottom right: " << currentGameObject->collider->getBottomRight().toString() << std::endl;
-
+                        currentGameObject->collider->drawCenter = colCenter;
 
                         auto coroutineGameObjects =
                                 GameObject::getGameObjects(false);
@@ -151,7 +150,7 @@ int main() {
                             Vector2 comparingDrawnAt = comparingObj->transform->getPosition() - cam.transform->getPosition();
                             comparingDrawnAt.x += comparingObj->collider->width;
                             comparingDrawnAt.y += comparingObj->collider->height;
-                            comparingObj->collider->center = comparingDrawnAt;
+                            comparingObj->collider->drawCenter = comparingDrawnAt;
 
 
                             //dynamic or heaviest
@@ -212,7 +211,7 @@ int main() {
                         currentGameObject->texture->render(drawnAt);
                     }
 
-                    if (currentGameObject->collider)
+                    if (appSettings.debug && currentGameObject->collider)
                         currentGameObject->collider->drawColliderBox();
 
 
@@ -225,7 +224,7 @@ int main() {
 
 
         //Lights:
-        /*SDL_Texture *lightmap = drawTool.startLightMap();
+        SDL_Texture *lightmap = drawTool.startLightMap();
 
 
         drawTool.drawLights();
@@ -234,7 +233,7 @@ int main() {
 
         // Set multiply (modulate) blending mode so black hides, white reveals
         SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
-        SDL_RenderCopy(myApp.getRenderer(), lightmap, nullptr, nullptr);*/
+        SDL_RenderCopy(myApp.getRenderer(), lightmap, nullptr, nullptr);
 
 
         //Implementation of a texxt component

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "GameObject.h"
 #include "Texture.h"
 #include "../Draw.h"
 
@@ -124,10 +125,10 @@ public:
     TileInfo getTile(const int &index);
 
     //Draw tiles based a CSV file.
-    void createMap(Vector2 startingPosition, const std::string &csvFilePath);
+    std::vector<GameObject*> createMap(Vector2 startingPosition, const std::string &csvFilePath);
 
     //Draw tiles based on Row and Columns definition. Recommended to use drawTile(csvFILE);
-    void createMap(Vector2 startingPosition, const std::vector<std::vector<int> > &data);
+    std::vector<GameObject*>  createMap(Vector2 startingPosition, const std::vector<std::vector<int> > &data);
 };
 
 

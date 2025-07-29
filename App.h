@@ -37,6 +37,7 @@ public:
             }
         };
 
+        bool debug = false;
 
         //Settings for WASAPI rendering, must be included to have audio.
         mutable RenderSettings* audioRenderingSettings = nullptr;

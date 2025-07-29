@@ -17,7 +17,9 @@ class Collider {
 public:
     double width;
     double height;
-    Vector2 center;
+    Vector2 drawCenter;
+    Vector2 offset;
+
     bool isStatic = true;
 
     double mass = 1;
@@ -33,6 +35,8 @@ public:
     explicit Collider(const SDL_Rect& from, const bool isStatic = true) : Collider(from.w, from.h, isStatic) {
 
     }
+
+    Vector2 getCenter() const;
 
     //Copy over an existing collider
     Collider(const Collider& ref) : Collider(ref.width, ref.height, ref.isStatic) {
