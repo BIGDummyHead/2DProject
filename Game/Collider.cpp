@@ -48,9 +48,13 @@ bool Collider::isColliding(const Collider& other, Vector2& push) const {
     const Vector2 otherBottomRight = other.getBottomRight();
 
     // Check for overlap in both axes
-    const bool hasCollision =  thisTopLeft.x < otherBottomRight.x && thisBottomRight.x > otherTopLeft.x && thisTopLeft.y < otherBottomRight.y && thisBottomRight.y > otherTopLeft.y;
-
+    const bool hasCollision =
+            thisTopLeft.x < otherBottomRight.x &&
+            thisBottomRight.x > otherTopLeft.x &&
+            thisTopLeft.y < otherBottomRight.y &&
+            thisBottomRight.y > otherTopLeft.y;
     if(hasCollision) {
+
         //1st algo coming from the top
         //2nd algo coming from the bottom
         //when coming from the top do the following: thisBottomRight.y - otherTopLeft.y
@@ -95,19 +99,22 @@ Vector2 Collider::getSize() const {
     return Vector2{width, height};
 }
 
-void Collider::drawColliderBox(SDL_Renderer* renderer, const Vector2& drawnAt) const {
+void Collider::drawColliderBox() const {
+    // Use your bounding box directly instead of drawnAt
 
-    const Vector2 colliderSize = getSize();
+    const Vector2 topLeft = getTopLeft();
+    const Vector2 bottomRight = getBottomRight();
 
     SDL_Rect rect;
-    rect.x = static_cast<int>(drawnAt.x - (colliderSize.x )); // Offset by half the width
-    rect.y = static_cast<int>(drawnAt.y - (colliderSize.y )); // Offset by half the height
-    rect.w = static_cast<int>(colliderSize.x * 2);
-    rect.h = static_cast<int>(colliderSize.y * 2);
+    rect.x = static_cast<int>(topLeft.x);
+    rect.y = static_cast<int>(topLeft.y);
+    rect.w = static_cast<int>(bottomRight.x - topLeft.x);
+    rect.h = static_cast<int>(bottomRight.y - topLeft.y);
 
-    // Set the draw color (e.g., green for the rectangle)
+    auto* renderer = Draw::getRenderer();
+    // Set draw color (green)
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 
-    // Draw the rectangle
     SDL_RenderDrawRect(renderer, &rect);
 }
+

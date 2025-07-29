@@ -16,6 +16,7 @@
 #include "Game/Camera.h"
 #include "Game/Collider.h"
 #include "Game/Scene.h"
+#include "Game/TileMap.h"
 #include "Game/Physics/Raycaster.h"
 #include "IP_Games/Knight/Knight_Game.h"
 
@@ -29,7 +30,6 @@ Scene *getKnightGame() {
 }
 
 int main() {
-
     App::SCREEN_DIMENSIONS screenDimensions = {500, 500};
     App::WINDOW_FLAGS winFlags = 0;
     App::Settings appSettings(screenDimensions, winFlags);
@@ -40,8 +40,8 @@ int main() {
     //Initialize the application
     App myApp("Knight Game");
 
-    const char* initResponse = myApp.initialize(&appSettings);
-    if(initResponse != nullptr) {
+    const char *initResponse = myApp.initialize(&appSettings);
+    if (initResponse != nullptr) {
         SDL_LogError(SDL_LOG_CATEGORY_SYSTEM, initResponse);
         return -1;
     }
@@ -61,7 +61,8 @@ int main() {
     //Center of the Screen, can be used for rendering
 
     //Create a camera to use for later, this will control scrolling
-    const Camera cam(Vector2(appSettings.windowDimensions.x + 150, appSettings.windowDimensions.y + 250), Vector2{0, 0});
+    const Camera cam(Vector2(appSettings.windowDimensions.x + 150, appSettings.windowDimensions.y + 250),
+                     Vector2{0, 0});
 
     const SceneInformation sceneInfo{&myApp, &drawTool};
 
@@ -72,6 +73,17 @@ int main() {
     Scene::loadScene(kGame, sceneInfo);
 
     //    Scene::loadFirstAvalScene(sceneInfo);
+
+    auto tMap = TileMap("testing_map.png", {11, 11});
+
+    // Row 0
+    tMap.addTile({0, 0}, true); // Empty
+    tMap.addTile({7, 0}, true); // Dirt tile
+    tMap.addTile({7, 0}, true); // Stone tile
+    tMap.addTile({7, 0}, true); // Special block
+
+
+    tMap.createMap({0, 0}, "tilemap.csv");
 
 
     Uint32 lastTick = -1;
@@ -91,11 +103,11 @@ int main() {
 
         //loop over each layer bucket
         for (unsigned int layer: GameObject::registeredLayers) {
-
             //get game objects from their respective bucket
             for (auto currentGameObject: GameObject::layeredGameObjects[layer]) {
                 //Ensure this object is not null for drawing
-                if (currentGameObject == nullptr || !currentGameObject->getIsActive() || currentGameObject->transform == nullptr) {
+                if (currentGameObject == nullptr || !currentGameObject->getIsActive() || currentGameObject->transform ==
+                    nullptr) {
                     continue;
                 }
 
@@ -109,25 +121,37 @@ int main() {
 
                     //test collision before updating position
                     if (currentGameObject->collider != nullptr) {
-                        currentGameObject->collider->center = drawnAt;
+                        Vector2 colCenter = drawnAt;
+                        colCenter.x += currentGameObject->collider->width;
+                        colCenter.y += currentGameObject->collider->height;
+
+                        currentGameObject->collider->center = colCenter;
+
+                        std::cout << "Top left: " << currentGameObject->collider->getTopLeft().toString() << std::endl;
+                        std::cout << "Top right: " << currentGameObject->collider->getTopRight().toString() << std::endl;
+                        std::cout << "Bottom left: " << currentGameObject->collider->getBottomLeft().toString() << std::endl;
+                        std::cout << "Bottom right: " << currentGameObject->collider->getBottomRight().toString() << std::endl;
 
 
                         auto coroutineGameObjects =
-                            GameObject::getGameObjects(false);
+                                GameObject::getGameObjects(false);
 
-                        for(int coIter = 0; coroutineGameObjects; coIter++) {
+                        for (int coIter = 0; coroutineGameObjects; coIter++) {
                             auto comparingObj = coroutineGameObjects();
 
                             //check if same object, if the collider is null, both collider's are static, and or the other is in the render view, if yes continue.
-                            if (comparingObj == currentGameObject || comparingObj->collider == nullptr || currentGameObject->collider->
+                            if (comparingObj == currentGameObject || comparingObj->collider == nullptr ||
+                                currentGameObject->collider->
                                 isStatic && comparingObj->collider->isStatic || !cam.isInRenderView(
                                     comparingObj->transform->getPosition()))
                                 continue;
 
 
                             //determine the center of this collider
-                            comparingObj->collider->center =
-                                    comparingObj->transform->getPosition() - cam.transform->getPosition();
+                            Vector2 comparingDrawnAt = comparingObj->transform->getPosition() - cam.transform->getPosition();
+                            comparingDrawnAt.x += comparingObj->collider->width;
+                            comparingDrawnAt.y += comparingObj->collider->height;
+                            comparingObj->collider->center = comparingDrawnAt;
 
 
                             //dynamic or heaviest
@@ -136,7 +160,8 @@ int main() {
                             //static or lightest
                             GameObject *right = nullptr;
 
-                            if (comparingObj->collider->isStatic == false && currentGameObject->collider->isStatic == false) {
+                            if (comparingObj->collider->isStatic == false && currentGameObject->collider->isStatic ==
+                                false) {
                                 //both are dynamic
 
                                 //choose the fastest and heaviest object
@@ -180,12 +205,16 @@ int main() {
                         }
 
                         //debug: draw the collider box so we can see it
-                        currentGameObject->collider->drawColliderBox(Draw::getRenderer(), drawnAt);
                     }
 
                     //render the object
-                    if (currentGameObject->texture != nullptr)
+                    if (currentGameObject->texture != nullptr) {
                         currentGameObject->texture->render(drawnAt);
+                    }
+
+                    if (currentGameObject->collider)
+                        currentGameObject->collider->drawColliderBox();
+
 
                     currentGameObject->onRender(drawnAt);
                 }
@@ -196,7 +225,7 @@ int main() {
 
 
         //Lights:
-        SDL_Texture *lightmap = drawTool.startLightMap();
+        /*SDL_Texture *lightmap = drawTool.startLightMap();
 
 
         drawTool.drawLights();
@@ -205,7 +234,7 @@ int main() {
 
         // Set multiply (modulate) blending mode so black hides, white reveals
         SDL_SetTextureBlendMode(lightmap, SDL_BLENDMODE_MOD);
-        SDL_RenderCopy(myApp.getRenderer(), lightmap, nullptr, nullptr);
+        SDL_RenderCopy(myApp.getRenderer(), lightmap, nullptr, nullptr);*/
 
 
         //Implementation of a texxt component

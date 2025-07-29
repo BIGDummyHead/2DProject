@@ -44,7 +44,7 @@ public:
 
     [[nodiscard]] Vector2 getSize() const;
 
-    void drawColliderBox(SDL_Renderer* renderer, const Vector2& drawnAt) const;
+    void drawColliderBox() const;
 
     [[nodiscard]]Vector2 getTopLeft() const;
     [[nodiscard]]Vector2 getTopRight() const;
