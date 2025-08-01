@@ -98,6 +98,8 @@ add_executable(2DProject main.cpp
         Game/TileLayer.h
         Game/TileTexture.h
         FileHelper.h
+        Game/LightSourceComponent.cpp
+        Game/LightSourceComponent.h
 )
 
 # Link against SDL2 libraries
