@@ -24,11 +24,19 @@ public:
 
     double mass = 1;
 
+    Vector2 scale;
+
     //Create a default collider
-    Collider(const double& width, const double& height, const bool isStatic = true) {
+    Collider(const double& width, const double& height, const bool isStatic = true) :
+    Collider(width, height, {1,1}, isStatic) {
+
+    }
+
+    Collider(const double& width, const double& height, const Vector2& scale, const bool isStatic = true) {
         this->width = fabs( width );
         this->height = fabs( height );
         this->isStatic = isStatic;
+        this->scale = scale;
     }
 
     //Create a collider from a SDL_Rect object
