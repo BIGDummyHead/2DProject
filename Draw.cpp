@@ -29,7 +29,7 @@ SDL_Renderer *Draw::getRenderer() {
 
 
 void Draw::prepareScene() const {
-    SDL_SetRenderDrawColor(renderer, 96, 128, 255, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 }
 
@@ -146,9 +146,9 @@ void Draw::drawGradientLine(const Vector2 start, const Vector2 end, const double
 }
 
 static SDL_Texture *lightmap;
-std::vector<LightSource> Draw::lightSources;
+std::vector<LightSource*> Draw::lightSources;
 
-void Draw::addLightSource(const LightSource &source) {
+void Draw::addLightSource(LightSource* source) {
     lightSources.push_back(source);
 }
 
@@ -188,49 +188,57 @@ void Draw::endLightMap(SDL_Texture *newDrawTexture) const {
     SDL_SetRenderTarget(renderer, newDrawTexture); // Restore default
 }
 
-void Draw::drawLight(LightSource &light) const {
+void Draw::drawLight(LightSource* light) const {
 
     //check if dynamic or not initalized
-    if (light.isDynamic() || !light.hasDrawn) {
+    if (light->isDynamic() || !light->hasDrawn) {
+
+        light->hasDrawn = true;
+        Vector2 offset = Camera::mainCamera != nullptr ? Camera::mainCamera->transform->getPosition() : Vector2{0,0};
+        //offset = {0,0};
+
         // more rays = smoother cone
-        const double centerAngle = light.angle * M_PI / 180.0;
+        const double centerAngle = light->angle * M_PI / 180.0;
 
         // Calculate start and end angles to cover the cone centered on centerAngle
-        const double startAngle = centerAngle - light.radius / 2.0;
-        const double endAngle = centerAngle + light.radius / 2.0;
+        const double startAngle = centerAngle - light->radius / 2.0;
+        const double endAngle = centerAngle + light->radius / 2.0;
 
-        light.vertices.clear();
-        const SDL_Color centerColor = {light.r, light.g, light.b, light.a}; // slightly dimmer if needed
+        light->vertices.clear();
+        const SDL_Color centerColor = {light->r, light->g, light->b, light->a}; // slightly dimmer if needed
         SDL_Vertex centerVertex{
-            {static_cast<float>(light.position.x), static_cast<float>(light.position.y)},
+            {static_cast<float>(light->position.x - offset.x), static_cast<float>(light->position.y - offset.y)},
             centerColor,
             {0, 0}
         };
-        light.vertices.push_back(centerVertex);
+        light->vertices.push_back(centerVertex);
 
-        for (int i = 0; i < light.rayCastCount; ++i) {
-            const double t = i / static_cast<double>(light.rayCastCount - 1); // from 0 to 1
+        for (int i = 0; i < light->rayCastCount; ++i) {
+            const double t = i / static_cast<double>(light->rayCastCount - 1); // from 0 to 1
             double rayAngle = startAngle + t * (endAngle - startAngle);
 
-            Ray lightRay(light.position, rayAngle, light.distance);
+
+            Ray lightRay(light->position - offset, rayAngle, light->distance);
 
             RayInfo rInfo;
 
             Vector2 end = {0, 0};
 
-            if (light.createRayCastedShadowing && Raycaster::cast(lightRay, &rInfo)) {
-                Vector2 toHit = rInfo.positionHit - light.position;
+            if (light->createRayCastedShadowing && Raycaster::cast(lightRay, &rInfo)) {
+                Vector2 toHit = rInfo.positionHit - light->position - offset;
                 const double hitDist = toHit.length();
 
                 //TODO: check if this gObject that we hit has some kind of component like Shadow caster?
                 //If it does then we can create a shadow for the object, that would be kinda epic!
 
                 // Only overshoot if hit was significantly before full range (e.g. < 98%)
-                if (hitDist < light.distance * 0.99) {
+                if (hitDist < light->distance * 0.99) {
                     constexpr double overshootFactor = 1.15;
                     Vector2 direction = toHit.normalized();
-                    double overshootDist = std::min(hitDist * overshootFactor, light.distance); // add 10 pixels max
-                    end = light.position + direction * overshootDist;
+                    double overshootDist = std::min(hitDist * overshootFactor, light->distance); // add 10 pixels max
+
+
+                    end = light->position - offset + direction * overshootDist;
                 } else {
                     // Hit very close to end — no overshoot
                     end = rInfo.positionHit;
@@ -243,22 +251,22 @@ void Draw::drawLight(LightSource &light) const {
             SDL_Color edgeColor = centerColor;
             edgeColor.a = 0;
 
-            light.vertices.push_back({{static_cast<float>(end.x), static_cast<float>(end.y)}, edgeColor, {0, 0}});
+            light->vertices.push_back({{static_cast<float>(end.x), static_cast<float>(end.y)}, edgeColor, {0, 0}});
         }
 
-        light.indices.clear();
+        light->indices.clear();
         // create indices for triangles
-        for (int i = 1; i < light.vertices.size() - 1; ++i) {
-            light.indices.push_back(0);
-            light.indices.push_back(i);
-            light.indices.push_back(i + 1);
+        for (int i = 1; i < light->vertices.size() - 1; ++i) {
+            light->indices.push_back(0);
+            light->indices.push_back(i);
+            light->indices.push_back(i + 1);
         }
 
-        light.hasDrawn = true;
+        light->hasDrawn = true;
     }
 
-    SDL_RenderGeometry(renderer, nullptr, light.vertices.data(), light.vertices.size(), light.indices.data(),
-                       light.indices.size());
+    SDL_RenderGeometry(renderer, nullptr, light->vertices.data(), light->vertices.size(), light->indices.data(),
+                       light->indices.size());
 }
 
 void Draw::drawLights() const {
