@@ -48,6 +48,11 @@ public:
 
     }
 
+
+    bool operator==(const Vector2& other) const {
+        return std::abs(x - other.x) < 0.001f &&
+               std::abs(y - other.y) < 0.001f;
+    }
     Vector2 operator+(const Vector2& other) const {
         const Vector2 v(x + other.x, y + other.y);
         return v;
@@ -146,6 +151,16 @@ public:
 
 };
 
+namespace std {
+    template<>
+    struct hash<Vector2> {
+        std::size_t operator()(const Vector2& v) const noexcept {
+            auto hx = std::hash<int>{}(static_cast<int>(v.x * 1000));
+            auto hy = std::hash<int>{}(static_cast<int>(v.y * 1000));
+            return hx ^ (hy << 1);
+        }
+    };
+}
 
 
 #endif //VECTOR2_H

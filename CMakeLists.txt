@@ -94,6 +94,10 @@ add_executable(2DProject main.cpp
         Audio/SoundManager.h
         Game/TileMap.cpp
         Game/TileMap.h
+        Game/TileLayer.cpp
+        Game/TileLayer.h
+        Game/TileTexture.h
+        FileHelper.h
 )
 
 # Link against SDL2 libraries

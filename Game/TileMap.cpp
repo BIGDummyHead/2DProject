@@ -3,94 +3,41 @@
 //
 
 #include "TileMap.h"
-
-#include <fstream>
-
 #include "GameObject.h"
+#include "../FileHelper.h"
 
 
-TileMap::TileInfo TileMap::getTile(const int &index) {
-    if (index < 0 || index > indexing - 1) {
-        throw std::runtime_error("Tile does not exist at index");
-    }
+TileLayer* TileMap::createLayer(const std::string &csvFilePath, const int& renderLayer) {
+    const auto csvMatrix = FileHelper::generateCsvMatrix<int>(csvFilePath);
 
-    return tileMap[index];
+    return createLayer(csvMatrix, renderLayer);
 }
 
-int TileMap::addTile(const ROW_COLUMN &position, const bool &includeCollider) {
-    if (position.x < 0 || position.y < 0) {
-        throw std::runtime_error("X or Y may not be null when adding a tile");
-    }
-
-    tileMap[indexing] = TileInfo(position, includeCollider);
-    indexing++;
-    return indexing - 1;
+TileLayer* TileMap::createLayer(const std::vector<std::vector<int> > &data, const int& renderLayer) {
+    auto* layer = new TileLayer(data, fileTexture, size, scale, renderLayer);
+    createdLayers.push_back(layer);
+    return layer;
 }
 
-std::vector<GameObject*>  TileMap::createMap(Vector2 startingPosition, const std::string &csvFilePath) {
-    std::vector<std::vector<int> > tileMapVector;
+std::vector<TileLayer *> TileMap::getLayers() {
+    return createdLayers;
+}
 
-    std::ifstream csvFile(csvFilePath);
-    std::string line;
+std::vector<GameObject *> TileMap::createAllLayers(const Vector2& position) {
+    std::vector<GameObject*> layerObjects;
 
-    while (std::getline(csvFile, line)) {
-        std::stringstream ss(line);
-        std::string tile;
-        std::vector<int> row;
+    for(const auto& layer : createdLayers) {
 
-        while (std::getline(ss, tile, ',')) {
-            row.push_back(std::stoi(tile));
+        auto objects = layer->create(position);
+        for(auto* obj : objects) {
+            layerObjects.push_back(obj);
         }
 
-        tileMapVector.push_back(row);
     }
 
-    return createMap(startingPosition, tileMapVector);
+    return layerObjects;
 }
 
 
-std::vector<GameObject*>  TileMap::createMap(Vector2 startingPosition, const std::vector<std::vector<int> > &data) {
-
-    std::vector<GameObject*> tilesCreated;
-    const float repeatX = startingPosition.x;
-
-    for (size_t r = 0; r < data.size(); r++) {
-
-        for (size_t c = 0; c < data[r].size(); c++) {
-            const int tile = data[r][c];
-
-            auto [position, hasCollider] = getTile(tile);
-
-            const auto tilePosition = position;
-            auto *tileTexture = new TileTexture(
-                fileTexture,
-                size.x,
-                size.y,
-                tilePosition.x,
-                tilePosition.y
-            );
-
-            auto *mapObj = new GameObject("tile_map_item", 0);
-            mapObj->texture = tileTexture;
-
-            mapObj->transform->setPosition(startingPosition);
-
-            if (hasCollider) {
-                auto* collider = new Collider(individualTileHeight / 2, individualTileWidth / 2, true);
-
-                mapObj->collider = collider;
-            }
-
-            tilesCreated.push_back(mapObj);
-
-            startingPosition.x += individualTileWidth;
-        }
-
-        startingPosition.x = repeatX;
-        startingPosition.y += individualTileHeight;
-    }
-
-    return tilesCreated;
-}
 
 

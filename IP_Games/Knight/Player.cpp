@@ -8,6 +8,13 @@
 
 //Called once initialized
 void Player::start() {
+
+    auto appSettings = *App::getInstance()->getSettings();
+    Vector2 center = {appSettings.windowDimensions.x / 2, appSettings.windowDimensions.y / 2};
+    LightSource lSource(center, 300, 100, 0, 360);
+    lSource.createRayCastedShadowing = false;
+    Draw::getInstance()->lightSources.push_back(lSource);
+
     auto* drawTool = Draw::getInstance();
     idleSheet = new Sheet(drawTool->loadTexture(PLAYER_IDLE_FILE), 4,4);
     attackSheet = new Sheet(drawTool->loadTexture(PLAYER_ATTACK_FILE), 4,6);

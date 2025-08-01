@@ -30,9 +30,10 @@ Scene *getKnightGame() {
 }
 
 int main() {
-    App::SCREEN_DIMENSIONS screenDimensions = {500, 500};
+    App::SCREEN_DIMENSIONS screenDimensions = {1000, 1000};
     App::WINDOW_FLAGS winFlags = 0;
     App::Settings appSettings(screenDimensions, winFlags);
+    appSettings.debug = true;
 
     RenderSettings audioSettings;
     appSettings.audioRenderingSettings = &audioSettings;
@@ -49,14 +50,14 @@ int main() {
     auto drawTool = *Draw::getInstance();
     auto soundManager = SoundManager::getInstance();
 
-    /* Disable sound for now, way too loud for testing purposes.
-    std::vector<Sound*>* backgroundNoises =
-        soundManager->getSounds(soundManager->NOISES_BACKGROUND);
+    std::vector<Sound *> *backgroundNoises =
+            soundManager->getSounds(soundManager->NOISES_BACKGROUND);
 
-    auto* tense = new Sound("tense.wav");
+    auto *tense = new Sound("tense.wav");
     tense->setVolume(.2f);
-    backgroundNoises->push_back(tense);
-    */
+    /* Disable sound for now, way too loud for testing purposes. */
+    //backgroundNoises->push_back(tense);
+
 
     //Center of the Screen, can be used for rendering
 
@@ -72,24 +73,32 @@ int main() {
 
     Scene::loadScene(kGame, sceneInfo);
 
-    //    Scene::loadFirstAvalScene(sceneInfo);
 
-    auto tMap = TileMap("testing_map.png", {11, 11});
+    //Tilemap creation example.
+    auto tMap = TileMap("dungeon_tileset.png", {10, 10}, {4, 4});
 
-    // Row 0
-    tMap.addTile({0, 0}, false); // Empty
-    tMap.addTile({7, 0}, true); // Dirt tile
-    tMap.addTile({4, 1}, false); // Special block
+    auto* buildingLayer = tMap.createLayer("dungeon_layer1.csv");
+    buildingLayer->addColliderInfo("dungeon_collider.csv");
 
+    auto* torchLayer = tMap.createLayer("dungeon_layer2.csv");
+    //Example code
+    /*torchLayer->addComponentInfo<int, LightComponent>("dungeon_lightsources.csv", [](int value, GameObject* obj) {
+        //handle value
+        if(value == ...)
+            obj->addComponent<LightComponent>();
+        elif (value != ...)
+            obj->addComponent<LComponent>();
 
-    tMap.createMap({-300, -300}, "ex_tile.csv");
+    });*/
 
+    /* Do this:
+    auto buildingVector = buildingLayer->create({0,0});
+    auto torchesVector = torchLayer->create({0,0});
 
-    //TODO: Solve issue with ray casted lighting not working correctly.
-    Vector2 center = {appSettings.windowDimensions.x / 2, appSettings.windowDimensions.y / 2};
-    LightSource lSource(center, 300, 100, 0, 360);
-    lSource.createRayCastedShadowing = false;
-    drawTool.lightSources.push_back(lSource);
+    Or:
+    */
+    std::vector<GameObject*> tiles = tMap.createAllLayers({0,0});
+
 
     Uint32 lastTick = -1;
     while (true) {
@@ -127,8 +136,8 @@ int main() {
                     //test collision before updating position
                     if (currentGameObject->collider != nullptr) {
                         Vector2 colCenter = drawnAt;
-                        colCenter.x += currentGameObject->collider->width;
-                        colCenter.y += currentGameObject->collider->height;
+                        colCenter.x += currentGameObject->collider->width * currentGameObject->collider->scale.x;
+                        colCenter.y += currentGameObject->collider->height * currentGameObject->collider->scale.y;
 
                         currentGameObject->collider->drawCenter = colCenter;
 
@@ -147,9 +156,10 @@ int main() {
 
 
                             //determine the center of this collider
-                            Vector2 comparingDrawnAt = comparingObj->transform->getPosition() - cam.transform->getPosition();
-                            comparingDrawnAt.x += comparingObj->collider->width;
-                            comparingDrawnAt.y += comparingObj->collider->height;
+                            Vector2 comparingDrawnAt =
+                                    comparingObj->transform->getPosition() - cam.transform->getPosition();
+                            comparingDrawnAt.x += comparingObj->collider->width * comparingObj->collider->scale.x;
+                            comparingDrawnAt.y += comparingObj->collider->height * comparingObj->collider->scale.y;
                             comparingObj->collider->drawCenter = comparingDrawnAt;
 
 

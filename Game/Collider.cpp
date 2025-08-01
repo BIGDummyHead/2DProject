@@ -84,29 +84,41 @@ bool Collider::isColliding(const Collider& other, Vector2& push) const {
 }
 
 Vector2 Collider::getBottomLeft() const {
-    return Vector2{getCenter().x - width, getCenter().y + height};
+    return Vector2{
+        getCenter().x - (width * scale.x),
+        getCenter().y + (height * scale.y)
+    };
 }
 
 Vector2 Collider::getBottomRight() const {
-    return Vector2{getCenter().x + width, getCenter().y + height};
+    return Vector2{
+        getCenter().x + (width * scale.x),
+        getCenter().y + (height * scale.y)
+    };
 }
 
 Vector2 Collider::getTopLeft() const {
-    return Vector2{getCenter().x - width, getCenter().y - height};
+    return Vector2{
+        getCenter().x - (width * scale.x),
+        getCenter().y - (height * scale.y)
+    };
 }
 
 Vector2 Collider::getTopRight() const {
-    return Vector2{getCenter().x + width, getCenter().y - height};
+    return Vector2{
+        getCenter().x + (width * scale.x),
+        getCenter().y - (height * scale.y)
+    };
 }
 
-
 Vector2 Collider::getSize() const {
-    return Vector2{width, height};
+    return Vector2{
+        width * scale.x,
+        height * scale.y
+    };
 }
 
 void Collider::drawColliderBox() const {
-    // Use your bounding box directly instead of drawnAt
-
     const Vector2 topLeft = getTopLeft();
     const Vector2 bottomRight = getBottomRight();
 
@@ -117,9 +129,7 @@ void Collider::drawColliderBox() const {
     rect.h = static_cast<int>(bottomRight.y - topLeft.y);
 
     auto* renderer = Draw::getRenderer();
-    // Set draw color (green)
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-
     SDL_RenderDrawRect(renderer, &rect);
 }
 

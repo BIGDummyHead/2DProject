@@ -37,8 +37,8 @@ void Knight_Game::onSceneLoad(SceneInformation sceneInfo) {
 //    auto *playerObject = new Test_Player(sceneInfo.drawingTool, center);
     thePlayer = new Player(center);
     thePlayer->setRenderLayer(1000);
-    auto* pCollider = new Collider(30, 30, false);
+    auto* pCollider = new Collider(20, 30, false);
 
-    pCollider->offset -= {30,30};
+    pCollider->offset -= {20,30};
     thePlayer->collider = pCollider;
 }
