@@ -4,6 +4,7 @@
 
 #include "Player.h"
 
+#include "../../Game/LightSourceComponent.h"
 
 
 //Called once initialized
@@ -13,7 +14,9 @@ void Player::start() {
     Vector2 center = {appSettings.windowDimensions.x / 2, appSettings.windowDimensions.y / 2};
     LightSource lSource(center, 300, 100, 0, 360);
     lSource.createRayCastedShadowing = false;
-    Draw::getInstance()->lightSources.push_back(lSource);
+
+    //addComponent<LightSourceComponent>()->setSource(&lSource);
+
 
     auto* drawTool = Draw::getInstance();
     idleSheet = new Sheet(drawTool->loadTexture(PLAYER_IDLE_FILE), 4,4);
@@ -21,10 +24,6 @@ void Player::start() {
     deathSheet = new Sheet(drawTool->loadTexture(PLAYER_DEATH_FILE), 4,11);
     moveSheet = new Sheet(drawTool->loadTexture(PLAYER_MOVE_FILE), 4,6);
 
-    idleSheet->scale *= 2;
-    attackSheet->scale *= 2;
-    deathSheet->scale *= 2;
-    moveSheet->scale *= 2;
 
     cycleManager = new CycleManager();
 

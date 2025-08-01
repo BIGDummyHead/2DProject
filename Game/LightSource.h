@@ -65,4 +65,6 @@ public:
 
     LightSource() = default;
 
+    void setColor(const Uint32& r,const  Uint32& g, const Uint32& b, const Uint32& a = 255);
+
 };

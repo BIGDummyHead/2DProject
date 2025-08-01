@@ -46,14 +46,14 @@ public:
 
     void drawLine(const Vector2& from, const Vector2& to) const;
 
-    static std::vector<LightSource> lightSources;
+    static std::vector<LightSource*> lightSources;
 
     //Add a light source to be rendered
-    void addLightSource(const LightSource& source);
+    void addLightSource(LightSource* source);
     //Start the light map texture and return it
     [[nodiscard]] SDL_Texture* startLightMap() const;
     //Draw a singular light, can be useful for certain situations
-    void drawLight(LightSource& light) const;
+    void drawLight(LightSource* light) const;
     //Draws all light sources that have been registered.
     void drawLights() const;
     //Completes and renders the light map, returning to the newDrawTexture or default.

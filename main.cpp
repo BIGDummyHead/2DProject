@@ -33,7 +33,7 @@ int main() {
     App::SCREEN_DIMENSIONS screenDimensions = {1000, 1000};
     App::WINDOW_FLAGS winFlags = 0;
     App::Settings appSettings(screenDimensions, winFlags);
-    appSettings.debug = true;
+    appSettings.debug = false;
 
     RenderSettings audioSettings;
     appSettings.audioRenderingSettings = &audioSettings;
@@ -75,12 +75,12 @@ int main() {
 
 
     //Tilemap creation example.
-    auto tMap = TileMap("dungeon_tileset.png", {10, 10}, {4, 4});
+    //auto tMap = TileMap("dungeon_tileset.png", {10, 10}, {4, 4});
 
-    auto* buildingLayer = tMap.createLayer("dungeon_layer1.csv");
-    buildingLayer->addColliderInfo("dungeon_collider.csv");
+    //auto* buildingLayer = tMap.createLayer("dungeon_layer1.csv");
+    //buildingLayer->addColliderInfo("dungeon_collider.csv");
 
-    auto* torchLayer = tMap.createLayer("dungeon_layer2.csv");
+    //auto* torchLayer = tMap.createLayer("dungeon_layer2.csv");
     //Example code
     /*torchLayer->addComponentInfo<int, LightComponent>("dungeon_lightsources.csv", [](int value, GameObject* obj) {
         //handle value
@@ -97,7 +97,7 @@ int main() {
 
     Or:
     */
-    std::vector<GameObject*> tiles = tMap.createAllLayers({0,0});
+    //std::vector<GameObject*> tiles = tMap.createAllLayers({0,0});
 
 
     Uint32 lastTick = -1;

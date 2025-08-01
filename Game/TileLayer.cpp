@@ -42,6 +42,9 @@ Vector2 TileLayer::getTileTexturePosition(const int &index) {
 
 std::vector< GameObject *> TileLayer::create(const Vector2& startingPosition) {
 
+    if(created)
+        return {};
+
     //generate fake collider info with none
     if (colliderInfo.empty()) {
         colliderInfo = std::vector(mapData.size(), std::vector(mapData.size(), false));
@@ -126,6 +129,8 @@ std::vector< GameObject *> TileLayer::create(const Vector2& startingPosition) {
 
     //get rid of map to tile, not needed anymore.
     delete mapToTile;
+
+    created = true;
 
     return tilesCreated;
 }

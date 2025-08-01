@@ -74,13 +74,14 @@ public:
     void updateFrame();
 
     template<typename T> requires std::is_base_of_v<Component, T>
-    void addComponent() {
+    T* addComponent() {
         T* componentPtr = new T();
         activeComponents.push_back(componentPtr);
 
         auto* comp = dynamic_cast<Component *>(componentPtr);
         comp->setAttachedObject(this);
         comp->awake();
+        return componentPtr;
     }
 
     template<typename T> requires std::is_base_of_v<Component, T>

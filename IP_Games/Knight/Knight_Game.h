@@ -6,6 +6,7 @@
 #define KNIGHT_GAME_H
 #include "Player.h"
 #include "../../Game/Scene.h"
+#include "../../Game/TileMap.h"
 #include "../../Settings/Parser.h"
 
 //Knight Game manager and controller.
@@ -22,6 +23,7 @@ public:
 
     Player* thePlayer = nullptr;
     Camera* camera = nullptr;
+    TileMap* map;
 
     std::unordered_map<std::string, std::string> getSettings() {
         return settings;
@@ -60,6 +62,8 @@ public:
     }
 
     void onSceneLoad(SceneInformation sceneInfo) override;
+
+    void createMap();
 
 };
 

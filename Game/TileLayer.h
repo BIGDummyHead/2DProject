@@ -46,6 +46,8 @@ private:
 
     int renderIndex;
 
+    bool created = false;
+
 public:
     TileLayer(const std::vector<std::vector<int> > &csvMatrix, SDL_Texture *fileTexture,
               const Vector2 &size, const Vector2 &scale, const int& renderIndex) {
