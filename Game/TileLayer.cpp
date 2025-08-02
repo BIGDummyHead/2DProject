@@ -46,19 +46,22 @@ std::vector< GameObject *> TileLayer::create(const Vector2& startingPosition) {
         return {};
 
     //generate fake collider info with none
-    if (colliderInfo.empty()) {
+    /*if (colliderInfo.empty()) {
 
+        //create a new collider info of the same size as the map.
         colliderInfo = std::vector<std::vector<bool>>(mapData.size());
 
+        //for each row of get the columns
         for(int i = 0; i < mapData.size(); i++) {
+
+            //get the size
             const size_t size = mapData[i].size();
 
+            //set all to default value of false.
             colliderInfo[i] = std::vector(size, false);
         }
 
-
-
-    }
+    }*/
 
     //choose the starting position
     Vector2 position = startingPosition;
@@ -98,7 +101,7 @@ std::vector< GameObject *> TileLayer::create(const Vector2& startingPosition) {
                 mapObj->transform->setPosition(position);
 
                 //Determine if we should generate a collider
-                const bool hasCollider = colliderInfo[r][c];
+                const bool hasCollider = colliderInfo.empty() ? false : colliderInfo[r][c];
                 if (hasCollider) {
                     auto *collider = new Collider(individualTileHeight / 2, individualTileWidth / 2, scale, true);
                     mapObj->collider = collider;
