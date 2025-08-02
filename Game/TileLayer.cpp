@@ -47,7 +47,17 @@ std::vector< GameObject *> TileLayer::create(const Vector2& startingPosition) {
 
     //generate fake collider info with none
     if (colliderInfo.empty()) {
-        colliderInfo = std::vector(mapData.size(), std::vector(mapData.size(), false));
+
+        colliderInfo = std::vector<std::vector<bool>>(mapData.size());
+
+        for(int i = 0; i < mapData.size(); i++) {
+            const size_t size = mapData[i].size();
+
+            colliderInfo[i] = std::vector(size, false);
+        }
+
+
+
     }
 
     //choose the starting position

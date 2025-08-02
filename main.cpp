@@ -33,7 +33,7 @@ int main() {
     App::SCREEN_DIMENSIONS screenDimensions = {1000, 1000};
     App::WINDOW_FLAGS winFlags = 0;
     App::Settings appSettings(screenDimensions, winFlags);
-    appSettings.debug = false;
+    appSettings.debug = true;
 
     RenderSettings audioSettings;
     appSettings.audioRenderingSettings = &audioSettings;
